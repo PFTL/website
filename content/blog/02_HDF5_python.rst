@@ -6,15 +6,19 @@ How to use HDF5 files in Python
 :subtitle: HDF5 allows you to store large amounts of data efficiently
 :header: {attach}samuel-zeller-118195-unsplash.jpg
 :tags: HDF5, Python, Data, Data Storage, h5py
-:og_description: Learn how to use the HDF5 format to store large amounts of data and read it back with Python
+:description: Learn how to use the HDF5 format to store large amounts of data and read it back with Python
+
 
 When dealing with large amounts of data, either experimental or simulated, saving it to several text files is not very efficient.  Sometimes you need to access a very specific subset of data and you want to do it fast. In these situations, the HDF5 format solves both issues thanks to a very optimized underlying library. HDF5 is broadly used in scientific environments and has a great implementation in Python, designed to work with numpy out of the box.
+
 
 The HDF5 format in principle supports files of any size, each file has an internal structure that allows you to search for a specific dataset. You can think of it as a single file with its own hierarchical structure, just like a collection of folders and subfolders. By default, the data is stored in binary format and the library is compatible with different data types. One of the most important options of the HDF5 format is that it allows attaching metadata to every element in the structure, making it ideal for generating self-contained files.
 
 In Python, the interface with the HDF5 format can be achieved through a package called **h5py**. One of the most interesting features of the h5py package is that data is read from the file only when it is needed. Imagine you have a very large array that doesn't fit in your available RAM memory. You could have generated the array, for example, in a computer with different specifications than the one you are using to analyze the data. The HDF5 format allows you to choose which elements of the array to read with a syntax equivalent to numpy. You can then work with the data stored on a hard drive rather than in the RAM memory without much modifications to your existent code.
 
 In this article, we are going to see how you can use **h5py** to store and retrieve data from a hard drive. We are going to discuss different ways of storing data and how to optimize the reading process. All the examples that appear in this article are also `available on our Github repository <https://github.com/uetke/website_content/tree/master/example_code/HDF_Examples>`_.
+
+.. contents::
 
 Installing
 **********
