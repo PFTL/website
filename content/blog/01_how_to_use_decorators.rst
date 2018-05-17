@@ -6,7 +6,7 @@ How to Use Decorators to Validate Input
 :subtitle: Decorators are very useful, but can become hard to understand
 :header: {attach}victor-garcia-560967-unsplash.jpg
 :tags: Decorators, Python, Tricks, Validation, Data
-:og_description: Learn how to use decorators to validate user input before communicating with a device
+:description: Learn how to use decorators to validate user input before communicating with a device
 
 Python is rich in resources that can shorten the time it takes to develop new programs and simplify repetitive tasks. Decorators are one of such elements but more often than not they are not considered by less experienced developers. Adding decorators to the syntactic toolbox can be of great use in different contexts, and in this article, we are going to discuss how can they help you when communicating with a device. The example code can be found in our `Github repository <https://github.com/uetke/website_content/tree/master/example_code/Examples_Decorators>`_.
 
