@@ -1,0 +1,14 @@
+{% if article.share_post and article.status != 'draft' %}
+    <div class="social-sharing mb-3">
+        <h3>If you enjoyed reading, consider sharing:</h3>
+        <div class="row">
+            <div class="col-3"><a href="{{ article.share_post['twitter'] }}" target="_blank"
+                                  title="Share on Twitter"><img src="{{ SITEURL }}/theme/images/twitter.svg"/></a></div>
+            <div class="col-3"><a href="{{ article.share_post['facebook'] }}" target="_blank" title="Share on Facebook"><img
+                    src="{{ SITEURL }}/theme/images/facebook.svg"/></a></div>
+            <div class="col-3"><a href="{{ article.share_post['google-plus'] }}" target="_blank"
+                                  title="Share on Google Plus"><img src="{{ SITEURL }}/theme/images/google.svg"/></a>
+            </div>
+        </div>
+    </div>
+{% endif %}

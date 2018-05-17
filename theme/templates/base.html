@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include 'analytics.html' %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="google-site-verification" content="E-wHsju00y9AiJ8eEHL1wfv2SUb0oQJvUEgOpxlplYQ" />
+    {% block meta_header %}{% endblock %}
+
+    <link href="{{ SITEURL }}/theme/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{{ SITEURL }}/theme/css/IndiFlower.css" rel="stylesheet" />
+    <link href="{{ SITEURL }}/theme/css/pftl.css" rel="stylesheet" />
+    <link href="{{ SITEURL }}/theme/css/pygment.css" rel="stylesheet" />
+    <link rel="icon" href="{{ SITEURL }}/theme/images/favicon.ico" />
+
+    <title>{% block title%}{% endblock %} | Python For The Lab</title>
+
+  </head>
+
+  <body>
+    {% include 'nav.html' %}
+    {% block content %}{% endblock %}
+    {% include 'footer.html' %}
+    {% include 'footer_javascript.html' %}
+    {% block footer_scripts %}{% endblock %}
+
+
+  </body>
+</html>

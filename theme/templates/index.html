@@ -1,0 +1,20 @@
+{% import 'macros/article_thumbnail.html' as art_thum %}
+{% extends 'base.html' %}
+{% block title %}List of Articles{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center my-3">
+    <h1>Our Latest Articles</h1>
+    </div>
+    <div class="row">
+    {% for article in articles_page.object_list %}
+        <div class="col-sm-4">
+            {{ art_thum.article_thumb(article) }}
+        </div>
+    {% endfor %}
+    </div>
+    {% if articles_page.has_other_pages() %}
+        {% include 'pagination.html' %}
+    {% endif %}
+    {% endblock %}
+</div>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title|striptags|title }}{% endblock %}
+{% block meta_header %}{% if article %}
+    <meta name="description" content="{{ article.description }}">
+
+     <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="{{ article.title }}">
+    <meta itemprop="description" content="{{ article.description }}">
+    <meta itemprop="image" content="{{ SITEURL }}/{{ article.header_linkedin }}">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:site" content="@pythonforthelab"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{{ article.title }}"/>
+    <meta name="twitter:image" content="{{ SITEURL }}/{{ article.header_twitter }}"/>
+    <meta name="twitter:description" content="{{ article.description }}">
+    <meta name="twitter:creator" content="@_aquic_"/>
+    <!-- Twitter summary card with large image must be at least 280x150px -->
+    <meta name="twitter:image:src" content="{{ SITEURL }}/{{ article.header_linkedin }}">
+
+    <!-- Open Graph data -->
+    <meta property="og:url" content="{{ SITEURL }}/{{ article.url }}"/>
+    <meta property="og:title" content="{{ article.title }}"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="{{ article.meta }} Great article on pythonforthelab.com!"/>
+    <meta property="og:image" content="{{ SITEURL }}/{{ article.header_facebook }}"/>
+    <meta property="og:site_name" content="{{ SITENAME }}" />
+
+    <link rel="canonical" href="{{ SITEURL }}/{{ article.url }}"/>
+{% endif %}{% endblock %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="row">
+            <h1 class="article-main-title">{{ article.title }}</h1>
+            {% if article.subtitle %}
+                <h3 class="text-left article-sub-title">{{ article.subtitle }}</h3>
+            {% endif %}
+            <p style="font-size: small"><span class="ml-1">by {{ article.author }}</span><span class="ml-1"><img
+                    src="{{ SITEURL }}/theme/img/calendar.png"
+                    style="height: auto"> {{ article.date.strftime('%B %d, %Y') }}</span><span class="ml-1"><img
+                    src="{{ SITEURL }}/theme/img/tags.png">
+                {% for tag in article.tags %}<span class="article-tag">{{ tag }}</span>{% endfor %}</span></p>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <article>
+                    {{ article.content }}
+                </article>
+                {% include 'author_info.html' %}
+                {% include 'social_sharing.html' %}
+            </div>
+            {% include 'article_sidebar.html' %}
+        </div>
+        <div class="row">
+            {% include 'comments.html' %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_scripts %}
+    <script src="{{ SITEURL }}/theme/js/comment_submit.js"></script>
+    <script src="{{ SITEURK }}/theme/js/comments_load.js"></script>
+{% endblock %}

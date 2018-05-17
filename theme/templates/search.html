@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search - {{ SITENAME|striptags }}
+{% endblock title %}
+
+{% block custom_header_links %}
+<link rel="stylesheet" href="{{ SITEURL }}/theme/css/tipuesearch.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400">
+<link rel="stylesheet" href="tipuesearch/css/normalize.css">
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div id="tipue_search_content"></div>
+</div>
+{% endblock content %}
+
+{% block footer_scripts %}
+<script src="{{ SITEURL }}/theme/js/tipuesearch_content.js"></script>
+<script src="{{ SITEURL }}/theme/js/tipuesearch_set.js"></script>
+<script src="{{ SITEURL }}/theme/js/tipuesearch.min.js"></script>
+<script>
+$(document).ready(function() {
+     $('#tipue_search_input').tipuesearch({
+          'mode': 'json',
+          'contentLocation': '/tipuesearch_content.json'
+     });
+});
+</script>
+{% endblock %}

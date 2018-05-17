@@ -1,0 +1,18 @@
+{% macro article_thumb(article) -%}
+<div class="row px-3">
+{% if article.header_thumbnail %}
+    <img src="{{ SITEURL }}/{{ article.header_thumbnail }}" style="width:100%; border-radius: 10px;">
+{% else %}
+    <img src="{{ SITEURL }}/theme/img/general_header.jpg" style="width:100%">
+{% endif %}
+    <h1>
+        <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}" class="article-title-thumbnail">
+            {{ article.title }}
+        </a>
+    </h1>
+</div>
+<div class="row px-3">
+    {{ article.summary }}
+    <a class="readmore" href="{{ SITEURL }}/{{ article.url }}">read more</a>
+</div>
+{%- endmacro %}

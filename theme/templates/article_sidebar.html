@@ -1,0 +1,50 @@
+<!-- SIDEBAR -->
+
+<div class="col-md-3 side-bar d-none d-md-block">
+    <div class="row justify-content-center my-3">
+        <div class="card border-primary mb-3">
+            <div class="card-header">Subscribe</div>
+            <div class="card-body">
+                <h4 class="card-title">Get all the information directly to your inbox</h4>
+                <div id="newsletter_feedback"></div>
+                <form id="newsletter">
+                    <div class="form-group">
+                        <input class="form-control" type="email" id="email" placeholder="Your E-mail" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-danger col-sm-12" type="submit"
+                               value="Subscribe to the newsletter" id="send">
+                    </div>
+                </form>
+                <p class="card-text">Get relevant information, unsubscribe at any time.</p>
+            </div>
+        </div>
+        <div class="card border-primary mb-3">
+            <div class="card-header">Latest Articles</div>
+            <ul class="list-group list-group-flush">
+                {% for art in articles[:10] %}
+                    <li class="list-group-item"><a href="{{ SITEURL }}/{{ art.url }}">{{ art.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% if article.share_post and article.status != 'draft' %}
+        <div class="row">
+            <div class="share-sidebar">
+
+                <h3>Share:</h3>
+                <div class="col-3"><a href="{{ article.share_post['twitter'] }}" target="_blank"
+                                      title="Share on Twitter"><img
+                        src="{{ SITEURL }}/theme/images/twitter.svg"/></a></div>
+                <div class="col-3"><a href="{{ article.share_post['facebook'] }}" target="_blank"
+                                      title="Share on Facebook"><img
+                        src="{{ SITEURL }}/theme/images/facebook.svg"/></a></div>
+                <div class="col-3"><a href="{{ article.share_post['google-plus'] }}" target="_blank"
+                                      title="Share on Google Plus"><img
+                        src="{{ SITEURL }}/theme/images/google.svg"/></a></div>
+
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block meta_header %}{% if page.meta %}
+<meta name="description" content="{{ page.meta }}">
+<link rel="canonical" href="{{ SITEURL }}/{{ page.slug }}" />
+{% endif %}{% endblock %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <h1>{{ page.title }}</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-9">
+      <div class="entry-content">
+          {{ page.content }}
+      </div><!-- /.entry-content -->
+    </div>
+  </div>
+</div>
+{% endblock %}
