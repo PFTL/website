@@ -339,6 +339,7 @@ The output of printing ``guy`` is quite ugly and is not particularly useful. For
 
 
 If you run the code above, you will get the following:
+
 .. code-block:: pycon
 
     >>> print(guy)
