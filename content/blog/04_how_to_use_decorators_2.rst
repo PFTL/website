@@ -1,15 +1,14 @@
 How to use decorators Part 2
 ============================
 
-:date: 2018-05-01
+:date: 2018-05-18
 :author: Aquiles Carattino
 :subtitle: Use decorators like a professional
 :header: {attach}michael-browning-227688-unsplash.jpg
-:tags: Decorators, Python, Tricks, Validation, Data
+:tags: Decorators, Python, Tricks, Validation, Data, Intermediate
 :description: Learn how to use decorators like a professional
-:status: draft
 
-Decorators are a very useful programming pattern that allows to change the behavior of functions with little refactoring. Decorators allow developers to abstract common options from functions, but mastering their use in Python can be challenging. In this article we are going to go in depth regarding different options when implementing decorators. The topics covered are:
+Decorators are a very useful programming pattern that allows changing the behavior of functions with little refactoring. Decorators allow developers to abstract common options from functions, but mastering their use in Python can be challenging. In this article, we are going to go in depth regarding different options when implementing decorators. The topics covered are:
 
 .. contents::
 
@@ -40,11 +39,11 @@ The function ``check_positive`` checks that the inputs of a function are all pos
     b = average(1, -1)
     print(b)
 
-In the first case the function would work, giving as output ``1.5``, while in the second case it would raise an exception because one of the arguments is not positive. If you can't understand the code above, you should check the `first article published on decorators <{filename}01_how_to_use_decorators.rst>`_.
+In the first case, the function would work, giving as output ``1.5``, while in the second case it would raise an exception because one of the arguments is not positive. If you can't understand the code above, you should check the `first article published on decorators <{filename}01_how_to_use_decorators.rst>`_.
 
 Docstrings with decorators
 --------------------------
-This example works fine, but it already shows an issue that for larger projects is very relevant: docstrings, i.e. the documentation of functions, methods and classes, stop working when using decorators like above. Let's add documentation to the function ``average``, like this:
+This example works fine, but it already shows an issue that for larger projects is very relevant: docstrings, i.e. the documentation of functions, methods, and classes, stop working when using decorators like above. Let's add documentation to the function ``average``, like this:
 
 .. code-block:: python
 
@@ -97,7 +96,7 @@ And if we repeat the steps above, we see that the help command is giving the exp
         """Decorator to check that the inputs of a function are positive"""
         [...]
 
-As with many things in Python, this is not the only option, but is the one that allows you to see how some of the internals work, such as the ``__name__`` and ``__doc__`` properties. Another option is to use a built-in decorator from Python that would allow you to do exactly what we have done but in one single line:
+As with many things in Python, this is not the only option but is the one that allows you to see how some of the internals work, such as the ``__name__`` and ``__doc__`` properties. Another option is to use a built-in decorator from Python that would allow you to do exactly what we have done but in one single line:
 
 .. code-block:: python
     :hl_lines: 1 4
@@ -113,7 +112,7 @@ As with many things in Python, this is not the only option, but is the one that 
             return res
         return func_wrapper
 
-The highlighted lines are the ones that changed compared to the previous example. Again, the ``help`` command is working as expected. In principle what the decorator ``@wraps`` does is the same as setting the the ``__name__`` and ``__doc__`` properties. Now you start seeing that the uses of decorators is virtually endless.
+The highlighted lines are the ones that changed compared to the previous example. Again, the ``help`` command is working as expected. In principle what the decorator ``@wraps`` does is the same as setting the ``__name__`` and ``__doc__`` properties. Now you start seeing that the uses of decorators are virtually endless.
 
 Arguments in decorators
 -----------------------
@@ -125,7 +124,7 @@ Imagine that you want to be able to check that both arguments in a function are 
     def average(x, y):
         return (x + y)/2
 
-We expect the function ``average`` to work only if both ``x`` and ``y`` are larger than 2. This is very useful when you are communicating with a device, for example, and you want to be sure that you are passing values which are allowed. However, the decorator that we defined earlier takes as an argument only the function to be decorated and it will fail if we add anything else. Solving this is a bit more involved, because it requires a function that returns a decorator. We can do the following:
+We expect the function ``average`` to work only if both ``x`` and ``y`` are larger than 2. This is very useful when you are communicating with a device, for example, and you want to be sure that you are passing values which are allowed. However, the decorator that we defined earlier takes as an argument only the function to be decorated and it will fail if we add anything else. Solving this is a bit more involved because it requires a function that returns a decorator. We can do the following:
 
 .. code-block:: python
 
@@ -174,7 +173,7 @@ Whenever you import the module that contains the ``average`` function, you will 
     >>> from utils import average
     Checking if it is positive
 
-This behavior may not be completely expected nor desired. For example, imagine that you use a decorator that checks the status of a device before allowing the user to send a new command to it. If you place the verification routine outside of the function wrapper, it will be triggered when you import the function and not when you execute it. This can give raise to a lot of undesired errors, because it is understandable that a user is importing the needed functions first and then starting the communication with a device.
+This behavior may not be completely expected nor desired. For example, imagine that you use a decorator that checks the status of a device before allowing the user to send a new command to it. If you place the verification routine outside of the function wrapper, it will be triggered when you import the function and not when you execute it. This can give rise to a lot of undesired errors because it is understandable that a user is importing the needed functions first and then starting the communication with a device.
 
 On the other hand, being able to run code before the function is executed, opens different doors. For example, you could register all the available functions. Check the following example:
 
@@ -238,7 +237,7 @@ I know that a class like that makes no sense at all, but it is only an example, 
     [...]
     TypeError: func_wrapper() takes 2 positional arguments but 3 were given
 
-When we defined the ``check_positive`` decorator, we explicitly used two arguments for the ``func_wrapper``, ``x`` and ``y`` . However, when we work with methods, there will be one more argument, the ``self``. There are different ways of solving this problem. On one hand, you could adapt the decorator in order to accommodate for the extra input, but then the decorator will stop working with normal functions. Of course, you could define a new decorator just for methods, but you would end up duplicating the code, and you should try to avoid that.
+When we defined the ``check_positive`` decorator, we explicitly used two arguments for the ``func_wrapper``, ``x`` and ``y``. However, when we work with methods, there will be one more argument, the ``self``. There are different ways of solving this problem. On one hand, you could adapt the decorator in order to accommodate for the extra input, but then the decorator will stop working with normal functions. Of course, you could define a new decorator just for methods, but you would end up duplicating the code, and you should try to avoid that.
 
 One more general solution would be to use a variable number of arguments for the decorator. This would be the idea:
 
@@ -257,13 +256,13 @@ One more general solution would be to use a variable number of arguments for the
 
         return func_wrapper
 
-Now you can see that the decorator became more complex than before. First, the ``func_wrapper`` takes ``*args`` as argument, and no longer explicitly ``x`` and ``y``. The ``*args`` parameter is a good subject for a next tutorial, what you should understand by now is that it makes a list out of all the inputs of the function, regardless of how many they are. This is what allows us to iterate through them by doing ``for arg in args``.
+Now you can see that the decorator became more complex than before. First, the ``func_wrapper`` takes ``*args`` as the argument, and no longer explicitly ``x`` and ``y``. The ``*args`` parameter is a good subject for a next tutorial, what you should understand by now is that it makes a list out of all the inputs of the function, regardless of how many they are. This is what allows us to iterate through them by doing ``for arg in args``.
 
-For every argument in the function, we have to check whether they are numbers or not, i.e., if the ``type`` is either ``int`` or ``float``. This prevents us from checking if ``self`` is positive or not, which would raise en exception. If the checks pass, we just return the original function ``func`` with the same arguments ``*args`` which were originally used. You can go ahead and try this decorator with either a method ìn the ``Operations`` class or with a function. Moreover, you can now try it with a function that takes three numbers as input and it will still work.
+For every argument in the function, we have to check whether they are numbers or not, i.e., if the ``type`` is either ``int`` or ``float``. This prevents us from checking if ``self`` is positive or not, which would raise an exception. If the checks pass, we just return the original function ``func`` with the same arguments ``*args`` which were originally used. You can go ahead and try this decorator with either a method ìn the ``Operations`` class or with a function. Moreover, you can now try it with a function that takes three numbers as input and it will still work.
 
 Classes as decorators
 ---------------------
-So far, we have seen that you can use a function to decorate another function or method. However, that is not the only option. Classes can be used as decorators as well, and this opens an entire realm of possibilities. What we have seen so far is that when you add a callable with a ``@`` just before another callable (i.e. a method or a function in our context), that function will be passed as argument to the decorator. When constructing classes, you can also pass functions as arguments. For example:
+So far, we have seen that you can use a function to decorate another function or method. However, that is not the only option. Classes can be used as decorators as well, and this opens an entire realm of possibilities. What we have seen so far is that when you add a callable with a ``@`` just before another callable (i.e. a method or a function in our context), that function will be passed as an argument to the decorator. When constructing classes, you can also pass functions as arguments. For example:
 
 .. code-block:: python
 
@@ -309,7 +308,7 @@ However, after the class has been instantiated, Python doesn't know what does it
         def __call__(self, *args, **kwargs):
             return self.func(*args)
 
-With this change, we have instructed Python what does it means to to *call* the object, i.e., to do ``average(...)``. If we run it again, it will work:
+With this change, we have instructed Python what does it means to *call* the object, i.e., to do ``average(...)``. If we run it again, it will work:
 
 .. code-block:: pycon
 
@@ -389,10 +388,11 @@ We have defined the function ``average`` that takes three arguments: a class and
 
 Conclusions
 -----------
-In this tutorial we have covered a lot of different options when working with decorators. Depending on the kind of projects you are working on, you may not find yourself in the situation of needing to develop decorators, however, it is always useful to be aware of one extra possibility. Decorators are very useful tools when a library is going to be used by other developers.
+In this tutorial, we have covered a lot of different options when working with decorators. Depending on the kind of projects you are working on, you may not find yourself in the situation of needing to develop decorators, however, it is always useful to be aware of one extra possibility. Decorators are very useful tools when a library is going to be used by other developers.
 
-Two libraries that make heavy use of decorators are `Flask <http://flask.pocoo.org/>`_ and `Lantz <https://github.com/lantzproject/>`_. Therefore, even if you don't develop your own decorators, it is always important to understand how they work. 
+Two libraries that make heavy use of decorators are `Flask <http://flask.pocoo.org/>`_ and `Lantz <https://github.com/lantzproject/>`_. Therefore, even if you don't develop your own decorators, it is always important to understand how they work.
+
+You can find the `example code for this tutorial <https://github.com/PFTL/website/tree/master/example_code/04_how_to_use_decorators_2>`_ on Github, as well as the `text <https://github.com/PFTL/website/blob/master/content/blog/04_how_to_use_decorators_2.rst>`_. If you find any mistakes, don't hesitate to submit a pull request or open an Issue.
 
 
 Header photo by `Michael Browning <https://unsplash.com/photos/tOZ-f5kl9BA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
-
