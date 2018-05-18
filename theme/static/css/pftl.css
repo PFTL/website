@@ -1,50 +1,49 @@
-.navbar-brand{
- font-family: 'Indie Flower';
+.navbar-brand {
+    font-family: 'Indie Flower';
 }
 
-.warning{
-  box-shadow: 0 4px 8px 0 rgba(255, 59, 0, 0.25), 0 6px 20px 0 rgba(255, 59, 0, 0.2);
-  padding: 1.25rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
+.warning {
+    box-shadow: 0 4px 8px 0 rgba(255, 59, 0, 0.25), 0 6px 20px 0 rgba(255, 59, 0, 0.2);
+    padding: 1.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
 }
 
-.warning .admonition-title{
-  color: tomato;
-  position: relative;
+.warning .admonition-title {
+    color: tomato;
+    position: relative;
 }
 
 .warning .admonition-title:before {
-    content: "\f071";  /* this is your text. You can also use UTF-8 character codes as I do here */
+    content: "\f071"; /* this is your text. You can also use UTF-8 character codes as I do here */
     font-family: FontAwesome;
-    left:-15px;
-    position:absolute;
-    top:0;
- }
-
-.note{
-  box-shadow: 0 4px 8px 0 rgba(100, 149, 237, 0.25), 0 6px 20px 0 rgba(100, 149, 237, 0.2);
-  padding: 1.25rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1.25rem;
+    left: -15px;
+    position: absolute;
+    top: 0;
 }
 
-.note .admonition-title{
-  color: cornflowerblue;
-  position: relative;
+.note {
+    box-shadow: 0 4px 8px 0 rgba(100, 149, 237, 0.25), 0 6px 20px 0 rgba(100, 149, 237, 0.2);
+    padding: 1.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.note .admonition-title {
+    color: cornflowerblue;
+    position: relative;
 }
 
 .note .admonition-title:before {
-    content: "\f129";  /* this is your text. You can also use UTF-8 character codes as I do here */
+    content: "\f129"; /* this is your text. You can also use UTF-8 character codes as I do here */
     font-family: FontAwesome;
-    left:-10px;
-    position:absolute;
-    top:0;
- }
+    left: -10px;
+    position: absolute;
+    top: 0;
+}
 
-
-.highlight{
-    background-color: rgba(202,202,202,0.34);
+.highlight {
+    background-color: rgba(202, 202, 202, 0.34);
     margin-left: 0rem;
     margin-right: 0rem;
     padding-top: 1rem;
@@ -52,7 +51,7 @@
     border-bottom-right-radius: 5px;
 }
 
-.lexer{
+.lexer {
     background-color: #ecd9a3;
     padding-left: 0.5rem;
     padding-bottom: 0.25rem;
@@ -61,15 +60,15 @@
     border-top-left-radius: 5px;
 }
 
-.Python{
+.Python {
     background-color: #90aaec;
 }
 
-.Bash{
+.Bash {
     background-color: #cacaca;
 }
 
-.highlight pre{
+.highlight pre {
     padding-bottom: 1rem;
     padding-left: 0.75rem;
 }
@@ -78,7 +77,7 @@
     width: 100%;
 }
 
-article{
+article {
     font-size: 18px;
 }
 
@@ -93,77 +92,89 @@ article{
     /*left: 50%;*/
 }
 
-.article-main-title{
-    background-color: white;
- }
-
-.article-sub-title{
+.article-main-title {
     background-color: white;
 }
 
-.article-tag{
+.article-sub-title {
+    background-color: white;
+}
+
+.article-tag {
     margin-right: 3px;
     background-color: #efefef;
     padding: 1px;
 }
 
 /*.article-title{*/
-    /*position: absolute;*/
-    /*top: 5rem;*/
-    /*left: 3%;*/
+/*position: absolute;*/
+/*top: 5rem;*/
+/*left: 3%;*/
 /*}*/
 
-.article-title h1{
+.article-title h1 {
     font-size: 1.5rem;
 }
 
-.article-title h3{
+.article-title h3 {
     font-size: 1.25rem;
 }
 
 @media (min-width: 576px) {
-    .article-title h1{
+    .article-title h1 {
         font-size: 2rem;
     }
-    .article-title h3{
+
+    .article-title h3 {
         font-size: 1.5rem;
     }
-    .article-title{
+
+    .article-title {
         top: 7rem;
     }
 }
 
 @media (min-width: 768px) {
-    .article-title h1{
+    .article-title h1 {
         font-size: 2.75rem;
     }
-    .article-title h3{
+
+    .article-title h3 {
         font-size: 1.75rem;
     }
 }
 
 @media (min-width: 992px) {
-    .article-title h1{
+    .article-title h1 {
         font-size: 3rem;
     }
-    .article-title h3{
+
+    .article-title h3 {
         font-size: 2rem;
     }
-    .article-title{
+
+    .article-title {
         position: absolute;
         top: 9.5rem;
         left: 3%;
     }
-    .article-title-thumbnail{
+
+    .article-title-thumbnail {
         font-size: 2rem;
     }
 }
 
 @media (min-width: 1200px) {
-    .article-title h1{
+    .article-title h1 {
         font-size: 4rem;
     }
-    .article-title h3{
+
+    .article-title h3 {
         font-size: 2.5rem;
     }
+}
+
+.hll {
+    display: block;
+    background-color: #bbbbbb;
 }
