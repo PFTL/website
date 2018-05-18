@@ -34,7 +34,8 @@ LOCALE = 'en_US.utf8'
 # Where to store the images
 HEADERS_FOLDER = 'static/img'
 # Force to re-generate the images even if they exist
-FORCE_IMG_REBUILD = True
+FORCE_IMG_REBUILD = False
 # Default image header for when one is missing
 DEFAULT_HEADER = 'static/img/compartments.jpg'
 
+DEFAULT_PAGINATION = 12
