@@ -1,7 +1,7 @@
 How to Use Decorators to Validate Input
 ========================================
 
-:date: 2018-05-01
+:date: 2018-03-12
 :author: Aquiles Carattino
 :subtitle: Decorators are very useful, but can become hard to understand
 :header: {attach}victor-garcia-560967-unsplash.jpg

@@ -1,7 +1,7 @@
 Virtual Environment is a Must-Have Tool
 =======================================
 
-:date: 2019-05-04
+:date: 2018-03-09
 :author: Aquiles Carattino
 :subtitle: Isolate different development environments from each other to avoid overlaps
 :header: {attach}michael-aleo-571965-unsplash.jpg

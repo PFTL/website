@@ -1,7 +1,7 @@
 How to use HDF5 files in Python
 ===============================
 
-:date: 2018-05-02
+:date: 2018-03-19
 :author: Aquiles Carattino
 :subtitle: HDF5 allows you to store large amounts of data efficiently
 :header: {attach}samuel-zeller-118195-unsplash.jpg
