@@ -178,3 +178,7 @@ article {
     display: block;
     background-color: #bbbbbb;
 }
+
+tt{
+    background-color: lightgray;
+}
