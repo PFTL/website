@@ -30,6 +30,15 @@
     <link rel="canonical" href="{{ SITEURL }}/{{ article.url }}"/>
 {% endif %}{% endblock %}
 
+{% block head_scripts %}
+<script
+    id="fsc-api"
+    src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.7.5/fastspring-builder.min.js"
+    type="text/javascript"
+    data-storefront="pythonforthelab.onfastspring.com/popup-pftl-book">
+</script>
+{% endblock %}
+
 {% block content %}
     <div class="container my-5">
         <div class="row">
