@@ -1,15 +1,14 @@
-Classes in Python
-=================
+A Primer on Classes in Python
+=============================
 
-:date: 2018-02-21
+:date: 2018-05-22
 :author: Aquiles Carattino
 :subtitle: A practical approach to working with classes in python
-:header: {attach}writing-machine.jpg
+:header: {attach}daniel-cheung-129841-unsplash.jpg
 :tags: Classes, beginner, tutorial
 :description: A practical approach to working with classes in python
-:status: draft
 
-Python is an object oriented programming (OOP) language. Object oriented
+Python is an object-oriented programming (OOP) language. Object-oriented
 programming is a programming design that allows developers not only to
 define the type of data of a variable but also the operations that can
 act on that data. For example, a variable can be of type integer, float,
@@ -29,6 +28,8 @@ for example. In this chapter we are going to cover from the very basics
 of object design to slightly more advanced topics in which we can define
 a custom behavior for most of the common operations.
 
+.. contents::
+
 Defining a Class
 ----------------
 Let's dive straight into how to work with classes in Python. Defining a class is as
@@ -36,23 +37,23 @@ simple as doing:
 
 .. code-block:: python
 
-    class Person():
+    class Person:
         pass
 
 When speaking it is very hard not to interchange the words
 ``Class`` and ``Object``. The reality is that the difference
 between them is very subtle: an object is an instance of a class. This
-means that we will use classes when referring to the type of variable,
-while object to the variable itself. It is going to be come clearer
+means that we will use the word *classes* when referring to the type of variable,
+while we will use *object* to the variable itself. It is going to become clearer
 later on.
 
 In the example above, we've defined a class called ``Person`` that doesn't do
-anything (that is way it says ``pass``.) We can add more
+anything, that is why it says ``pass``. We can add more
 functionality to this class by declaring a function that belongs to it. Create a file called **person.py** and add the following code to it:
 
 .. code-block:: python
 
-    class Person():
+    class Person:
         def echo_name(self, name):
             return name
 
@@ -65,11 +66,11 @@ using the class, we have to create a variable of type person. Back in the Python
     >>> from person import Person
     >>> me = Person()
     >>> me.echo_name("John Snow")
-
+    John Snow
 
 The first line imports the code into the interactive console. For this to work, it is important that you trigger python directly from the same folder where the file **person.py** is located. When you run the code above, you should see as output ``John Snow``. There is also an
-important detail that was ommitted this far, the presence of
-``self`` in the delcaration of the method. All the methods in
+important detail that was omitted this far, the presence of
+``self`` in the declaration of the method. All the methods in
 python take a first input variable called self, referring to the class
 itself. For the time being don't stress yourself about it, but bear in
 mind that when you define a new method, you should always include the
@@ -89,7 +90,7 @@ that can be used by doing:
     >>> me.echo_True()
 
 
-So far, definig a function within a class has no advantage at all. The
+So far, defining a function within a class has no advantage at all. The
 main difference, and the point where methods become handy is because
 they have access to all the information stored within the object itself.
 The ``self`` argument that we are passing as first argument of the
@@ -112,14 +113,15 @@ And then we can execute this:
     >>> me = Person()
     >>> me.store_name('John Snow')
     >>> print(me.get_name())
+    John Snow
     >>> print(me.stored_name)
-
+    John Snow
 
 What you can see in this example is that the method ``store_name``
 takes one argument, ``name`` and stores it into the class variable
-``stored_name``. As with methods, variables are called **properties**
+``stored_name``. Variables in the context of classes are called **attributes**
 in the context of a class. The method ``get_name`` just returns
-the stored property. What we show in the last line is that we can access
+the stored property. What we showed in the last line is that we can access
 the property directly, without the need to call the ``get_name``
 method. In the same way, we don't need to use the ``store_name``
 method if we do:
@@ -128,10 +130,10 @@ method if we do:
 
     >>> me.stored_name = 'Jane Doe'
     >>> print(me.get_name())
-
+    Jane Doe
 
 One of the advantages of the attributes of classes is that they can be
-of any type, even other classes. Imagine that you have acquired a timetrace
+of any type, even other classes. Imagine that you have acquired a time trace
 of an analog sensor and you have also recorded the temperature of the
 room when the measurement started. You can easily store that information
 in an object:
@@ -141,16 +143,14 @@ in an object:
     measurement.temperature = '20 degrees'
     measurement.timetrace = np.array([...])
 
-
 What you have so far is a vague idea of how classes behave, and maybe
 you are starting to imagine some places where you can use a class to
 make your daily life easier and your code more reusable. However, this
-is just the tip of the iceberg. Classes are very powerfull
-tools.
+is just the tip of the iceberg. Classes are very powerful tools.
 
 Initializing classes
 --------------------
-Instantiating a class is the moment in which we call the class and pass
+**Instantiating** a class is the moment in which we call the class and pass
 it to a variable. In the previous example, the instantiation of the
 class happened at the line reading ``me = Person()``. You may
 have noticed that the property ``stored_name`` does not exist in
@@ -180,11 +180,12 @@ other methods, for example:
     def __init__(self):
         self.store_name('')
 
+    [...]
 
 Will have the same final effect. It is however common (and smart)
 practice, to declare all the variables of your class at the beginning,
 inside your ``__init__``. In this way you don't depend on
-specific methods being called to create the variables. 
+specific methods being called to create the variables.
 
 As with any other method, you can have an ``__init__`` method with more
 arguments than just ``self``. For example you can define it like
@@ -195,7 +196,6 @@ this:
     def __init__(self, name):
         self.stored_name = name
 
-
 Now the way you instantiate the class is different, you will have to do
 it like this:
 
@@ -204,20 +204,20 @@ it like this:
     me = Person('John Snow')
     print(me.get_name())
 
-
-When you do this, your previous code will stop working, because now you have to set the ``name`` explicitly. If there is any other code that does ``Person()`` will fail. The proper way of altering the functioning of a method is to add a default value in case no explicit value is passed. The ``__init__`` would become:
+When you do this, your previous code will stop working, because now you have to set the ``name`` explicitly. If there is any other code that does ``Person()``, it will fail. The proper way of altering the functioning of a method is to add a default value in case no explicit value is passed. The ``__init__`` would become:
 
 .. code-block:: python
 
     def __init__(self, name=''):
         self.stored_name = name
 
-
 With this modification, if you don't explicitly specify a name when instantiating the class, it will default to ``''``, i.e., an empty string.
 
-Defining class properties
+Defining default values for parameters in methods has to be handled with care. They are very useful when you expect people to always use the same values and only occasionally to change them. Trying to keep backwards compatibility by declaring default values can make your code look chaotic, so you have to do it only when it is worth doing, and not all the time. When developing, it is impossible not to refactor code.
+
+Defining class attributes
 -------------------------
-So far, if you wanted to have properties available right after the instantiation of a class, you had to include them in the ``__init__`` method. However, this is not the only possibility. You can define properties that belong to the class itself. Doing it is as simple as declaring them before the ``__init__`` method. For example, we could do this:
+So far, if you wanted to have properties available right after the instantiation of a class, you had to include them in the ``__init__`` method. However, this is not the only possibility. You can define attributes that belong to the class itself. Doing it is as simple as declaring them before the ``__init__`` method. For example, we could do this:
 
 .. code-block:: python
 
@@ -227,7 +227,7 @@ So far, if you wanted to have properties available right after the instantiation
             [...]
 
 
-If you use the new ``Person`` class, you will have a property called ``birthday`` available, but with some interesting behavior. Let's see. First, let's start as always:
+If you use the new ``Person`` class, you will have an attribute called ``birthday`` available, but with some interesting behavior. First, let's start as always:
 
 .. code-block:: pycon
 
@@ -250,11 +250,11 @@ What you see above is that it doesn't matter if you define the birthday within t
     2011-11-11
 
 
-What you can see in the code above is that you can access class properties before you instantiate anything. That is why they are class and not object properties. Subtetlies apart, once you change the class property, in the example above the birtday, next time we create an object with that class it will receive the new property. At the beginning it is hard to understand why it is useful, but one day you will need it and it will save you a lot of time. 
+What you see in the code above is that you can access class attributes before you instantiate anything. That is why they are class and not object attributes. Subtleties apart, once you change the class attribute, in the example above, the birthday, next time you create an object with that class, it will receive the new property. At the beginning it is hard to understand why it is useful, but one day you will need it and it will save you a lot of time.
 
 Inheritance
 -----------
-One of the advantages of working with classes in Pythan is that it allows you to use the code from other developers and expand or change its behavior without modifying the original code. The best would be to see it in action. So far we have a class called ``Person``, which is general but not too useful. Let's assume we want to define a new class, called ``Teacher``, that has the same properties as a ``Person`` (i.e., name and birthday) plus it is able to teach a class. You can add the following code to the file **person.py**:
+One of the advantages of working with classes in Python is that it allows you to use the code from other developers and expand or change its behavior without modifying the original code. The best idea is to see it in action. So far we have a class called ``Person``, which is general but not too useful. Let's assume we want to define a new class, called ``Teacher``, that has the same properties as a ``Person`` (i.e., name and birthday) plus it is able to teach a class. You can add the following code to the file **person.py**:
 
 .. code-block:: python
 
@@ -269,7 +269,7 @@ One of the advantages of working with classes in Pythan is that it allows you to
             self.course = new_course
 
 
-Note that in the definition of the new ``Teacher`` class, we have added already ``Person``. In Python jargon, this means that the class ``Teacher`` is a child of the class ``Person``, or viceversa, that ``Person`` is the parent of ``Teacher``. This is called **inheritance** and is not only very common in Python programs, it is one of the characteristics that makes Python so versatile. You can use the class ``Teacher`` in the same way as you have used the class ``Person``:
+Note that in the definition of the new ``Teacher`` class, we have added the ``Person`` class. In Python jargon, this means that the class ``Teacher`` is a child of the class ``Person``, or the opposite, that ``Person`` is the parent of ``Teacher``. This is called **inheritance** and you will notice that a lot of different projects take advantage of it. You can use the class ``Teacher`` in the same way as you have used the class ``Person``:
 
 .. code-block:: pycon
 
@@ -280,7 +280,6 @@ Note that in the definition of the new ``Teacher`` class, we have added already 
     >>> print(me.birthday)
     2010-10-10
 
-
 However, if you try to use the teacher's name it is going to fail:
 
 .. code-block:: pycon
@@ -288,7 +287,6 @@ However, if you try to use the teacher's name it is going to fail:
     >>> print(me.get_name())
     [...]
     AttributeError: 'Teacher' object has no attribute 'stored_name'
-
 
 The reason behind this error is that ``get_name`` returns ``stored_name`` in the class Person. However, the property ``stored_name`` is created when running the ``__init__`` method of Person, which didn't happen. You could have changed the code above slightly to make it work:
 
@@ -302,7 +300,7 @@ The reason behind this error is that ``get_name`` returns ``stored_name`` in the
     >>> print(me.get_name())
     J.J.R.T.
 
-However, there is also another approach to avoid the error. You could simply run the ``__init__`` method of the parent class (i.e. the base class), you need to add the follwing:
+However, there is also another approach to avoid the error. You could simply run the ``__init__`` method of the parent class (i.e. the base class), you need to add the following:
 
 .. code-block:: python
 
@@ -313,11 +311,30 @@ However, there is also another approach to avoid the error. You could simply run
         [...]
 
 
-When you use ``super()``, you are going to have access directly to the class from which you are inheriting. In the example above, you explicitly called the ``__init__`` method of the parent class. If you try again to run the method ``me.get_name()``, you will see that no error appears, but also that nothing is printed to screen. This is because you triggered the ``super().__init__()`` without any arguments and therefore the name defaulted to the empty string.
+When you use ``super()``, you are going to have access directly to the class from which you are inheriting. In the example above, you explicitly called the ``__init__`` method of the parent class. If you try again to run the method ``me.get_name()``, you will see that no error appears, but also that nothing is printed to screen. This is because you triggered the ``super().__init__()`` without any arguments and therefore the name defaulted to the empty string. You could change the code like this:
+
+.. code-block:: python
+
+    class Teacher(Person):
+        def __init__(self, name, course):
+            super().__init__(name)
+            self.course = course
+        [...]
+
+which you would use combining both examples above:
+
+.. code-block:: pycon
+
+    >>> from person import Teacher
+    >>> me = Teacher('John', 'math')
+    >>> print(me.get_name())
+    John
+
+It is important to note that when importing the class, you only import the one you want to use, you don't need to import the parent, that is the responsibility of whoever developed the ``Teacher`` class.
 
 Finer details of classes
 ------------------------
-With what you have learned up to here, you can achieve a lot of things, it is just a matter of thinking how to connect different methods, when it is useful to inherit. Wihtout doubts, it will help you to understand the code developed by others. There are, however, some details that are worth mentioning, because you can improve how your classes look and behave. 
+With what you have learned up to here, you can achieve a lot of things, it is just a matter of thinking how to connect different methods when it is useful to inherit. Without doubts, it will help you to understand the code developed by others. There are, however, some details that are worth mentioning, because you can improve how your classes look and behave.
 
 Printing objects
 ................
@@ -337,7 +354,6 @@ The output of printing ``guy`` is quite ugly and is not particularly useful. For
     def __str__(self):
         return "Person class with name {}".format(self.stored_name)
 
-
 If you run the code above, you will get the following:
 
 .. code-block:: pycon
@@ -354,13 +370,11 @@ You can get very creative. It is also important to point out that the method ``_
     >>> print(class_str)
     Person class with name John Snow
 
-
 Which also works if you do this:
 
 .. code-block:: pycon
 
     >>> print('My class is {}.'.format(guy))
-
 
 Something that is important to point out is that this method is inherited. Therefore, if you, instead of printing a ``Person``, print a ``Student``, you will see the same output, which may or may not be the desired behavior.
 
@@ -373,7 +387,6 @@ When you are developing complex classes, sometimes you would like to alter the b
     >>> person.year_of_birth = 1980
     >>> print(person.age)
     38
-
 
 There is a way of doing this in Python which can be easily implemented even if you don't fully understand the syntax. Working again in the class ``Person``, we can do the following:
 
@@ -406,6 +419,14 @@ Which can be used like this:
     >>> me.age
     32
 
-What is happening is that Python gives you control over everything, including what does the ``=`` do when you assign a value to an attribute of a class. The first time you create a ``@property``, you need to specify a function that returns a value. In the case above, we are returning ``self._year_of_birth``. Just doing that will allow you to use ``me.year_of_birth`` as any attribute, but it will fail if you try to change its value. This is called a read-only property. If you are working in the lab, it is useful to define methods as read-only properties when you can't change the value. For example, a method for reading the serial number would be read-only.
+What is happening is that Python gives you control over everything, including what does the ``=`` do when you assign a value to an attribute of a class. The first time you create a ``@property``, you need to specify a function that returns a value. In the case above, we are returning ``self._year_of_birth``. Just doing that will allow you to use ``me.year_of_birth`` as an attribute, but it will fail if you try to change its value. This is called a read-only property. If you are working in the lab, it is useful to define methods as read-only properties when you can't change the value. For example, a method for reading the serial number of a device would be read-only.
 
-If you want to change the value of a property, you have to define a new method. This method is going to be called a *setter*. That is why you can see the line ``@year_of_birth.setter``. The method takes an argument that triggers two actions. On the one hand, it updates the age, on the other it stores the year in an attribute. It takes a while to get used to, but it can be very handy. It takes a bit more of time to develop than with simple methods, but it simplifies a lot the rest of the programs that build upon the class.
+If you want to change the value of a property, you have to define a new method. This method is going to be called a *setter*. That is why you can see the line ``@year_of_birth.setter``. The method takes an argument that triggers two actions. On the one hand, it updates the age, on the other it stores the year in an attribute. It takes a while to get used to, but it can be very handy.
+
+Conclusions
+-----------
+This article is a very short primer on how to start working with classes in Python. You are not supposed to be an expert after such a brief walk-through, but it should be enough for getting you started with your own developments, and, more importantly, to be able to read other developers code and understand what they are doing.
+
+The series of primer articles are thought as a go-to destination when you need to refresh a specific concept. If you find anything missing, you can always leave a comment below and we will expand the article according to your needs. You can find the text of this article on `Github <https://github.com/PFTL/website/blob/master/content/blog/08_intro_to_classes.rst>`_.
+
+Header photo by `Daniel Cheung <https://unsplash.com/photos/ZqqlOZyGG7g?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
