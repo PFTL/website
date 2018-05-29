@@ -33,7 +33,7 @@ This tutorial is not about Arduinos themselves but about how to build a device t
 
 If you go through the menus, you will see that there are some examples available, which can provide a very valuable starting point for learning new options. In a broad sense, the code that runs in an Arduino can be split in two parts: a setup process in which you initialize variables and do some configuration, such as setting the parameters of some ports, etc. This is run only once, when the device boots up. Then you have a loop, in which all the interaction both with the real world and to the computer happens.
 
-Arduinos are not programmed with Python, but with C++ type of code. Therefore the syntax is different, but the routines we will develop are simple enough. If you are in doubt, the fastest is to learn by reading code from others. 
+Arduinos are not programmed with Python, but with C++ type of code. Therefore the syntax is different, but the routines we will develop are simple enough. If you are in doubt, the fastest is to learn by reading code from others.
 
 Downloading data with Python
 ----------------------------
