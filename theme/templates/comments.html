@@ -1,11 +1,11 @@
-<div class="col-10">
+<div class="col-12">
     <div class="card ">
         <div class="card-header">Comments</div>
         <div class="mt-1" id="current-comments"></div>
         <hr>
         <div class="comment">
             <form method="post" action="https://api.staticman.net/v2/entry/PFTL/website_comments/master/comments"
-                  id="comment-form">
+                  id="comment-form" class="p-2">
                 <input name="options[url]" type="hidden" value="{{ article.url }}">
                 <input name="fields[url]" type="hidden" value="{{ article.url }}">
                 <div class="form-group row">
