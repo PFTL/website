@@ -1,0 +1,43 @@
+{% import 'macros/article_thumbnail.html' as art_thum %}
+{% extends 'base.html' %}
+{% block title %}Books to Learn Python Programming{% endblock %}
+{% block meta_header %}
+    <meta name="description" content="Resources to learn how to develop programs for the lab">
+    <link rel="canonical" href="https://www.pythonforthelab.com/books"/>
+{% endblock %}
+{% block head_scripts %}
+<script
+    id="fsc-api"
+    src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.7.5/fastspring-builder.min.js"
+    type="text/javascript"
+    data-storefront="pythonforthelab.onfastspring.com/popup-pftl-book">
+</script>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h1 class="text-center my-5">Python For The Lab</h1>
+                <p class="text-center"><img src="{{ SITEURL }}/theme/img/cover_mockup.png" width="350px"> </p>
+                <p>Python For The Lab is a collection of resources to help you start using Python
+                    for developing solutions in your lab.
+                </p>
+                <p>Learn by doing, with detailed, step-by-step instructions and exercises. <b>More than 150 pages with complete examples and tutorials</b>
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center my-3">
+            <div class="col-md-5">
+                <a href="#" data-fsc-action="Add,Checkout" data-fsc-item-path-value="python-for-the-lab-book"><button class="btn btn-primary btn-lg btn-block">Get the book, only for 15€</button> </a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% include 'free_chapter_form.html' %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer_scripts %}
+<script src="{{ SITEURL }}/theme/js/freechapter_subscribe.js"></script>
+{% endblock %}

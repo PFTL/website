@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log('doc ready');
   $('#comment-form').submit(function (event) {
     event.preventDefault();
     data = $('#comment-form').serialize();

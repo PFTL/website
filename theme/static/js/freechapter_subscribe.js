@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  $('#newsletter').submit(function (event) {
+  $('#free-chapter').submit(function (event) {
     event.preventDefault();
 
     var email = $("#email").val();
@@ -9,7 +9,7 @@ $(document).ready(function () {
         data: {
           'publicAccountID': '7616a022-4e37-40ba-b90e-6c3735d8440e',
           'email': email,
-          'listName': 'PFTL Newsletter',
+          'listName': 'Free PFTL Chapter',
           'activationTemplate': '',
           'source': 'WebForm',
           'ewf_captcha': 'false'},
@@ -20,7 +20,7 @@ $(document).ready(function () {
         success: function (data) {
           $("#newsletter_feedback").html('<div class="alert alert-primary" role="alert">Thanks for signing up to our newsletter!</div>');
         },
-        error: function () {
+        error: function (data) {
           $("#newsletter_feedback").html('<div class="alert alert-danger" role="alert">An error ocurred, please try again!</div>');
         }
        });
