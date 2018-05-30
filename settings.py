@@ -8,7 +8,8 @@ GITHUB_URL = 'https://github.com/PFTL'
 PDF_GENERATOR = False
 
 TEMPLATE_PAGES = {'static_index.html': 'index.html',
-                 'search.html': 'search/index.html',}
+                 'search.html': 'search/index.html',
+                  'static_books.html': 'books/index.html',}
 
 STATIC_PATHS = ['images', 'static', 'pages']
 
