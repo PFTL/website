@@ -4,6 +4,7 @@ The factorial is a mathematical operation that calculates the product of all the
 
 For example, the factorial of 5 would be 1*2*3*4*5 = 120. With our code we can do the following::
 
+    >>> from my_module.factorial import factorial
     >>> factorial(5)
     120
 

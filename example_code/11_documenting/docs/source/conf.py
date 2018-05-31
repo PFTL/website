@@ -14,4 +14,5 @@ pygments_style = 'sphinx'
 html_theme = 'alabaster'
 html_static_path = ['_static']
 extensions = [
-    'sphinx.ext.autodoc',]
+    'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',]

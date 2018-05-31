@@ -2,21 +2,29 @@
 Module factorial
 ================
 This module supplies one function, factorial() to calculate the factorial of an integer.
+You can imported like this:
+
+>>> from my_module.factorial import factorial
 """
 import math
 
 
 def factorial(n):
     """Function to calculate the factorial of a number.
-    For example:
+    First import, and then use, for example:
+
 
     >>> factorial(5)
     120
-
     >>> factorial(-1)
     Traceback (most recent call last):
         ...
     ValueError: n must be >= 0
+
+    :param n: Number to calculate the factorial
+    :type n: int
+    :return: The calculated factorial
+    :rtype: int
     """
 
     if not n >= 0:

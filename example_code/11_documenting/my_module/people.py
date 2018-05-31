@@ -4,10 +4,15 @@ Module People
 Defines two classes, Person and Teacher.
 You define a person by supplying a name, for example:
 
+>>> from my_module.people import Person, Teacher
 >>> me = Person('My Name')
 >>> print(me.name)
 My Name
-
+>>> you = Teacher('Your Name', 'Math')
+>>> print(you.name)
+Your Name
+>>> print(you.course)
+Math
 """
 class Person:
     """Class to store a general person information. For example the name."""
@@ -17,7 +22,9 @@ class Person:
 
 
 class Teacher(Person):
-    """Class to store a teacher's information. It subclasses Person."""
+    """Class to store a teacher's information. It subclasses :class:`Person`.
+    You can create a teacher like this:
+    """
     def __init__(self, name, course):
         """Create a teacher object by providing a name and the course it teaches."""
         super().__init__(name)
