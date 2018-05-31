@@ -1,6 +1,9 @@
 import math
 
+
 def factorial(n):
+    'Function to calculate the factorial'
+
     if not n >= 0:
         raise ValueError("n must be >= 0")
     if math.floor(n) != n:
