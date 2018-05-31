@@ -2,6 +2,13 @@
     font-family: 'Indie Flower';
 }
 
+.center-img{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    width: 85%;
+}
+
 .warning {
     box-shadow: 0 4px 8px 0 rgba(255, 59, 0, 0.25), 0 6px 20px 0 rgba(255, 59, 0, 0.2);
     padding: 1.25rem;
@@ -141,6 +148,9 @@ article {
 
     .article-title h3 {
         font-size: 1.75rem;
+    }
+    .center-img{
+        width: auto;
     }
 }
 

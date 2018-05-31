@@ -23,7 +23,7 @@ FEED_RSS = 'feed'
 
 MARKUP = ('rst', 'markdown',)
 
-RELATIVE_URLS = False
+RELATIVE_URLS = True
 
 INDEX_SAVE_AS = 'blog/index.html'
 
