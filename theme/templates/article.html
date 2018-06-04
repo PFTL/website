@@ -68,6 +68,19 @@
 
 {% block footer_scripts %}
     <script src="{{ SITEURL }}/theme/js/comment_submit.js"></script>
-    <script src="{{ SITEURK }}/theme/js/comments_load.js"></script>
     <script src="{{ SITEURL }}/theme/js/newsletter_subscribe.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/comments/{{ article.url }}comments.html',
+                success: function (data) {
+                    $('#current-comments').html(data);
+                },
+                error: function () {
+                    $('#current-comments').html('<h3 class="mb-3">No comments yet, be the first!</h3>');
+                }
+            });
+        });
+    </script>
 {% endblock %}
