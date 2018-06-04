@@ -6,7 +6,7 @@ Documenting with Sphinx and Readthedocs
 :subtitle: Documentation is key for a project survival
 :header: {attach}chuttersnap-553860-unsplash.jpg
 :tags: Threads, Processes, Parallel, Speed, Async, Advanced
-:description: Lear how to build beautiful documentation for your projects
+:description: Learn how to build beautiful documentation for your projects
 
 If you have ever followed a guide on how to start programming, most likely you have encounter reflections about the importance of adding comments to your code. Comments allow you to understand what the developer was thinking when programming, maybe left some traces of what could be improved. If you are developing software in places where people change often, it is crucial to leave extra information behind, to speed up the catching up of the new developers.
 
