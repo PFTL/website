@@ -5,3 +5,4 @@ try:
     data = file.readfile()
 except FileNotFoundError:
     file = open(filename, 'w')
+    raise
