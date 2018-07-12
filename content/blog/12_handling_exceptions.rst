@@ -8,7 +8,7 @@ Learning (not) to Handle Exceptions
 :tags: Exceptions, Errors, Try, Except, Catch, Handling
 :description: Learn how to deal with exceptions in Python
 
-When you develop code, it is almost impossible not to run into an error. Some problems are going to arise as soon as you start your program, for example, if you forgot to close a parenthesis, or forgot the ``:`` after an if-statement. However, errors at runtime are also very frequent and harder to deal with. In this article, you are going to learn how to handle exceptions, i.e. how to avoid program crashes when you can anticipate that an error may appear.
+    When you develop code, it is almost impossible not to run into an error. Some problems are going to arise as soon as you start your program, for example, if you forgot to close a parenthesis, or forgot the ``:`` after an if-statement. However, errors at runtime are also very frequent and harder to deal with. In this article, you are going to learn how to handle exceptions, i.e. how to avoid program crashes when you can anticipate that an error may appear.
 
 We are going to cover from the basics of error handling to defining your own exceptions. You will learn why sometimes it is better not to catch exceptions and how to develop a pattern that can be useful for future users of your code. Exceptions are a crucial part of any code, and dealing with them elegantly can improve a lot the value of your code.
 
@@ -380,6 +380,35 @@ You are very encouraged to play around and try to find different usages for each
 
 Things are not over yet, there are many more things that can be done with exceptions.
 
+The Traceback
+-------------
+As you have probably seen already, when there is an exception, a lot of information is printed to the screen. For example, if you try to open a not existing file you get:
+
+.. code-block:: bash
+
+    Traceback (most recent call last):
+      File "P_traceback.py", line 13, in <module>
+        file = open(filename)
+    FileNotFoundError: [Errno 2] No such file or directory: 'my_data.dat'
+
+Interpreting the message may take a bit of practice, but for simple cases it is clear. First, it tells you that you are seeing a traceback, in simple words the history of things that lead to the exception. I will cover more on this on a separate post. However, you can clearly see the file that generated the problem and the line. If you open the file and go to that line, you will see that it is exactly the one that says ``file = open(filename)``. Finally, you see the exception.
+
+This last message is the one we were printing to screen, but we were neglecting the traceback that would allow us to find the real source of the exception and act accordingly. Fortunately, Python allows us to access the traceback very easily. Slightly modifying the example of opening a file, we would have:
+
+.. code-block:: python
+
+    import traceback
+
+    filename = 'my_data.dat'
+
+    try:
+        file = open(filename)
+        data = file.read()
+    except FileNotFoundError:
+        traceback.print_exc()
+
+If you run the code again, you will see printed to screen the same information than before. The main difference is that your program didn't crash, because you were handling the exception. Working with tracebacks is very handy for debugging. The examples that you have seen here are very simple, but when you have a very nested code, i.e., one function calls another that creates an object, that runs a method, etc. it is very important to pay attention to the traceback in order to know what triggered the exception.
+
 Raising Custom Exceptions
 -------------------------
 When you are developing your own packages, it is often useful to define some common exceptions. This gives a great deal of flexibility because it allows other developers to handle those exceptions as they find appropriate. Let's see an example. Imagine that you want to write a function that calculates the average between two numbers, but you want both numbers to be positive. This is the same example that we have seen when working with `decorators <{filename}04_how_to_use_decorators_2.rst>`_. We start by defining the function:
@@ -531,4 +560,4 @@ As with almost any other Python topic, the best way to learn is to look closely 
 
 Photo by `Cody Davis <https://unsplash.com/photos/5E5N49RWtbA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
 
-Remember, that both `the code <https://github.com/PFTL/website/tree/master/example_code/12_exceptions>`_ and `the text <https://github.com/PFTL/website/blob/master/content/blog/12_handling_exceptions.rst>`_ of the article are available, in case you have any comments or suggestions to improve it.
+Remember, that both `the code <https://github.com/PFTL/website/tree/master/example_code/12_exceptions>`_ and `the text <https://github.com/PFTL/website/blob/master/content/blog/12_handling_exceptions.rst>`_ of the article is available, in case you have any comments or suggestions to improve it.

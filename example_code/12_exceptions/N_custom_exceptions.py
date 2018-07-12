@@ -29,5 +29,6 @@ try:
     average('a', 'b')
 except MyException as e:
     print(e)
+    # print(dir(e))
 
 print('Done')
