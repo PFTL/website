@@ -3,10 +3,10 @@ Learning (not) to Handle Exceptions
 
 :date: 2018-06-04
 :author: Aquiles Carattino
-:subtitle: Learn how to dealing with exceptions in Python
+:subtitle: Learn how to deal with exceptions in Python
 :header: {attach}cody-davis-253928-unsplash.jpg
-:tags: Threads, Processes, Parallel, Speed, Async, Advanced
-:description: Why you should not catch exceptions in your programs
+:tags: Exceptions, Errors, Try, Except, Catch, Handling
+:description: Learn how to deal with exceptions in Python
 
 When you develop code, it is almost impossible not to run into an error. Some problems are going to arise as soon as you start your program, for example, if you forgot to close a parenthesis, or forgot the ``:`` after an if-statement. However, errors at runtime are also very frequent and harder to deal with. In this article, you are going to learn how to handle exceptions, i.e. how to avoid program crashes when you can anticipate that an error may appear.
 
