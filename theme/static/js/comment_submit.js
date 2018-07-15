@@ -12,6 +12,7 @@ $(document).ready(function () {
           $("#id").prop("disabled", true);
         },
         success: function (data) {
+            console.log('Success');
           $(".comment").html('<div class="alert alert-primary" role="alert">Thanks for your comment. It will appear here as soon as it gets approved!</div>');
         },
         error: function () {
