@@ -19,7 +19,7 @@ ARTICLE_SAVE_AS = 'blog/{slug}/index.html'
 SITEMAP_SAVE_AS = 'sitemap.xml'
 FEED_DOMAIN = 'https://www.pythonforthelab.com'
 
-FEED_RSS = 'feed'
+FEED_RSS = 'feed.rss'
 
 MARKUP = ('rst', 'markdown',)
 
