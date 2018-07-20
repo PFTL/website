@@ -192,3 +192,110 @@ article {
 tt{
     background-color: lightgray;
 }
+.affix {
+  top: 20px;
+  width: 213px;
+}
+
+/*.latest-articles{*/
+    /*position: -webkit-sticky;*/
+    /*position: fixed;*/
+    /*top: 120px;*/
+    /*border: 1px rgba(0, 0, 0, 0.34) solid;*/
+    /*border-radius: 5px;*/
+/*}*/
+
+.latest-articles{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 120px;
+    border: 1px rgba(0, 0, 0, 0.34) solid;
+    border-radius: 5px;
+}
+
+
+
+.mpopup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    margin-top: 100px;
+    left: 0;
+    top: 0;
+    width: 250px;
+    margin-left: 10%;
+    /*height: 100%;*/
+    overflow: auto;
+    /*background-color: rgb(0,0,0);*/
+    /*background-color: rgba(0,0,0,0.4);*/
+}
+
+@media (min-width: 768px) {
+    .mpopup{
+        width: 500px;
+        margin-left: 150px;
+    }
+}
+/*.mpopup-content {*/
+    /*position: relative;*/
+    /*background-color: #fefefe;*/
+    /*margin: auto;*/
+    /*padding: 0;*/
+    /*width: 60%;*/
+    /*box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);*/
+    /*-webkit-animation-name: animatetop;*/
+    /*-webkit-animation-duration: 0.4s;*/
+    /*animation-name: animatetop;*/
+    /*animation-duration: 0.4s*/
+/*}*/
+
+/*.mpopup-head {*/
+    /*padding: 2px 16px;*/
+    /*background-color: #ff0000;*/
+    /*color: white;*/
+/*}*/
+/*.mpopup-main {padding: 2px 16px;}*/
+/*.mpopup-main input[type="text"]{*/
+    /*width: 30%;*/
+    /*height: 25px;*/
+    /*font-size: 15px;*/
+/*}*/
+/*.mpopup-main input[type="submit"]{*/
+    /*padding: 5px;*/
+    /*font-size: 15px;*/
+    /*font-weight: bold;*/
+    /*background-color: #333;*/
+    /*outline: none;*/
+    /*border: none;*/
+    /*color: #fff;*/
+    /*cursor: pointer;*/
+/*}*/
+/*.mpopup-foot {*/
+    /*padding: 2px 16px;*/
+    /*background-color: #ff0000;*/
+    /*color: #ffffff;*/
+/*}*/
+
+/* add animation effects */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* close button style */
+.close {
+    color: gray;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
