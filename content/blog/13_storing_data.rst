@@ -9,9 +9,9 @@ How to Store Data in Your Python Applications
 :tags: Data, Storing, sqlite, HDF5, ascii, json
 :description: Learn different ways of storing data in your projects
 
-    Storing data to re use it later is a central part in most Python applications, regardless of their origin. Whether you are doing a measurement in the lab or developing a web application, you will need to save information in a persistent way. For example, you would like to analyze your results after you have performed an experiment. Or you would like to keep a list of e-mails of people who registered on your website.
+Storing data to re use it later is a central part in most Python applications, regardless of their origin. Whether you are doing a measurement in the lab or developing a web application, you will need to save information in a persistent way. For example, you would like to analyze your results after you have performed an experiment. Or you would like to keep a list of e-mails of people who registered on your website.
 
-    Even if storing data is of utmost importance, every application will require different strategies. You have to take into account different factors, such as the volume of data being generated, how self-descriptive the data is, who is going to use it later, etc. In this article we are going to explore different ways of storing data and we will discuss advantages and drawbacks of each.
+Even if storing data is of utmost importance, every application will require different strategies. You have to take into account different factors, such as the volume of data being generated, how self-descriptive the data is, who is going to use it later, etc. In this article we are going to explore different ways of storing data and we will discuss advantages and drawbacks of each.
 
 .. contents::
 
