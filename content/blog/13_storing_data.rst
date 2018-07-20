@@ -261,7 +261,7 @@ Reading the data
 ----------------
 After we have saved the data, it is very important to be able to read it back into our program. The first approach is unorthodox, but it will prove a point. You can read the data generated with the ``write`` method using numpy's ``loadtxt``:
 
-.. code-block::
+.. code-block:: python
 
     import numpy as np
 
