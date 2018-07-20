@@ -5,7 +5,7 @@ How to Store Data in Your Python Applications
 :date: 2018-07-23
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
-:header: {attach}cody-davis-253928-unsplash.jpg
+:header: {attach}tom-hermans-642319-unsplash.jpg
 :tags: Data, Storing, sqlite, HDF5, ascii, json
 :description: Learn different ways of storing data in your projects
 
@@ -386,4 +386,14 @@ You see that we are splitting the spaces, which seemd like a good idea in the ex
 
 More complicated data, like sentences for instance, will require a more careful handling. In a sentence, you will have a variable number of spaces and therefore you are going to have a hard time figuring out what parts belong to which data column. You can replace the space by a comma when you save the file and it is going to work, provided that there are no commas in the data you are saving.
 
-If you delimiter your data with commas
+If you delimiter your data with commas you will have a file commonly referred to as Comma Separated Values, or **csv**. You can see the output of `the file I have generated <https://github.com/PFTL/website/blob/master/example_code/13_storing_data/DB_data.csv>`_ on Github. This kind of files can be interpreted not only by text readers, but also by numeric programs such as Excel, Libre Office, Matlab, etc. You can even see that if you look at the file on Github it appears nicely formatted. There are several standards around, and you can try to reproduce them, with enough insight.
+
+Of course, if your data has a comma in it, the file will be broken. The integrity of your data will be fine, but it is going to be very hard to specify how to read it back without errors. The idea of storing data is that you can read back, and if there are exceptions in the process, you will not be certain about what your data means. You don't need to use commas, nor single characters. You can separate your data with a dot and a comma, for instance.
+
+When you store data, you have to think not only in the process of storing, but also in the process of reading it back in an unambiguous way. If you store only numeric data, choosing a letter for separating values may seem like a good idea. Using a comma may seem correct until you realize that in some countries commas separate the decimal part of numbers.
+
+Is this all regarding how to store data? Of course not, there is much more to come. Next monday there will be another article.
+
+As always, `the example code can be found here <https://github.com/PFTL/website/tree/master/example_code/13_storing_data>`_ and `the source code for this article here <https://github.com/PFTL/website/blob/master/content/blog/13_storing_data.rst>`_.
+
+Header photo by `Tom Hermans <https://unsplash.com/photos/IbL3Zd62Q7Q?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
