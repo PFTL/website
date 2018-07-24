@@ -16,7 +16,25 @@ STATIC_PATHS = ['images', 'static', 'pages']
 ARTICLE_URL = 'blog/{slug}'
 ARTICLE_SAVE_AS = 'blog/{slug}/index.html'
 
+
+
 SITEMAP_SAVE_AS = 'sitemap.xml'
+SITEMAP = {
+    'format': 'xml',
+    'priorities': {
+        'articles': 1,
+        'indexes': 0.5,
+        'pages': 0.5
+    },
+    'changefreqs': {
+        'articles': 'monthly',
+        'indexes': 'weekly',
+        'pages': 'monthly'
+    },
+    'exclude': ['tag/', 'category/', 'categories.html', 'tags.html', 'search/'],
+}
+
+
 FEED_DOMAIN = 'https://www.pythonforthelab.com'
 
 FEED_RSS = 'feed.rss'
@@ -28,7 +46,7 @@ RELATIVE_URLS = False
 INDEX_SAVE_AS = 'blog/index.html'
 
 PLUGIN_PATHS = ['plugins',]
-PLUGINS = ['new_pigment', 'header_image', 'tipue_search']
+PLUGINS = ['new_pigment', 'header_image', 'tipue_search', 'sitemap']
 
 LOCALE = 'en_US.utf8'
 
