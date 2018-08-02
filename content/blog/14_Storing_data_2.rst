@@ -105,7 +105,7 @@ You will see that the ascii file is still taking the same space, exactly 2KB (or
 
 Those extra .12KB that numpy is saving are equivalent to the header we were generating in the previous article. Binary files also need to store context information in order to be interpreted. You also have to notice that what you are storing is not 'just' a number, you are storing also its data type. Next time you read that file, you will have an 8, 16 or 32-bit variable. The ascii file, on the other hand, doesn't have that information.
 
-With this examples, it may even seem that saving ascii files is more efficient than saving binary files. Let's see what happens if you have more than just 1's in your array:
+With these examples, it may even seem that saving ascii files is more efficient than saving binary files. Let's see what happens if you have more than just 1's in your array:
 
 .. code-block:: python
 
@@ -117,5 +117,194 @@ With this examples, it may even seem that saving ascii files is more efficient t
         for i in a:
             f.write(str(i)+'\n')
 
-Compare the sized of the two files and try to understand why are they so different.
+Compare the size of the two files and try to understand why are they so different.
 
+Intro to Pickle
+--------------------------------------
+So far we have discussed how to save strings or numpy arrays to a file. However, Python allows you to define several types of data structure, such as lists, dictionaries, custom objects, etc. You can try think how to transform a list into a series of strings and use the opposite operation to recover the variable. This is what we have done when writing arrays to plain text files.
+
+However, this is very cumbersome, because is very susceptible to small changes. For example, it is not the same saving a list of numbers than a list that mixes numbers and strings. Fortunately, Python comes with a package that allows us to save almost everything we want, called **Pickle**. Let's first see it in action and then discuss how it works.
+
+Imagine you have a list that mixes some numbers and some strings and you want to save them to a file, you can do the following:
+
+.. code-block:: python
+
+    import pickle
+
+    data = [1, 1.2, 'a', 'b']
+
+    with open('AF_custom.dat', 'wb') as f:
+        pickle.dump(data, f)
+
+If you try to open the file *AF_custom.dat* you will not see anything interesting. Is is important to note that we have opened the file as ``wb``, meaning that we are writing just as before, but that the file is opened in binary format. This is what allows Python to write a stream of bytes to a file.
+
+If you want to load the data back into Python, you can do the following:
+
+.. code-block:: python
+
+    with open('AF_custom.dat', 'rb') as f:
+        new_data = pickle.load(f)
+
+    print(new_data)
+
+Again, check that we have used ``rb`` instead of just ``r`` for opening the file. Then you just load the contents of f into a variable called ``new_data``.
+
+Pickle is transforming an object, in the example above a list, into a series of bytes. That procedure is called serialization. The algorithm responsible for serializing the information is particular to Python and therefore is not compatible out of the box with other programming languages. In the context of Python, when you serialize an object is called *pickling* and when you deserialize it is called *unpickling*.
+
+Pickling numpy arrays
+---------------------
+You can use Pickle to save other kind of variables. For example, you can use it to store a numpy array. Let's compare what happens when you use the default numpy ``save`` method and Pickle:
+
+.. code-block:: python
+
+    import numpy as np
+    import pickle
+
+    data = np.linspace(0, 1023, 1000, dtype=np.uint8)
+
+    np.save('AG_numpy', data)
+
+    with open('AG_pickle.dat', 'wb') as f:
+        pickle.dump(data, f)
+
+As in the examples earlier, the numpy file will take exactly 1128 bytes. 1000 are for the data itself and 128 are for the extra information. The pickle file will take 1159 bytes, which is not bad at all, considering that it is a general procedure and not specific to numpy.
+
+To read the file, you do exactly the same as before:
+
+.. code-block:: python
+
+    with open('AG_pickle.dat', 'rb') as f:
+        new_data = pickle.load(f)
+
+    print(new_data)
+
+If you check the data you will see that it is actually a numpy array. If you run the code in an environment in which numpy is not installed, you will see the following error:
+
+.. code-block:: bash
+
+    Traceback (most recent call last):
+      File "AG_pickle_numpy.py", line 14, in <module>
+        new_data = pickle.load(f)
+    ModuleNotFoundError: No module named 'numpy'
+
+So, you already see that pickle is doing a lot of things under the hood, like trying to import numpy.
+
+Pickling Functions
+------------------
+To show you that Pickle is very flexible, you will see how you can store functions. Probably you already heard that everything in Python is an object, and Pickle is in fact a way of serializing objects. Therefore it doesn't really matter what it actually is that you are storing. For a function, you would have something like this:
+
+.. code-block:: python
+
+    def my_function(var):
+        new_str = '='*len(var)
+        print(new_str+'\n'+var+'\n'+new_str)
+
+    my_function('Testing')
+
+Which is a simple example of a function. It surroundes the text with ``=`` signs. Storing this function is exactly the same as storing any other object:
+
+.. code-block:: python
+
+    import pickle
+
+    with open('AH_pickle_function.dat', 'wb') as f:
+        pickle.dump(my_function, f)
+
+And to load it and use it you would do:
+
+.. code-block:: python
+
+    with open('AH_pickle_function.dat', 'rb') as f:
+        new_function = pickle.load(f)
+
+    new_function('New Test')
+
+Limitations of Pickle
+---------------------
+In order for Pickle to work, you need to have available the definition of the object you are pickling. In the examples above, you have seen that you need to have numpy installed in order to unpickle an array. However, if you try to unpickle your function from a different file than the one you used to create it, you will get the following error:
+
+.. code-block:: bash
+
+    Traceback (most recent call last):
+      File "<stdin>", line 2, in <module>
+    AttributeError: Can't get attribute 'my_function' on <module '__main__' (built-in)>
+
+If you want to unpickle a function in a different file (as most likely is going to be the case), you can do the following:
+
+.. code-block:: python
+
+    import pickle
+    from AH_pickle_function import my_function
+
+    with open('AH_pickle_function.dat', 'rb') as f:
+        new_function = pickle.load(f)
+
+Now, of course you can wonder what is the use of this. If you imported ``my_function``, you don't need to load the pickled file. And this is true. Storing a function or a class doesn't make a lot of sense, because in any case you have it defined. The biggest difference is when you want to store an instance of a class. Let's define a class that stores the time at which it is instantiated:
+
+.. code-block:: python
+
+    import pickle
+    from time import time
+    from datetime import datetime
+
+    class MyClass:
+        def __init__(self):
+            self.init_time = time()
+
+        def __str__(self):
+            dt = datetime.fromtimestamp(self.init_time)
+            return 'MyClass created at {:%H:%M on %m-%d-%Y}'.\
+                format(dt)
+
+    my_class = MyClass()
+    print(my_class)
+
+    with open('AI_pickle_object.dat', 'wb') as f:
+        pickle.dump(my_class, f)
+
+If you do this, you will have an object that stores the time at which it was created and if you ``print`` that object, you will see the date nicely formatted. Pay attention also to the fact that that you are saving ``my_class`` and not ``MyClass`` to the pickled file. This means that you are saving an instance of your class, with the attributes that you have defined.
+
+From a second file you would like to load what you have saved. You need to import the ``MyClass`` class, but the instance itself will be what you saved:
+
+.. code-block:: python
+
+    import pickle
+    from AI_pickle_object import MyClass
+
+
+    with open('AI_pickle_object.dat', 'rb') as f:
+        new_class = pickle.load(f)
+
+    print(new_class)
+
+Notice that we are not importing ``time`` nor ``datetime``, just ``pickle`` for loading the object and the class itself. Pickle is a great tool when you want to save the specific state of an object in order to keep with the work later.
+
+Risks of Pickle
+---------------
+If you look around, you will definitely find a lot of people warning the Pickle is not safe to use. The main reason is that when you unpickle, arbitrary code could be executed on the machine. If you are the only one using the files, or you definitely trust the one who gave you the file, there will be no problems. If you are building an online service, however, unpickling data that was sent by a random user may have consequences.
+
+When Pickle runs, it will look for a special method on the class called ``__reduce__`` that specifies how an object is pickled and unpickled. Without entering too much into detail, you can specify a callable that will be executed while unpickling. In the example above, you can add the extra method to ``MyClass``. You will end up having:
+
+.. code-block:: python
+
+    class MyClass:
+        def __init__(self):
+            self.init_time = time()
+
+        def __str__(self):
+            dt = datetime.fromtimestamp(self.init_time)
+            return 'MyClass created at {:%H:%M:%S on %m-%d-%Y}'.\
+                format(dt)
+
+        def __reduce__(self):
+            return (os.system, ('ls',))
+
+Run the code again to save the pickled file. If you run the other file, to load the pickled object you will see that all the contents of the folder in which you executed the script are shown. **Windows** users may not see it happening because depending on whether you use Power Shell or CMD, the command ``ls`` is not defined.
+
+This is a very naïve example. Instead of ``ls`` you could erase file, open a connection to an external attacker, send all the files to a server, etc. You can see that if you open the door to other to execute commands in your computer, eventually something very bad is going to happen.
+
+The scenario of a security risk with Pickle is extremely low for the vast majority of end users. The most important thing is to trust the source of your pickled files. If it is yourself, a colleague, etc. then you are fine.
+
+You may wonder why Python opens this security risk. The answer is that by being able to define how to unpickle an object, you can become much more efficient at storing data. The idea is that you define how to reconstruct an object and not necessarily all the information that it contains. In the case of the numpy arrays, imagine you define a matrix of 1024X1024 elements, all ones (or zeroes). You can store each value, which will take a lot of memory, or you can just instruct Python to run numpy and create the matrix, which doesn't take that much space (is only one line of code).
+
+Having control is always better. If you want to be sure that nothing bad is going to happen, you have to find other ways of serializing data. 

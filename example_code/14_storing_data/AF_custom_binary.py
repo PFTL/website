@@ -1,10 +1,11 @@
-from array import array
+import pickle
 
-data = array('d', [3.15, 2.15, 1.28])
+data = [1, 1.2, 'a', 'b']
 
-with open('AF_custom_binary.dat', 'wb') as f:
-    f.write(data)
+with open('AF_custom.dat', 'wb') as f:
+    pickle.dump(data, f)
 
+with open('AF_custom.dat', 'rb') as f:
+    new_data = pickle.load(f)
 
-with open('AF_custom_binary2.dat', 'w') as f:
-    f.write(data)
+print(new_data)
