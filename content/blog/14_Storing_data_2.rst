@@ -39,7 +39,7 @@ Let's do a quick test. We can create an array of integers between 0 and 255 (8-b
 
 Each element of the array is 8-bits long (or 1 byte). We are storing 256 elements, and therefore we expect the file to be 256 bytes in size. However, if you check it, you will see that it is bigger than that: around 914 bytes. This difference is not negligible, so where is it coming from?
 
-We have stored 256 elements, but there more numbers in the file. 10 elements are 1-digit long, 90 are 2-digits and 156 are 3-digits long. In total, there are 658 digits, plus 256 new line characters. If you add them up you get exactly 914. This means that each character is taking exactly 1 byte, or 8 bits.
+We have stored 256 elements, but there more numbers in the file. 10 elements are 1-digit long, 90 are 2-digits and 156 are 3-digits long. In total, there are 658 digits, plus 256 new line characters. If you add them up you get exactly 914. This means that each character is taking exactly 1 byte, or 8 bits. If you are on Windows, there is an extra consideration, because the new line character gets replaced by two characters and therefore you need to add 512 characters instead of 256.
 
 When you want to write a ``1``, it takes 1 byte. However, when you store a ``10`` it will take 2 bytes. You have to remember that, in the space of integer numbers of 8 bits, they both take the same amount of memory. With this simple example you start seeing that there are a lot of small issues that you have to take into account when saving data.
 
@@ -61,8 +61,61 @@ If you want to specify the encoding used while saving a file, you can do the fol
     with codecs.open('AB_unicode.dat', 'w', 'utf-8') as f:
         f.write(data_to_save)
 
-In the code about, the important part is the line that says ``utf-8``. Unicode has different implementations; each use a different amount of bits per character. You can choose 8, 16 and 32. You can also change the encoding for ``ascii``. Compare how much space it takes every time you save the data. Open the file being saved with a text editor and check if you can see the message.
+In the code above, the important part is the line that says ``utf-8``. Unicode has different implementations; each use a different amount of bits per character. You can choose 8, 16 and 32. You can also change the encoding to ``ascii``. Compare how much space it takes every time you save the data. Open the file being saved with a text editor and check if you can see the message.
 
 Saving Numpy Arrays
 -------------------
-Last week we have seen that it is possible to save numpy arrays into text files that can be read by any editor. This means that the information will be converted
+Last week we have seen that it is possible to save numpy arrays into text files that can be read by any editor. This means that the information will be converted to ascii (or unicode) and then written to a file. It is very easy to calculate how much space it will take, based on the number of digits that you are storing. Numpy also offer another way of storing data, in binary format.
+
+Let's start by creating an array and then we save it both as numpy binary and as ascii:
+
+.. code-block:: python
+
+    import numpy as np
+
+    a = np.linspace(0, 1000, 1024, dtype=np.uint8)
+
+    np.save('AC_binay', a)
+
+    with open('AC_ascii.dat', 'w') as f:
+        for i in a:
+            f.write(str(i)+'\n')
+
+You will end up with two different files, one called 'AC_binary.npy' and the other called 'AC_ascii.dat'. The latter can be opened with any text editor, while the first one will give you a very weird looking file. If you compare the size, you will notice that the binary file is using less memory than the ascii file.
+
+First, you have to note something strange about the code above. We are specifying the type of our array to ``np.uint8``, which means that we are using 8-bit integers. With 8-bits you can go up to ``2^8-1``, or ``255``. Moreover, since we are generating a linear space between 0 and 1000 with 1024 elements, each one is going to be rounded off. Anyways, this discussion is for you to start thinking about different data types and what do they mean. If you inspect the ascii file, you will notice that the numbers increase up to 255 and then they start again from 0.
+
+So, we have 1024 numbers, each one taking 8-bits, or equivalently 1 byte. The array therefore will take 1KB (1 kilobyte), but the file we are saving is larger than that (around 1.12KB). You can do the math for the ascii file and see that you can predict its size. Let's create, instead, a file with an array of ones:
+
+.. code-block:: python
+
+    import numpy as np
+
+    a = np.ones((1024), dtype=np.uint8)
+
+    np.save('AD_binay', a)
+
+    with open('AD_ascii.dat', 'w') as f:
+        for i in a:
+            f.write(str(i)+'\n')
+
+First thing to notice is that the ascii file is now smaller than in the example above. You are saving two characters per element (the 1 and the newline character), while before you could have up to 4 characters per line. However, the numpy binary file has exactly the same size. What happens if you run the code above, but specifying the type of the array as ``np.uint16``?
+
+You will see that the ascii file is still taking the same space, exactly 2KB (or 3KB on Windows). However, the numpy binary format is taking more space, exactly 1KB more. The array itself takes 2KB of memory, and there is an extra 0.12KB, exactly as before. This already gives us a hint of what is going on, but you can keep testing. Change the type to ``np.uint32`` and you will see that the ascii files is still at the same size, but the binary file is taking 2KB more than before. Again, you are saving 4KB to a file that takes 4.12KB.
+
+Those extra .12KB that numpy is saving are equivalent to the header we were generating in the previous article. Binary files also need to store context information in order to be interpreted. You also have to notice that what you are storing is not 'just' a number, you are storing also its data type. Next time you read that file, you will have an 8, 16 or 32-bit variable. The ascii file, on the other hand, doesn't have that information.
+
+With this examples, it may even seem that saving ascii files is more efficient than saving binary files. Let's see what happens if you have more than just 1's in your array:
+
+.. code-block:: python
+
+    import numpy as np
+
+    a = np.linspace(0,65535,65535, dtype=np.uint16)
+    np.save('AE_binay', a)
+    with open('AE_ascii.dat', 'w') as f:
+        for i in a:
+            f.write(str(i)+'\n')
+
+Compare the sized of the two files and try to understand why are they so different.
+
