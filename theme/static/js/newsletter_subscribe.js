@@ -10,7 +10,7 @@ $(document).ready(function () {
           'publicAccountID': '7616a022-4e37-40ba-b90e-6c3735d8440e',
           'email': email,
           'listName': 'PFTL Newsletter',
-          'activationTemplate': '',
+          'activationTemplate': 'New_Account_Confirmation',
           'source': 'WebForm',
           'ewf_captcha': 'false'},
         beforeSend: function () {
@@ -37,7 +37,7 @@ $(document).ready(function () {
           'publicAccountID': '7616a022-4e37-40ba-b90e-6c3735d8440e',
           'email': email,
           'listName': 'PFTL Newsletter',
-          'activationTemplate': '',
+          'activationTemplate': 'New_Account_Confirmation',
           'source': 'WebForm',
           'ewf_captcha': 'false'},
         beforeSend: function () {
@@ -64,7 +64,7 @@ $(document).ready(function () {
           'publicAccountID': '7616a022-4e37-40ba-b90e-6c3735d8440e',
           'email': email,
           'listName': 'PFTL Newsletter',
-          'activationTemplate': '',
+          'activationTemplate': 'New_Account_Confirmation',
           'source': 'WebForm',
           'ewf_captcha': 'false'},
         beforeSend: function () {
