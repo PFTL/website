@@ -307,4 +307,154 @@ The scenario of a security risk with Pickle is extremely low for the vast majori
 
 You may wonder why Python opens this security risk. The answer is that by being able to define how to unpickle an object, you can become much more efficient at storing data. The idea is that you define how to reconstruct an object and not necessarily all the information that it contains. In the case of the numpy arrays, imagine you define a matrix of 1024X1024 elements, all ones (or zeroes). You can store each value, which will take a lot of memory, or you can just instruct Python to run numpy and create the matrix, which doesn't take that much space (is only one line of code).
 
-Having control is always better. If you want to be sure that nothing bad is going to happen, you have to find other ways of serializing data. 
+Having control is always better. If you want to be sure that nothing bad is going to happen, you have to find other ways of serializing data.
+
+.. note:: If you are using Pickle as in the examples above, you should consider changing ``pickle`` for ``cPickle`` which is the same algorithm but written directly in C and runs much faster.
+
+Serializing with JSON
+---------------------
+The main idea with serialization is that you transform an object into something else, that can be 'easily' stored or transmitted. Pickle is a very convenient way but with some limitations regarding security. Moreover, the results of Pickle are not human readable, so it makes it harder to explore the contents of a file.
+
+JavaScript Object Notation, or JSON for short became a popular standard for exchanging information with web services. It is a definition on how to structure strings that can be later converted to variables. Let's first see a simple example with a dictionary:
+
+.. code-block:: python
+
+    import json
+
+    data = {
+        'first': [0, 1, 2, 3],
+        'second': 'A sample string'
+    }
+
+    with open('AK_json.dat', 'w') as f:
+        json.dump(data, f)
+
+If you open the file you will notice that the result is a text file that can be easily read with a text editor and interpreted. You can also define more complex data structures, such as a combination of lists and dictionaries, etc. To read, you can just do the following:
+
+.. code-block:: python
+
+    with open('AK_json.dat', 'r') as f:
+        new_data = json.load(f)
+
+Json is very handy because it can structure the information in such a way that can be shared with other programming languages, transmitted over the network and easily explored if saved to a file. However, if you try to save an instance of a class, you will get an error like this:
+
+.. code-block:: bash
+
+    TypeError: Object of type 'MyClass' is not JSON serializable
+
+JSON will not work with numpy arrays out of the box either.
+
+Combining JSON and Pickle
+-------------------------
+As you have seen JSON is a way of writing to a file structured text that will be easy to load and transform into a list, a dictionary, etc. On the other hand, Pickle transforms objects into bytes. It would be great therefore to combine both, to write the bytes to a text file. Fortunately there is such a possibility.
+
+The idea is, in the end, quite simple. You need to transform bytes into an ASCII string. If you remember about the discussion in the previous article, there is a standard called ASCII that transforms bytes into characters that you can read. When the internet started to catch up, people needed to transfer more than just plain words. Therefore, a new standard appeared, in which you can translate bytes into characters. This is called ``Base64`` and is supported by most programming languages, not just Python.
+
+As an example, we will generate a numpy array, we will pickle it and then we are going to create a dictionary that holds that array and the current time. The code looks like this:
+
+.. code-block:: python
+
+    import pickle
+    import json
+    import numpy as np
+    import time
+    import base64
+
+    np_array = np.ones((1000, 2), dtype=np.uint8)
+    array_bytes = pickle.dumps(np_array)
+    data = {
+        'array': base64.b64encode(array_bytes).decode('ascii'),
+        'time': time.time(),
+    }
+
+    with open('AL_json_numpy.dat', 'w') as f:
+        json.dump(data, f)
+
+.. note:: In the example above, we are using ``pickle.dumps`` instead of ``pickle.dump``, which returns the information instead of writing it to a file.
+
+You can go ahead and look at the file. You will see that you can read some parts of it, like the words 'array' and the time at which it was created. However, the array itself is a sequence of characters that don't make much sense. If you want to load the data back, you need to repeat the steps in the opposite order:
+
+.. code-block:: python
+
+    import pickle
+    import base64
+    import json
+
+    with open('AL_json_numpy.dat', 'r') as f:
+        data = json.load(f)
+
+
+    array_bytes = base64.b64decode(data['array'])
+
+    np_array = pickle.loads(array_bytes)
+    print(data['time'])
+    print(np_array)
+    print(type(np_array))
+
+The first step is to open the file and read it. Then, you grab the base64 encoded pickle and decode it. The output is directly the pickled array, which you proceed to unpickle. You can print the values and see that effectively you have recovered the numpy array.
+
+At this point there are two questions that you may be asking yourself. Why going through the trouble of pickling, encoding and serializing through json instead of just pickling the ``data`` dictionary. And why have we pickled first the array and then encoded in base 64 instead of writing the output of pickle.
+
+First, going to the trouble is justified if you look at your data with other programs. Having files which store extra information that can be easily read is very handy to quickly decide if it is the file you want to read or not. For example, you can open the file with a text editor, see that the date is not the one you were interested on and move forward.
+
+The second question is a bit deeper. Remember that when you are writing to a text file, you are assuming a certain encoding. The most common one being ascii, or utf-8. This limits a lot the way in which you can write bytes to disk, because you have only a finite set of characters you can use. Base64 takes care of using just the allowed characters.
+
+However, you have to remember that base64 was developed to transmit data over the network a long time ago. That makes base64 slower and less memory efficient than what it could be. Nowadays you don't need to be limited by the ascii specification thanks to unicode. However, sticking to standards is a good practice if you want compatibility of your code in different systems.
+
+Other Serialization Options
+---------------------------
+We have seen how to serialize objects with Pickle and JSON, however they are not the only two options. There are no doubts that they are the most popular ones, but you may face the challenge of opening files generated by other programs. For instance, LabView normally uses XML instead of JSON to store data.
+
+While JSON translates very easily to python variables, XML is a bit more complicated. Normally, XML files come from an external source, such as a website or another program. To load the data on those files, you need to rely on `ElementTree <https://docs.python.org/3/library/xml.etree.elementtree.html>`_. Check the link to see the official documentation to see how it works.
+
+Another option is YAML. It is a simple markup language that, such as Python, uses tabs to delimit blocks of content. The advantage of YAML is that it is easy to type. For instance, imagine you are using text files as input for your program. While you respect the tabbing, the file will be easily parsed. A YAML file looks like this:
+
+.. code-block:: yaml
+
+    data:
+      creation_date: 2018-08-08
+      values: [1, 2, 3, 4]
+
+To read the file, you need to install a package called PyYAML, simply with ``pip``:
+
+.. code-block:: bash
+
+    pip install pyyaml
+
+And the script to read looks like this:
+
+.. code-block:: python
+
+    import yaml
+
+    with open('AM_example.yml', 'r') as f:
+        data = yaml.load(f)
+
+    print(data)
+
+You can also write a yaml file:
+
+.. code-block:: python
+
+    import yaml
+    from time import time
+
+    data = {
+        'values': [1, 2, 3, 4, 5],
+        'creation_date': time(),
+    }
+
+    with open('AM_data.yml', 'w') as f:
+        yaml.dump(data, f)
+
+It is beyond the scope of this article to discuss about YAML, but you can find a lot of information online. YAML is still not a standard, but it is gaining traction. Writing configuration files in YAML feels very natural. There is much less typing involved than with XML and it looks more organized, at least to me, than JSON.
+
+Conclusions
+-----------
+In this article we have discussed a lot about serialization of objects and how to store them on the hard drive. We have started discussing what an encoding is, and started to think about converting from and to bytes. This opened the door to understand what Pickle does and how to save the data to disk.
+
+Remember that Pickle is not perfect and you have to be aware of its limitations, especially if you are going to deal with user submitted files, such as what happens on a web server. On the other hand, if you are using it for storing data for yourself, it is a very efficient way.
+
+We have also discussed how to use JSON, a very popular tool for web technologies. The limit of JSON is, however, that you have to store data as text files, thus limiting the options. Fortunately, combining Pickle and base64, you can transform bytes to an ascii string and save it next to easy to read metadata.
+
+This article has gone much more in depth regarding how to store data in different formats, but the topic is far from complete.
