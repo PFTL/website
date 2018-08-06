@@ -8,9 +8,14 @@ How to use HDF5 files in Python
 :tags: HDF5, Python, Data, Data Storage, h5py
 :description: Learn how to use the HDF5 format to store large amounts of data and read it back with Python
 
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
 
 When dealing with large amounts of data, either experimental or simulated, saving it to several text files is not very efficient.  Sometimes you need to access a very specific subset of data and you want to do it fast. In these situations, the HDF5 format solves both issues thanks to a very optimized underlying library. HDF5 is broadly used in scientific environments and has a great implementation in Python, designed to work with numpy out of the box.
-
 
 The HDF5 format in principle supports files of any size, each file has an internal structure that allows you to search for a specific dataset. You can think of it as a single file with its own hierarchical structure, just like a collection of folders and subfolders. By default, the data is stored in binary format and the library is compatible with different data types. One of the most important options of the HDF5 format is that it allows attaching metadata to every element in the structure, making it ideal for generating self-contained files.
 
@@ -541,3 +546,10 @@ Storing a lot of data into the same file is susceptible to corruption. If your f
 HDF5 is a format that has a long history and that many researchers use. It takes a bit of time to get used to, and you will need to experiment for a while until you find a way in which it can help you store your data. HDF5 is a good format if you need to establish transversal rules in your lab on how to store data and metadata.
 
 Header photo by `Samuel Zeller <https://www.samuelzeller.ch>`_ on `Unsplash <https://unsplash.com/photos/JuFcQxgCXwA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
