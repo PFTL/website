@@ -9,9 +9,9 @@ Store Data in Your Python Applications Part 3
 :tags: Data, Storing, sqlite, HDF5, ascii, json
 :description: Learn different ways of storing data in your projects
 
-Using databases for storing data may sound much more complicated that what it actually means. In this article we are going to cover how to use databases to store different types of data. We will quickly review how you can search for specific parameters and how to get exactly what you want.
+Using databases for storing data may sound much more complicated that what it actually is. In this article we are going to cover how to use databases to store different types of data. We will quickly review how you can search for specific parameters and how to get exactly what you want.
 
-In the previous articles we have seen how to store data to plain text files, which is nothing more than a particular way of serializing our objects. On the second release we have seen how to serialize complex objects using Python's built-in tools. In this article we are going to explore another very useful module called SQLite.
+In the previous articles we have seen how to store data to plain text files, which is nothing more than a particular way of serializing our objects. On the second release we have seen how to serialize complex objects using Python's built-in tools. In this article we are going to explore another very useful module called **SQLite**.
 
 .. contents::
 
@@ -46,7 +46,7 @@ We you use connect, sqlite will try to open the file that you are specifying and
 
     conn = sqlite3.connect('AA_db.sqlite')
     cur = conn.cursor()
-    cur.execute('CREATE TABLE experiments (name STRING, description STRING)')
+    cur.execute('CREATE TABLE experiments (name VARCHAR, description VARCHAR)')
     conn.commit()
 
     conn.close()
@@ -55,11 +55,13 @@ After opening (or creating) the database, we have to create a cursor. The cursor
 
 .. code-block:: sql
 
-    CREATE TABLE experiments (name STRING, description STRING)
+    CREATE TABLE experiments (name VARCHAR, description VARCHAR)
 
-It is quite descriptive: you are creating a table called experiments with two columns: ``name`` and ``description``. Each one of those columns will be of type ``STRING``. Don't worry to much about it right now. Right after you run the ``commit`` command in order to save the changes to the database and you close the connection. The problem right now is that there is no feedback on what you have done.
+It is quite descriptive: you are creating a table called experiments with two columns: ``name`` and ``description``. Each one of those columns will be of type ``VARCHAR``. Don't worry to much about it right now. Right after you run the ``commit`` command in order to save the changes to the database and you close the connection. The problem right now is that there is no feedback on what you have done.
 
 If you are using PyCharm, for example, it comes with a built-in sqlite implementation. Therefore, you can just click on the file and you will be able to navigate through the contents of the database. You can also try an application like `sqlite browser <https://sqlitebrowser.org/>`_ to visualize the files. There is also a `Firefox Add-On <https://addons.mozilla.org/en-US/firefox/addon/sqlite-manager/?src>`_ that works very well.  Congratulations, you have created your first table!
+
+.. note:: The extension .sqlite is not mandatory. If you use it, many higher level programs will identify it as a database and will be able to open it with a double-click. You can also use the .db extension, which is more common if following Flask or Django tutorials.
 
 Adding Data to a Database
 -------------------------
@@ -124,8 +126,8 @@ First, we will remove the table from the database, losing all its contents. Then
     DROP TABLE IF EXISTS experiments;
     CREATE TABLE experiments (
         id INTEGER,
-        name STRING,
-        description STRING,
+        name VARCHAR,
+        description VARCHAR,
         PRIMARY KEY (id));
     INSERT INTO experiments (name, description) values ("Aquiles", "My experiment description");
     INSERT INTO experiments (name, description) values ("Aquiles 2", "My experiment description 2");
@@ -143,3 +145,191 @@ If you run the retrieval code again, you will notice that each element has a uni
     data = cur.fetchone()
 
 Notice that we are using ``fetchone`` instead of ``fetchall`` because we know that the output should be only one element. Check what is the difference if you use one or the other command in the data that you get from the database.
+
+Adding a primary key is fundamental to decrease the time it takes to fetch the data that you are looking for. Not only because it allows you to refer to specific entries, but also because of how databases work, it is much faster addressing data by their key.
+
+Default Values for Fields
+-------------------------
+So far we have used only two types of variables: ``VARCHAR`` and ``INTEGERS``. The varchar has been used for the name of the person doing the experiment and its description, while the integer is used only for the ``id`` number. However, we can develop much more complex tables, not only specifying the type, but also limiting the length. We can also specify default values, simplifying the operations when storing new values. One of the advantages of doing this is that our data is going to be very consistent.
+
+Imagine that you want to store also the date at which the experiment is run, you could add an extra field and every time you create a new experiment, you also add a field with the date, or you instruct the database to automatically add the date format. At he moment of creating the table, you should do the following:
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS experiments;
+    CREATE TABLE experiments (
+        id INTEGER,
+        name VARCHAR,
+        description VARCHAR,
+        perfomed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id));
+    INSERT INTO experiments (name, description) values ("Aquiles", "My experiment description");
+    INSERT INTO experiments (name, description) values ("Aquiles 2", "My experiment description 2");
+
+Note the new field called ``performed_at``, which uses ``TIMESTAMP`` as its type, and it also specifies a ``DEFAULT``. If you check the the two inserted experiments (you can use the code of the previous example) you will see that there is a new field with the current date and time. You can also add default values for other fields, for example:
+
+.. code-block:: sql
+
+    CREATE TABLE experiments (
+        id INTEGER,
+        name VARCHAR DEFAULT "Aquiles",
+        description VARCHAR ,
+        perfomed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id));
+
+Next time you add a new experiment, if you don't specify the user who performed it, it will default to ``Aquiles`` (my name). Specifying defaults is a very useful way of avoiding missing information. For example, the ``performed_at`` will always be added. This ensures that even if later someone forgets to explicitly declare the time of an experiment, at least a very reasonable assumption has been made.
+
+SQLite Data Types
+-----------------
+SQLite is different from other database managers, such as MySQL or Postgres because it is flexibly regarding its data types and lengths. SQLite defines only `4 types of fields <https://www.sqlite.org/datatype3.html>`_:
+
+* NULL. The value is a NULL value.
+* INTEGER. The value is a signed integer, stored in 1, 2, 3, 4, 6, or 8 bytes depending on the magnitude of the value.
+* REAL. The value is a floating point value, stored as an 8-byte IEEE floating point number.
+* TEXT. The value is a text string, stored using the database encoding (UTF-8, UTF-16BE or UTF-16LE).
+* BLOB. The value is a blob of data, stored exactly as it was input.
+
+And then it defines something called affinities, which specifies the preferred type of data to be stored in a column. This is very useful to maintain compatibility with other database sources, and can generate some headaches if you are following tutorials designed for other types of databases. The type we have used, ``VARCHAR`` is not one of the specified datatypes, but it is supported through the affinities. It will be treated as a ``TEXT`` field.
+
+The way SQLite manages data types, if you are new to databases, is not important. If you are not new to databases, you should definitely look at the `official documentation <https://www.sqlite.org/datatype3.html>_` in order to understand the differences and make the best out of the capabilities.
+
+Relational Databases
+--------------------
+Perhaps you have already heard about relational databases. So far, in the way we have used sqlite it is hard to see advantages compared to plain CSV files, for example. If you are just storing a table, then you could perfectly do the same with a spreadsheet or a Pandas Data Frame. The power of databases is much more noticeable when you start making relationships between fields.
+
+In the examples that we have discussed earlier, you have seen that when you run an experiment you would like to store who was to user performing the measurement. The number of users is most likely going to be limited and perhaps you would like to keep track of some information, such as the name, email and phone number.
+
+The way to organize all this information is by creating a table in which you store the users. Each entry will have a primary key. From the table experiments, instead of storing the name of the user, you store the key of the user. Moreover, you can specify that, when creating a new experiment, the user associated with the experiment already exists. This is done by specifying a foreign key to the field, like this:
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS experiments;
+    DROP TABLE IF EXISTS users;
+    CREATE TABLE  users(
+        id INTEGER,
+        name VARCHAR,
+        email VARCHAR,
+        phone VARCHAR,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id));
+    CREATE TABLE experiments (
+        id INTEGER,
+        user_id INTEGER,
+        description VARCHAR ,
+        perfomed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+        FOREIGN KEY (user_id) REFERENCES users(id));
+
+.. warning:: depending on your installation of SQLite, you may need to add support for foreign keys. Run the following command when creating the database to be sure: ``cur.execute("PRAGMA foreign_keys = ON;")``
+
+First, you need to create a new user, for example:
+
+.. code-block:: sql
+
+    INSERT INTO users (name, email, phone) values ("Aquiles", "example@example.com", "123456789");
+
+And then you can create a new experiment:
+
+.. code-block:: sql
+
+    INSERT INTO experiments (user_id, description) values (1, "My experiment description");
+
+Note that if you try to add an experiment with a user_id that does not exist, you will get an error:
+
+.. code-block:: sql
+
+    INSERT INTO experiments (user_id, description) values (2, "My experiment description");
+
+When you run the code above using Python, you will get the following message:
+
+.. code-block:: bash
+
+    sqlite3.IntegrityError: FOREIGN KEY constraint failed
+
+Which is exactly what we have been expecting. Note, however, that if you leave the ``user_id`` out, i.e., if you don't specify a value, it will default to ``Null``, which is valid (an experiment without a user). If you would like to prevent this behavior, you will need to specify it explicitly:
+
+.. code-block:: sql
+
+    CREATE TABLE experiments (
+        id INTEGER,
+        user_id INTEGER NOT NULL ,
+        description VARCHAR ,
+        perfomed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+        FOREIGN KEY (user_id) REFERENCES users(id));
+
+Now we have specified that the ``user_id`` is ``NOT NULL``. If we try to run the following code:
+
+.. code-block:: sql
+
+    INSERT INTO experiments (description) values ("My experiment description 2");
+
+It will raise the following error:
+
+.. code-block:: bash
+
+    sqlite3.IntegrityError: NOT NULL constraint failed: experiments.user_id
+
+Storing Numpy Arrays into Databases
+-----------------------------------
+Storing complex data into databases is not a trivial task. Databases specify only some data types and numpy arrays are not between them. This means that we have to convert the arrays into something that can be stored into a database. Since SQLite specifies only 4 mayor data types, we should stick to one of them. In the `previous article <{filename}14_Storing_data_2.rst>`_ we have discussed a lot about serialization. The same ideas can be used to store an array to a database.
+
+For example, you can use Pickle in order to transform your data into bytes and store them using base64 as a ``TEXT`` field. You could also store the Pickle object directly into a ``BLOB``field. You can convert your array into a list and separate its values with ``,`` or use a specific notation to separate rows and columns, etc. However, SQLite offers also the possibility of registering new data types. As explained in `this answer on Stack Overflow <https://stackoverflow.com/a/18622264/4467480>`_ we need to create an adapter and a converter:
+
+.. code-block:: python
+
+    import sqlite3
+    import numpy as np
+    import io
+
+    def adapt_array(arr):
+        out = io.BytesIO()
+        np.save(out, arr)
+        out.seek(0)
+        return sqlite3.Binary(out.read())
+
+    def convert_array(text):
+        out = io.BytesIO(text)
+        out.seek(0)
+        return np.load(out)
+
+    sqlite3.register_adapter(np.ndarray, adapt_array)
+    sqlite3.register_converter("array", convert_array)
+
+What we are doing in the code above is to tell sqlite what to do when a field of type ``array`` is declared. When we are storing the field, it will be transformed into bytes, that can be stored as a BLOB in the database. When retrieving the data, we are going to read the bytes and transform them to a numpy array. Note that this is possible because the methods ``save`` and ``load`` know how to deal with bytes when saving/loading.
+
+It is important to note that it is not necessary to register both adapter and converter. The first one is responsible for transforming a specific data type into an SQLite-compatible object. You could do this to automatically serialize your own classes, etc. The converter is responsible for converting back into your object. You can play around and see what happens when you don't register one of the two.
+
+When you define your table, you can use your newly created 'array' data type:
+
+.. code-block:: sql
+
+    DROP TABLE IF EXISTS measurements;
+    CREATE TABLE measurements (
+        id INTEGER PRIMARY KEY,
+        description VARCHAR ,
+        arr array);
+
+It is important to note that for the above to work, when you start the connection with the database, you should add the following:
+
+.. code-block:: python
+
+    conn = sqlite3.connect('AI_db.sqlite', detect_types=sqlite3.PARSE_DECLTYPES)
+
+The option ``PARSE_DECLTYPES`` is telling SQLite to use the registered adapters and converters. If you don't include that option, it will not use what you have registered and will default to the standard data types.
+
+To store the array, you can do the following:
+
+.. code-block:: python
+
+    x = np.random.rand(10,2)
+    cur.execute('INSERT INTO measurements (arr) values (?)', (x,))
+    cur.execute('SELECT arr FROM measurements')
+    data = cur.fetchone()
+    print(data)
+
+This will transform your array into bytes, and it will store it to the database. When you read it back, it will transform the Bytes back into an array.
+
+Combining Information
+---------------------
+So far, we have seen how to create some tables with values, and how to relate them through the use of primary and foreign keys. Howe
