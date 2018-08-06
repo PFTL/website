@@ -19,8 +19,9 @@ CREATE TABLE experiments (
     PRIMARY KEY (id)
     FOREIGN KEY (user_id) REFERENCES users(id));
 INSERT INTO users (name, email, phone) values ("Aquiles", "example@example.com", "123456789");
+INSERT INTO users (name, email, phone) values ("Joseph", "joseph@example.com", "12345678");
 INSERT INTO experiments (user_id, description) values (1, "My experiment description");
-INSERT INTO experiments (description) values ("My experiment description 2");
+INSERT INTO experiments (user_id, description) values (2, "My experiment description 2");
 """
 
 cur.execute("PRAGMA foreign_keys = ON;")
