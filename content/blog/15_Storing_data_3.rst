@@ -6,8 +6,15 @@ Store Data in Your Python Applications Part 3
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
 :header: {attach}tom-hermans-642319-unsplash.jpg
-:tags: Data, Storing, sqlite, HDF5, ascii, json
+:tags: Data, Storing, sqlite, HDF5, ascii, json, Data Storage
 :description: Learn different ways of storing data in your projects
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
 
 Using databases for storing data may sound much more complicated that what it actually is. In this article we are going to cover how to use databases to store different types of data. We will quickly review how you can search for specific parameters and how to get exactly what you want.
 
@@ -330,6 +337,64 @@ To store the array, you can do the following:
 
 This will transform your array into bytes, and it will store it to the database. When you read it back, it will transform the Bytes back into an array.
 
+What you have to keep in mind is that when you store numpy arrays (or any non-standard object) into a database, you loose the intrinsic advantages of databases, i.e. the capabilities to operate on the elements. What I mean is that with SQL it is very easy to replace a field in all the entries that match a criterion, for example, but you won't be able to do that for a numpy array, at least not in pure SQL commands.
+
 Combining Information
 ---------------------
-So far, we have seen how to create some tables with values, and how to relate them through the use of primary and foreign keys. Howe
+So far, we have seen how to create some tables with values, and how to relate them through the use of primary and foreign keys. However, SQL is much more powerful than that, especially when retrieving information. One of the things that you can do is to join the information from different tables into a single table. Let's see quickly what can be done. First, we are going to re-create the tables with the experiments and the users, as we have seen before. You can check the `code in here <https://github.com/PFTL/website/blob/master/example_code/15_databases/AH_foreign_key.py>`_. You should have two entries for users and two entries for the experiments.
+
+You can run the following code:
+
+.. code-block:: python
+
+    import sqlite3
+
+    conn = sqlite3.connect('AH_db.sqlite')
+    cur = conn.cursor()
+
+    sql_command = """
+    SELECT users.id, users.name, experiments.description
+    FROM experiments
+    INNER JOIN users ON experiments.user_id=users.id;
+    """
+    cur.execute(sql_command)
+    data = cur.fetchall()
+
+    for d in data:
+        print(d)
+
+What you will see printed is the id of the user, the name and the description of the experiment. This is much handier than just seeing the id of the user, because you immediately see the information that you need. Moreover, you can filter based on properties of either of the tables. Imagine you want to get the experiments performed by ``'Aquiles'``, but you don't know its user id. You can change to command above to the following:
+
+.. code-block:: sql
+
+    SELECT users.id, users.name, experiments.description
+        FROM experiments
+        INNER JOIN users ON experiments.user_id=users.id
+        WHERE users.name="Aquiles";
+
+And you will see that only the data related to that user is retrieved.
+
+Join statements are complex and very flexible. You probably noticed that we have used the ``INNER JOIN`` option, but it is not the only possibility. If you want to combine tables that are not related through a foreign key, for example you would like to combine data from different sources that belong to the same day, you can use other types of joins. The diagram in `this website <https://www.w3schools.com/sql/sql_join.asp>`_ is very explicit, but going through the details exceeds the capabilities of an introductory tutorial.
+
+How to Use Databases in Scientific Projects
+-------------------------------------------
+Leveraging the power of databases is not obvious for first time developers, especially if you don't belong to the web-development realm. One of the main advantages of databases is that you don't need to keep in memory the entire structure. For example, Imagine that you would have a very large project, with millions of measurements of thousands of experiments with hundreds of users. Most likely you can't load all the information because the computer doesn't have enough RAM memory.
+
+Using databases you will be able to filter the measurements done by a specific user in a given time frame, or that match a specific description without actually loading everything into memory. Even if simple, this example already shows you a very clear use case where Data Frames or numpy arrays would fail.
+
+Databases are used in many large scale scientific projects, such as astronomical observations, simulations, etc. By using databases, these groups are able to give users access to filtering and joining capabilities, getting the desired data and not the entire collection. Of course, for small groups, it may look like an overshoot. But imagine that you could filter through your data, acquired during years, to find a specific measurement.
+
+Conclusions
+-----------
+One of the main challenges of using databases is that they require learning a new language called SQL. In this article we have tried to point to the most basic concepts, that would allow anyone to get started and build his/her way up through clever Google searchers.
+
+Python has built-in support for SQLite, a file-based database that is ideal for getting started. There is no further setting up involved, everything works out of the box, and may of the tutorials that can be found online relating to SQL will also work with SQLite.
+
+Using databases for one-off projects may be an overkill, but for long-running programs, such as software for controlling setups or custom data analysis it may open the door to very creative solutions. Combining databases for metadata and plain files for data has the added advantage of a high portability (sharing data is sharing just a file) and an easy way to search for through the information.
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_

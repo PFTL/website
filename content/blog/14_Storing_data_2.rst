@@ -6,8 +6,15 @@ Store Data in Your Python Applications Part 2
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
 :header: {attach}tom-hermans-642319-unsplash.jpg
-:tags: Data, Storing, sqlite, HDF5, ascii, json
+:tags: Data, Storing, sqlite, HDF5, ascii, json, Data Storage
 :description: Learn different ways of storing data in your projects
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
 
 Last week we have seen how to store data into plain text files that can be read by any editor and by other programs. We have also seen that if you separate your data with commas your file will be compatible with other programs, mainly spread sheets. One of the main limitations of this strategy is that if your data contains a comma, your file will not be readable anymore.
 
@@ -458,3 +465,10 @@ Remember that Pickle is not perfect and you have to be aware of its limitations,
 We have also discussed how to use JSON, a very popular tool for web technologies. The limit of JSON is, however, that you have to store data as text files, thus limiting the options. Fortunately, combining Pickle and base64, you can transform bytes to an ascii string and save it next to easy to read metadata.
 
 This article has gone much more in depth regarding how to store data in different formats, but the topic is far from complete.
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
