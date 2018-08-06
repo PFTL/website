@@ -6,12 +6,18 @@ How to Store Data in Your Python Applications
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
 :header: {attach}tom-hermans-642319-unsplash.jpg
-:tags: Data, Storing, sqlite, HDF5, ascii, json
+:tags: Data, Storing, sqlite, HDF5, ascii, json, Data Storage
 :description: Learn different ways of storing data in your projects
+
+This is the first article of a series of articles relating to data storage with Python. The other articles are:
+
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
 
 Storing data to re use it later is a central part in most Python applications, regardless of their origin. Whether you are doing a measurement in the lab or developing a web application, you will need to save information in a persistent way. For example, you would like to analyze your results after you have performed an experiment. Or you would like to keep a list of e-mails of people who registered on your website.
 
-Even if storing data is of utmost importance, every application will require different strategies. You have to take into account different factors, such as the volume of data being generated, how self-descriptive the data is, who is going to use it later, etc. In this article we are going to explore different ways of storing data and we will discuss advantages and drawbacks of each.
+Even if storing data is of utmost importance, every application will require different strategies. You have to take into account different factors, such as the volume of data being generated, how self-descriptive the data is, who are you going to use it later, etc. In this article we are going to start exploring different ways of storing data and we will discuss advantages and drawbacks of each.
 
 .. contents::
 
@@ -31,7 +37,7 @@ Which will generate an array of 201 values equally spaced between 0 and 1. This 
 
     np.savetxt('A_data.dat', data)
 
-Go ahead and open the file with any text editor. You will see that you have a column of all the values in your array. This is very handy, because this file can be read with any other program that supports reading text files. So far, this example is very simplistic because it stores only one array. Imagine that you want to store two arrays, like the ones needed to make a simple plot. First, let's generate both arrays:
+Go ahead and open the file with any text editor. You will see that you have a column of all the values in your array. This is very handy, because the file can be read with any other program that supports reading text files. So far, this example is very simplistic because it stores only one array. Imagine that you want to store two arrays, like the ones needed to make a simple plot. First, let's generate both arrays:
 
 .. code-block:: python
 
@@ -48,10 +54,10 @@ If you open the file, you will see that instead of having two columns, the file 
 
 .. code-block:: python
 
-    data = np.colum_stack((x, y))
+    data = np.column_stack((x, y))
     np.savetxt('AA_data.dat', data)
 
-Check the file again, you will see that you have the x values on the column on the left and the y values on the other. This is easier to read and, as we will see later, allows you to do partial reads. However, there is something very important missing. If someone opens the file, there is no information on what each column means. The easy solution in this case is to add a header describing each column:
+Check the file again, you will see that you have the x values on the column on the left and the y values on the other. A file like this is easier to read and, as we will see later, allows you to do partial reads. However, there is something very important missing. If someone opens the file, there is no information on what each column means. The easier solution in this case is to add a header describing each column:
 
 .. code-block:: python
 
@@ -78,7 +84,7 @@ Of course, saving to a file is only half what you have to do. The other half is 
     x = data[:, 0]
     y = data[:, 1]
 
-Note that it automatically discards the headers. The advantage of using always the same library (in this case numpy) is that it makes it incredibly easy to go through the write/read cycle. If you are trying to read data from a file that was generated with another program and that users another character for starting comments, you can very easily adapt the code above:
+Note that it automatically discards the headers. The advantage of using always the same library (in this case numpy) is that it makes it incredibly easy to go through the write/read cycle. If you are trying to read data from a file that was generated with another program and that uses another character for starting comments, you can very easily adapt the code above:
 
 .. code-block:: python
 
@@ -109,11 +115,11 @@ One common situation is to save to file while the data acquisition or generation
 
 The first thing you have to notice is that we are explicitly opening the file with the command ``open``. The important portion of information here is the ``wb`` that we added at the end. The ``w`` stands for *writing* mode, i.e. the file will be created if it doesn't exist, and if it already exists it will be erased and started from scratch. The second letter, the ``b`` is for binary mode, which is needed for letting numpy append data to a file. In order to generate the header, we first save an empty list with the header. Within the for-loop, we save every value to the file, line by line.
 
-With the example above, if you open the file you will see it exactly as earlier. However, if you add a ``sleep`` within the loop, and open the file, you will see the partial saves. Remember that not all operating systems allow you to open the file in two different programs at the same time. Moreover, not all text editors are able to notice changes to the file from outside themselves, meaning that you won't see the changes to the file unless you re-open it.
+With the example above, if you open the file you will see it exactly as earlier. However, if you add a ``sleep`` statement within the for-loop, and open the file, you will see the partial saves. Remember that not all operating systems allow you to open the file in two different programs at the same time. Moreover, not all text editors are able to notice changes to the file from outside themselves, meaning that you won't see the changes to the file unless you re-open it.
 
 Flushing Changes
 ~~~~~~~~~~~~~~~~
-If you start saving partial data often, you will notice that, especially when your program crashes, some of the points may be missing. Writing to disk is a step that is handled by the operating system, and therefore the behavior can be very different depending on which one you use and how busy it is. Python puts the writing instructions into a queue, meaning that can be executed much later in time. A good practice to be sure that changes are being written, especially when you expect that your program may give raise to `unhandled exceptions <{filename}12_handling_exceptions.rst>`_ is to add the ``flush`` command. Simply like this:
+If you start saving partial data often, you will notice that, especially when your program crashes, some of the points may be missing. Writing to disk is a step that is handled by the operating system, and therefore the behavior can be very different depending on which one you use and how busy the computer is. Python puts the writing instructions into a queue, which means that the writing itself can be executed much later in time. A good practice to be sure that changes are being written, especially when you are aware that your program may give raise to `unhandled exceptions <{filename}12_handling_exceptions.rst>`_ is to add the ``flush`` command. Simply like this:
 
 .. code-block:: python
 
@@ -138,13 +144,13 @@ When working with files, it is important to ensure that you are closing it when 
             f.flush()
             sleep(0.1)
 
-The first line is the key element here. Instead of doing ``f=open()``, we use the ``with`` statement. The file will be open while we are inside the block. As soon as the block finishes, the file will be closed, even if there is an exception within the block. The ``with`` allows you to save a lot of typing, since you don't need to handle exceptions nor to close the file afterwards. May seem like a small gain at the beginning, but the conscious developer should use it extensively.
+The first line is the key element here. Instead of doing ``f=open()``, we use the ``with`` statement. The file will be open while we are inside the block. As soon as the block finishes, the file will be closed, even if there is an exception within the block. The ``with`` allows you to save a lot of typing, since you don't need to handle exceptions nor to close the file afterwards. It may seem like a small gain at the beginning, but the conscious developer should use it extensively.
 
 The details of the ``with`` statement deserve their own article, which is in the pipeline for the future. For the time being, remember what it means when you see it.
 
 Lower-level Writing to Text Files
 ---------------------------------
-Up to here we have seen how to use numpy to save data, because it is a standard in many applications. However, it may not fit all the applications. Python has its own method for writing to and reading from files. Let's start writing to a file. The pattern is very simple:
+Up to here we have seen how to use numpy to save data, because it is a standard in many applications. However, it may not fit all the applications. Python has its own method for writing to, and reading from files. Let's start writing to a file. The pattern is very simple:
 
 .. code-block:: python
 
@@ -159,7 +165,7 @@ Or with the ``with``:
     with open('BA_data.dat', 'w') as f:
         f.write('# This is the header')
 
-The ``open`` command takes at least one argument, the filename. The second argument is the mode at which the file is opened. Basically there are three: ``r`` for reading, not modifying, ``a`` for appending or creating the file if it doesn't exist, ``w`` for creating an empty file, even if it already exists. If no mode is given, ``r`` is assumed, and if the file doesn't exist, a ``FileNotFound`` exception will be raised.
+The ``open`` command takes at least one argument, the filename. The second argument is the mode with which the file is opened. Basically there are three: ``r`` for reading, not modifying, ``a`` for appending or creating the file if it doesn't exist, ``w`` for creating an empty file, even if it already exists. If no mode is given, ``r`` is assumed, and if the file doesn't exist, a ``FileNotFound`` exception will be raised.
 
 Now that we have the header written to the file, we want to write some data to it. For example, we can try the following:
 
@@ -177,7 +183,7 @@ However, you will see an error, ``TypeError``, because you are trying to write s
 
     f.write(str(data))
 
-If you open the file, you will notice something very strange. Both the header and all the elements of your array were written to the same line, no separation whatsoever between them. This is actually expected. Since you are using lower level commands, you have a much more precise control over what and how you write to a file.
+If you open the file, you will notice something very strange. Both the header and all the elements of your array were written to the same line, no separation whatsoever between them. This is actually expected if you think about it. Because you are using lower level commands, you have a much more precise control over what and how you write to a file.
 
 If you remember from the previous section, you can use the ``\n`` character to generate a new line after writing to a file. Your code will look like the following:
 
@@ -189,11 +195,11 @@ If you remember from the previous section, you can use the ``\n`` character to g
         for data in x:
             f.write(str(data)+'\n')
 
-If you open the file again, you will see that all your data points are nicely stacked on top of each other. You will also notice that not all values have the same length. For example you will find elements such as ``0.01``, ``0.005``, and ``0.17500000000000002``. The first two make sense, however the third one may seem odd. The last digit in that number is given because of floating-point errors. You can read more about it in the `Oracle website <https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html>`_ (more technical) or `on Wikipedia <https://en.wikipedia.org/wiki/Floating-point_arithmetic#Floating-point_numbers>`_ (more general public).
+If you open the file again, you will see that all your data points are nicely stacked on top of each other. You will also notice that not all values have the same length. For example you will find elements such as ``0.01``, ``0.005``, and ``0.17500000000000002``. The first two make sense, however the third one may seem odd. The last digit in that number is given because of floating-point errors. You can read more about it in the `Oracle website <https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html>`_ (more technical) or `on Wikipedia <https://en.wikipedia.org/wiki/Floating-point_arithmetic#Floating-point_numbers>`_ (more general public oriented).
 
 Formatting the output
 ---------------------
-One of the most important things to consider when writing data to disk is how to structure it in order to make it easy to read afterwards. In the section above, we have seen that if you don't append a new line character after every value, they get printed one after the other, on the same line. This makes your data almost imposible to read back. Since every number has a different length, you can't break the line into blocks, etc.
+One of the most important things to consider when writing data to disk is how to structure it in order to make it easy to read afterwards. In the section above, we have seen that if you don't append a new line character after every value, they get printed one after the other, on the same line. This makes your data almost impossible to read back. Since every number has a different length, you can't break the line into blocks, etc.
 
 Formatting the output is therefore very important to give sense to your data in the long run. Python offers different ways for formatting strings. I will choose the one I normally employ, but you are free to explore other alternatives. Let's first adapt the example above, with ``format``. You can print every value to a different line like this:
 
@@ -205,13 +211,13 @@ Formatting the output is therefore very important to give sense to your data in 
         for data in x:
             f.write('{}\n'.format(data))
 
-If you run the code, the output file will be the same. Here, the ``{}`` get replaced by data. It is equivalent to the ``str(data)`` that we have used before. However, imagine that you want to output all the values with the same amount of characters, you can replace that last line by:
+If you run the code, the output file will be the same. When you use ``format``, the ``{}`` gets replaced by the data. It is equivalent to the ``str(data)`` that we have used before. However, imagine that you want to output all the values with the same amount of characters, you can replace that last line by:
 
 .. code-block:: python
 
     f.write('{:.2f}\n'.format(data))
 
-which will give you values like ``0.00``, ``0.01``, etc. What you put in between the ``{}`` is the format string, which instructs Python how to transform your numbers into strings. In this case, it is telling it to treat the numbers as fixed point with 2 decimals. In principle it is very nice, but see that you are loosing information. The values like ``0.005`` are rounded to ``0.01``. Therefore, you have to be very certaing about what do you want to achieve, in order not to loose important information. If you are performing an experiment with 0.1 precision, you don't care about 0.005, but if it is not the case, you have lost half your information.
+which will give you values like ``0.00``, ``0.01``, etc. What you put in between the ``{}`` is the format string, which instructs Python how to transform your numbers into strings. In this case, it is telling it to treat the numbers as fixed point with 2 decimals. In principle it looks very nice, but notice that you are loosing information. The values like ``0.005`` are rounded to ``0.01``. Therefore, you have to be very certain about what do you want to achieve, in order not to loose important information. If you are performing an experiment with 0.1 precision, you don't care about 0.005, but if it is not the case, you have lost half your information.
 
 Proper formatting takes a bit of tinkering. Since we want to store at least three decimals, we should change the line to:
 
@@ -219,7 +225,7 @@ Proper formatting takes a bit of tinkering. Since we want to store at least thre
 
     f.write('{:.3f}\n'.format(data))
 
-Now you can see the decimals up to the third place. Formatting strings deserves a post on its own. But you can see the basic options here. If you are working with integers, for instance, or with larger floating point numbers (not between 0 and 1), you may want to specify how much space the numbers are going to take. For instance, you can try:
+Now you are storing all the decimals up to the third place. Formatting strings deserves a post on its own. But you can see the basic options here. If you are working with integers, for instance, or with larger floating point numbers (not between 0 and 1), you may want to specify how much space the numbers are going to take. For instance, you can try:
 
 .. code-block:: python
 
@@ -230,13 +236,13 @@ Now you can see the decimals up to the third place. Formatting strings deserves 
         for data in x:
             f.write('{:4.1f}\n'.format(data))
 
-This comand is letting Python know that each number should be allocated 4 spaces in total, with only one decimal place. Since the first numbers have only 3 characters (``0.5``), there will be a a space preceding the number. Later on, ``10.0`` will start right from the begenning, and the decimals will be nicely aligned. However, you will notice that ``100.0`` is displaced by one position (it takes 5, not 4 spaces).
+This command is letting Python know that each number should be allocated 4 spaces in total, with only one decimal place. Since the first numbers have only 3 characters (``0.5``), there will be a a space preceding the number. Later on, ``10.0`` will start right from the beginning, and the decimals will be nicely aligned. However, you will notice that ``100.0`` is displaced by one position (it takes 5, not 4 spaces).
 
-You can play a lot with the formatting. You can align the information to the left or to the right, adding spaces or any other character at either side, etc. I promise to cover this topic later on. But enough, let's keep storing data to a file.
+You can play a lot with the formatting. You can align the information to the left or to the right, adding spaces or any other character at either side, etc. I promise to cover this topic later on. But for now it is enough, let's keep storing data to a file.
 
 Storing Data in Columns
 -----------------------
-Let's recover the example of before, where we stored two columns of data. We would like to do the same, without the use of numpy's ``savetxt``. With what we know of formatting we can already do this:
+Let's recover the example from before, where we stored two columns of data. We would like to do the same, without the use of numpy's ``savetxt``. With what we know of formatting we can already do this:
 
 .. code-block:: python
 
@@ -249,17 +255,17 @@ Let's recover the example of before, where we stored two columns of data. We wou
         for i in range(len(x)):
             f.write('{:4.1f} {:.4f}\n'.format(x[i], y[i]))
 
-Check the file, you will see the two columns of data, separated by a space. You can change the ``write`` line in differnt ways, for example, you could have:
+Check the file, you will see the two columns of data, separated by a space. You can change the ``write`` line in different ways, for example, you could have:
 
 .. code-block:: python
 
     f.write('{:4.1f}\t{:.4f}\n'.format(x[i], y[i]))
 
-which will add a tab between the columns, and not a space. Check the differences, especially if you change the number of characters that every number takes. However, the biggest advantage of formatting the output comes when you are storing data that is not numeric.
+which will add a tab between the columns, and not a space. You can structure your file as you like. However, you have to be careful and think ahead about how you are going to retrieve the data in case an inconsistency appears.
 
 Reading the data
 ----------------
-After we have saved the data, it is very important to be able to read it back into our program. The first approach is unorthodox, but it will prove a point. You can read the data generated with the ``write`` method using numpy's ``loadtxt``:
+After we have saved the data to a file, it is very important to be able to read it back into our program. The first approach is unorthodox, but it will prove a point. You can read the data generated with the ``write`` method using numpy's ``loadtxt``:
 
 .. code-block:: python
 
@@ -297,7 +303,7 @@ In this case, ``data`` will hold the header, because it is the first line of the
                 data.append(line)
             line = f.readline()
 
-Now you see that things are getting more complicated. After opening the file, we read the first line and then we enter into a loop, that will keep running while there are more lines in the file. We start two empty lists to hold the header and the data information. For each line, we check whether it starts with ``#``, which would correspond to the header (or comment). The rest of the lines, we append them to ``data``.
+Now you see that things are getting more complicated. After opening the file, we read the first line and then we enter into a loop, that will keep running while there are more lines in the file. We start two empty lists to hold the header and the data information. For each line, we check whether it starts with ``#``, which would correspond to the header (or comment). We append the rest of the lines to ``data``.
 
 If you look into the ``data`` variable, you will notice that it is not very usable. If you are reading the example with the two columns, you will see that ``data`` is a list in which every element looks like `` 0.0\t0.02994\n``. If we want to reconstruct the information we had before, we have to reverse the procedure of writing. The first thing to note is that both values are separated by a ``\t``, therefore our code would look like the following:
 
@@ -323,9 +329,9 @@ With the steps above you can see that it is possible to recover the functionalit
 
 Saving Non Numeric Data
 -----------------------
-So far we have dealt with numbers, that is why using numpy provides such a big advantage. However, a lot of applications need to deal with different types of data. Let's start with the easiest one, storing strings. There is a very popular dataset for people learning machine learning, known as the Iris Dataset. It consists of observations of several parameters of three different types of flowers.
+So far we have dealt with numbers, that is why using numpy provides such a big advantage. However, a lot of applications need to deal with different types of data. Let's start with the easiest one: storing strings. There is a very popular dataset for people learning machine learning, known as the Iris Dataset. It consists of observations of several parameters of three different types of flowers.
 
-I am not going to recreate the dataset here, but I will just use the inspiration. Imagine you make several observations, each corresponds to a flower. However, not all of them are real, some were labeled as fake ones. We can create a file very easily, with some random data:
+I am not going to recreate the dataset here, but I will just use it as inspiration. Imagine you make several observations, each corresponding to a specific flower out of three options. However, not all of the observations are real, some were labeled as fake ones. We can create a file very easily, with some random data:
 
 .. code-block:: python
 
@@ -382,18 +388,25 @@ Just as before, reading non numeric data is as easy as reading numeric data. For
             line = f.readline()
     print(data)
 
-You see that we are splitting the spaces, which seemd like a good idea in the examples above. However, if you look closely at the data, you will notice that the names of the flowers are split, and we end up with lines of 6 elements instead of 5 as expected. This is a simple example, because every field has exactly one space, and therefore we can merget together the two that belong to the name.
+You see that we are splitting the spaces, which seemed like a good idea in the examples above. However, if you look closely at the data, you will notice that the names of the flowers are split, and we end up with lines of 6 elements instead of 5 as expected. This is a simple example, because every field has exactly one space, and therefore we can merge together the two that belong to the name.
 
-More complicated data, like sentences for instance, will require a more careful handling. In a sentence, you will have a variable number of spaces and therefore you are going to have a hard time figuring out what parts belong to which data column. You can replace the space by a comma when you save the file and it is going to work, provided that there are no commas in the data you are saving.
+More complicated data, like sentences, for example, will require a more careful handling. In a sentence, you will have a variable number of spaces and therefore you are going to have a hard time figuring out what parts belong to which data column. You can replace the space by a comma when you save the file and it is going to work, provided that there are no commas in the data you are saving.
 
-If you delimiter your data with commas you will have a file commonly referred to as Comma Separated Values, or **csv**. You can see the output of `the file I have generated <https://github.com/PFTL/website/blob/master/example_code/13_storing_data/DB_data.csv>`_ on Github. This kind of files can be interpreted not only by text readers, but also by numeric programs such as Excel, Libre Office, Matlab, etc. You can even see that if you look at the file on Github it appears nicely formatted. There are several standards around, and you can try to reproduce them, with enough insight.
+If you delimiter your data with commas you will have a file commonly referred to as Comma Separated Values, or **csv**. You can see the output of `the file I have generated <https://github.com/PFTL/website/blob/master/example_code/13_storing_data/DB_data.csv>`_ on Github. This kind of files can be interpreted not only by text readers, but also by numeric programs such as Excel, Libre Office, Matlab, etc. You can even see that if you look at the file on Github it appears nicely formatted. There are several standards around, and you can try to reproduce them.
 
 Of course, if your data has a comma in it, the file will be broken. The integrity of your data will be fine, but it is going to be very hard to specify how to read it back without errors. The idea of storing data is that you can read back, and if there are exceptions in the process, you will not be certain about what your data means. You don't need to use commas, nor single characters. You can separate your data with a dot and a comma, for instance.
 
 When you store data, you have to think not only in the process of storing, but also in the process of reading it back in an unambiguous way. If you store only numeric data, choosing a letter for separating values may seem like a good idea. Using a comma may seem correct until you realize that in some countries commas separate the decimal part of numbers.
 
-Is this all regarding how to store data? Of course not, there is much more to come. Next monday there will be another article.
+Is this all regarding how to store data? Of course not, there is much more to come. 
 
 As always, `the example code can be found here <https://github.com/PFTL/website/tree/master/example_code/13_storing_data>`_ and `the source code for this article here <https://github.com/PFTL/website/blob/master/content/blog/13_storing_data.rst>`_.
 
 Header photo by `Tom Hermans <https://unsplash.com/photos/IbL3Zd62Q7Q?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
+
+This article is part of a series of articles relating to data storage with Python. The other articles are:
+
+* `Introduction to Storing Data in Files <{filename}13_storing_data.rst>`_
+* `Storing Binary Data and Serializing <{filename}14_Storing_data_2.rst>`_
+* `Using Databases to Store Data <{filename}15_Storing_data_3.rst>`_
+* `Using HDF5 Files with Python <{filename}02_HDF5_python.rst>`_
