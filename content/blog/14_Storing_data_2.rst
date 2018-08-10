@@ -1,7 +1,7 @@
 Storing Binary Data and Serializing
 ===================================
 
-:date: 2018-08-10
+:date: 2018-08-11
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
 :header: {attach}joshua-sortino-215039-unsplash.jpg

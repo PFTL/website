@@ -1,7 +1,7 @@
 Storing Data with SQLite
 ========================
 
-:date: 2018-08-10
+:date: 2018-08-12
 :author: Aquiles Carattino
 :subtitle: Learn different ways of storing data in your projects
 :header: {attach}tobias-fischer-185901-unsplash.jpg
