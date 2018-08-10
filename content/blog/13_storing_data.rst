@@ -1,5 +1,5 @@
-How to Store Data in Your Python Applications
-=============================================
+Introduction to Storing Data in Files
+=====================================
 
 :date: 2018-08-10
 :author: Aquiles Carattino
