@@ -398,7 +398,7 @@ Of course, if your data has a comma in it, the file will be broken. The integrit
 
 When you store data, you have to think not only in the process of storing, but also in the process of reading it back in an unambiguous way. If you store only numeric data, choosing a letter for separating values may seem like a good idea. Using a comma may seem correct until you realize that in some countries commas separate the decimal part of numbers.
 
-Is this all regarding how to store data? Of course not, there is much more to come. 
+Is this all regarding how to store data? Of course not, there is much more to come.
 
 As always, `the example code can be found here <https://github.com/PFTL/website/tree/master/example_code/13_storing_data>`_ and `the source code for this article here <https://github.com/PFTL/website/blob/master/content/blog/13_storing_data.rst>`_.
 
