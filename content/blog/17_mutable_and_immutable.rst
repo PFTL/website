@@ -287,7 +287,7 @@ However, you will see that this doesn't change the output. As we saw earlier, th
         var = copy.copy(var1)
     [...]
 
-And now you will see that the original ``my_list`` variable is not altered. What we have just done is called a *deep copy* of an object. It is also possible to perform a shallow copy, but its implications are left for a different article.
+And now you will see that the original ``my_list`` variable is not altered. What we have just done is called a *shallow copy* of an object. It is also possible to perform a *deep* copy, but its implications are left for a different article.
 
 Default Arguments in Functions
 -------------------------------
@@ -400,4 +400,4 @@ Understanding the differences between mutable and immutable types in Python does
 
 As a personal note, I found out such a bug performing a complex experiment with a microscope. I wanted to be able to refocus automatically on certain bright spots after an image was acquired. The first time the algorithm was working fine. The second time it was pretty much OK, but the third and onwards was not even close from reaching the desired values. The root of the problem was defining the initial range that the microscope would scan as a list, which was being divided by a factor after every iteration.
 
-Some of the patterns you find in this article, probably are not going to be of any use. However, it is important to keep in the back of your mind that ``==`` can give very unexpected results, that variables can change in unexpected ways if you are not careful. When projects start to grow, small mistakes can pile up to disastrous problems. 
+Some of the patterns you find in this article, probably are not going to be of any use. However, it is important to keep in the back of your mind that ``==`` can give very unexpected results, that variables can change in unexpected ways if you are not careful. When projects start to grow, small mistakes can pile up to disastrous problems.
