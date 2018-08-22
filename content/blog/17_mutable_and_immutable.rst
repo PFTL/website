@@ -1,17 +1,18 @@
 Mutable and Immutable Objects
------------------------------
+=============================
 
-:status: draft
-:date: 2018-08-12
+:date: 2018-08-23
 :author: Aquiles Carattino
 :subtitle: Understanding the differences in data types to make better programs
-:header: {attach}tobias-fischer-185901-unsplash.jpg
+:header: {attach}rawpixel-274862-unsplash.jpg
 :tags: Data, Types, Mutable, Immutable, Objects
 :description: Understanding the differences in data types to make better programs
 
-People who start programming in Python quickly stumble upon the existence of lists and tuples. They are defined in a similar way, they look the same. Sometimes they are even used interchangeably. The obvious question is therefore why do you have two different types of elements for the same goal? The answer lays in understanding the differences between **mutable** and **immutable** data types in Python.
+People who start programming in Python quickly stumble upon the existence of lists and tuples. They are defined in a similar way, they look the same. Sometimes they are even used interchangeably. The obvious question is, therefore, why do you have two different types of elements for the same goal? The answer lays in understanding the differences between **mutable** and **immutable** data types in Python.
 
-Even after programming Python applications for a while, being conscious about choosing lists or tuples is hard, and sometimes the implications give raise to obscure bugs, very hard to find and correct. In this article we are going to discus about the differences between lists and tuples, or more generally about mutable and immutable data types and how they can be used in your programs.
+Even after programming Python applications for a while, being conscious about choosing lists or tuples is hard, and sometimes the implications give rise to obscure bugs, very hard to find and correct. In this article, we are going to discuss about the differences between lists and tuples, or more generally about mutable and immutable data types and how they can be used in your programs.
+
+As always, `example code <https://github.com/PFTL/website/tree/master/example_code/17_mutable_immutable>`__ is available and the `source code <https://github.com/PFTL/website/blob/master/content/blog/17_mutable_and_immutable.rst>`__ for this page also.
 
 .. contents::
 
@@ -63,9 +64,9 @@ When you have a variable that cannot be changed after it has been created it is 
 
 Mutable and Immutable Data Types
 --------------------------------
-There is an `excellent article written by Luciano Ramalho <https://standupdev.com/wiki/doku.php?id=python_tuples_are_immutable_but_may_change>`_ in which he explains how to understand variables in Python. I am not going to copy his article, but I think it is a great inspiration on how to explain things. What he suggests is to think about labels and not about boxes when referring to variables. A variable is a label that we assign to an object, its the way we, humans, have to identify it. However, what is important about the underlying object is its value and its type.
+There is an `excellent article written by Luciano Ramalho <https://standupdev.com/wiki/doku.php?id=python_tuples_are_immutable_but_may_change>`_ in which he explains how to understand variables in Python. I am not going to copy his article, but I think it is a great inspiration on how to explain things. What he suggests is to think about labels and not about boxes when referring to variables. A variable is a label that we assign to an object, it is the way we, as humans, have to identify it. However, what is important about the underlying object is its value and its type.
 
-A great tool in Python to understand this concepts is the ``id`` function. We can apply it to any variable and it will return its identity. If we want to be sure about dealing with the same object, we can check whether the value returned by ``id`` is the same. It is possible to think about the integer that is being returned as the address in memory that is assigned to the object. So, for example, we can do the following:
+A great tool in Python to understand this concept is the ``id`` function. We can apply it to any variable and it will return its identity. If we want to be sure about dealing with the same object, we can check whether the value returned by ``id`` is the same. It is possible to think about the integer that is being returned as the address in memory that is assigned to the object. So, for example, we can do the following:
 
 .. code-block:: pycon
 
@@ -93,7 +94,7 @@ It is easy to see that both variables have different identities. Now we can expa
 
 What you see in the code above is that we have appended the same values to both the list (``var1``) and the tuple (``var2``). If we ask for the id of them, you will notice that ``var1`` has the same identity as before, while ``var2`` has a new identity. This means that we have expanded the list, but created a completely new tuple. This is why memory management is more efficient for lists than for tuples.
 
-Tuples are not the only immutable data type in Python, but they are a great tool to learn, because they can be directly compared to lists, which are mutable. Other immutable data types are:
+Tuples are not the only immutable data type in Python, but they are a great tool to learn because they can be directly compared to lists, which are mutable. Other immutable data types are:
 
 1. int
 2. float
@@ -106,7 +107,7 @@ Tuples are not the only immutable data type in Python, but they are a great tool
 9. frozenset
 10. bytes
 
-Most likely you haven't thought about it before, but when you assign an integer, float, etc. to a variable, it can't be replaced. So for example, you will get an output like this if you check the identity of a an integer assigned to a variable:
+Most likely you haven't thought about it before, but when you assign an integer, float, etc. to a variable, it can't be replaced. So for example, you will get an output like this if you check the identity of an integer assigned to a variable:
 
 .. code-block:: pycon
 
@@ -186,7 +187,7 @@ Which is logical, because they have the same values, but they are two distinct o
     >>> var1 == var2
     True
 
-An interesting thing happens when you use the so called singletons. Let's quickly see an example:
+An interesting thing happens when you use the so-called singletons. Let's quickly see an example:
 
 .. code-block:: pycon
 
@@ -224,7 +225,7 @@ And then:
 
     python -m timeit "1 is 1"
 
-In my case, I got that the first expression took on average 0.0207 microseconds to run, while the second took 0.0171 microsecond. Speed is an obvious factor. The other, is that when working with custom classes, you can specify what happens when you compare them to other objects. This is a very silly example but would prove the point:
+In my case, I got that the first expression took on average 0.0207 microseconds to run, while the second took 0.0171 microseconds. Speed is an obvious factor. The other is that when working with custom classes, you can specify what happens when you compare them to other objects. This is a very silly example but would prove the point:
 
 .. code-block:: python
 
@@ -244,7 +245,7 @@ If you run the code above, the output would me ``My Object == None``. Better be 
 
 Mutable Objects in Functions
 ----------------------------
-We have just seen that if you have two mutable objects with the same id it means that they are the same object. If you change one, you will change the other. This also applies when working with functions that take mutable objects as arguments. Imagine that you develop a function that takes as input a list, devides all of its arguments by 2 and then returns the average. The function would look like this:
+We have just seen that if you have two mutable objects with the same id it means that they are the same object. If you change one, you will change the other. This also applies when working with functions that take mutable objects as arguments. Imagine that you develop a function that takes as input a list, divides all of its arguments by 2 and then returns the average. The function would look like this:
 
 .. code-block:: python
 
@@ -269,7 +270,7 @@ The output will be:
     1.0
     [0.5, 1.0, 1.5]
 
-When you execute the function, you are actually changing the values of the variable ``my_list``. This is very powerful, because it allows you to change the elements of a list *in-place* while you are returning a different element. Sometimes, however, you don't want to do this and want to preserve the value of the original list. It may seem like a good idea to create a new variable within the function and use that instead. For example:
+When you execute the function, you are actually changing the values of the variable ``my_list``. This is very powerful because it allows you to change the elements of a list *in-place* while you are returning a different element. Sometimes, however, you don't want to do this and want to preserve the value of the original list. It may seem like a good idea to create a new variable within the function and use that instead. For example:
 
 .. code-block:: python
 
@@ -291,7 +292,7 @@ And now you will see that the original ``my_list`` variable is not altered. What
 
 Default Arguments in Functions
 -------------------------------
-A common practice when you are defining a function is to assign default values to its arguments. On the one hand this allows you to include new parameters without changing downstream code, but it also allows you to call the function with fewer arguments and thus making it easier to use. Let's see for example, a function that increases the value of the elements of a list. The code would look like:
+A common practice when you are defining a function is to assign default values to its arguments. On the one hand, this allows you to include new parameters without changing the downstream code, but it also allows you to call the function with fewer arguments and thus making it easier to use. Let's see, for example, a function that increases the value of the elements of a list. The code would look like:
 
 .. code-block:: python
 
@@ -308,7 +309,7 @@ If you call this function without arguments, it will use the default value ``[1,
     print(increase_values())
     print(increase_values())
 
-The first time it will print ``[2, 2]`` as expected, but the second time it is going to print ``[3, 3]``. Where you actually expecting this outcome? This basically means that the default argument of the function is changing every time we run it. When we run the script, Python evaluates the function definition only once, and creates the default list and the default value. Because lists are mutable, every time you call the function you will be changing its own values for all the successive calls. However, the ``value`` is immutable, and therefore it will be preserved over time.
+The first time it will print ``[2, 2]`` as expected, but the second time it is going to print ``[3, 3]``. Where you actually expecting this outcome? This basically means that the default argument of the function is changing every time we run it. When we run the script, Python evaluates the function definition only once and creates the default list and the default value. Because lists are mutable, every time you call the function you will be changing its own values for all the successive calls. However, the ``value`` is immutable, and therefore it will be preserved over time.
 
 The next logical question is how can you prevent this from happening. And the short answer is to use immutable types as default arguments for functions. You could have used ``None``, for instance:
 
@@ -335,7 +336,7 @@ When we run ``calculate`` for the first time, there will be nothing stored in th
 
 Your Own Immutable Objects
 --------------------------
-Python is very flexible and it gives you a lot of control on how to customize its behavior. As you can see in the list at the beginning of this article, custom created classes belong to the mutable types. But what happens if you want to define your own immutable objects? The answer is to modify how the class behaves when assigning attributes. This means reimplementing the ``__setattr__`` method.
+Python is very flexible and it gives you a lot of control over how to customize its behavior. As you can see from the list at the beginning of this article, custom created classes belong to the mutable types. But what happens if you want to define your own immutable objects? The answer is to modify how the class behaves when assigning attributes. This means reimplementing the ``__setattr__`` method.
 
 .. code-block:: python
 
@@ -356,7 +357,7 @@ If you instantiate the class and try to assign a value to an attribute of it, an
         raise TypeError('MyImmutable cannot be modified after instantiation')
     TypeError: MyImmutable cannot be modified after instantiation
 
-Great, you have an object that you can't modify after instantiation. But that also means there is no much you can do with it. Imagine you would like to store some initial values, if you create a standard ``__init__`` method, it will fail:
+Great, you have an object that you can't modify after instantiation. But that also means there is no much you can do with it. Imagine you would like to store some initial values if you create a standard ``__init__`` method, it will fail:
 
 .. code-block:: python
 
@@ -392,12 +393,16 @@ Which now you can use as follows:
     [...]
     TypeError: MyImmutable cannot be modified after instantiation
 
-It is a bit of a work around, but maybe you can find a use for this kind of pattern.
+It is a bit of a workaround, but maybe you can find a use for this kind of pattern.
 
 Conclusions
 -----------
-Understanding the differences between mutable and immutable types in Python does not arise as an important topic until it is too late. In most cases you can develop complex applications exchanging tuples or lists, or altering the value of a variable inside a function without realizing it is actually happening. But it will eventually happen that you find a bug very hard to track down that may be related to the use (or misuse) of mutable types.
+Understanding the differences between mutable and immutable types in Python does not arise as an important topic until it is too late. In most cases, you can develop complex applications exchanging tuples for lists, or you may even be altering the value of a variable inside a function without realizing it and without great consequences. But it will eventually happen that you find a bug very hard to track down that may be related to the use (or misuse) of mutable types.
 
-As a personal note, I found out such a bug performing a complex experiment with a microscope. I wanted to be able to refocus automatically on certain bright spots after an image was acquired. The first time the algorithm was working fine. The second time it was pretty much OK, but the third and onwards was not even close from reaching the desired values. The root of the problem was defining the initial range that the microscope would scan as a list, which was being divided by a factor after every iteration.
+As a personal note, I found out such a bug performing a complex experiment with a microscope. I wanted to be able to refocus automatically on certain bright spots after an image was acquired. The first time the algorithm was working fine. The second time it was pretty much OK, but the third and onwards was not even close to reaching the desired values. The root of the problem was defining the initial range that the microscope would scan as a list, which was being divided by a factor after every iteration.
 
 Some of the patterns you find in this article, probably are not going to be of any use. However, it is important to keep in the back of your mind that ``==`` can give very unexpected results, that variables can change in unexpected ways if you are not careful. When projects start to grow, small mistakes can pile up to disastrous problems.
+
+As always, `example code <https://github.com/PFTL/website/tree/master/example_code/17_mutable_immutable>`__ is available and the `source code <https://github.com/PFTL/website/blob/master/content/blog/17_mutable_and_immutable.rst>`__ for this page also.
+
+Header Photo by `rawpixel <https://unsplash.com/photos/EF8Jr-uPS2Y?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
