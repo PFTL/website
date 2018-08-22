@@ -113,3 +113,5 @@ However, if you generate a tuple that contains a reference to a mutable object, 
     TypeError: unhashable type: 'list'
 
 The keys of dictionaries have to be immutable, and they must reference objects that are also immutable. Therefore, even if the tuple is immutable, their elements may not be. You have to be careful when using a tuple as key to a dictionary, since it will not always work.
+
+We are going to discuss more about the error that appears, when we discuss about hashing objects in Python.
