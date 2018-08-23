@@ -74,3 +74,142 @@ In the same way, you could have used the tuple itself:
     >>> var3[1, 2, 3]
     'var1'
 
+Hashing an object can be thought as converting it to an integer based on its content, but not on the identity of the object itself. Of course, this may give problems, because you are reducing a very large space of possibilities into a finite set of integers. This reduction may give raise to something known as hash collisions, i.e., two objects which are reduced to the same integer even if their values are different.
+
+A very simple example of hash collisions is what happens between variables and integers:
+
+.. code-block:: pycon
+
+    >>> var1 = 'a'
+    >>> var1.__hash__()
+    12416037344
+    >>> var2 = 12416037344
+    >>> var1.__hash__() == var2.__hash__()
+    True
+
+Both ``var1`` and ``var2`` have the same hash value. So, we may wonder, what happens if we use them in a dictionary, let's try it to find out:
+
+.. code-block:: pycon
+
+    >>> var3 = {var1: 'var1'}
+    >>> var3[var2] = 'var2'
+    >>> var3
+    {'a': 'var1', 12416037344: 'var2'}
+
+As you can see in the snippen above, Python is relying in more than just the hash value of an object when using it as keys for a dictionary.
+
+Hash Values of Custom Classes
+-----------------------------
+We have seen `before <{filename}17_mutable_and_immutable.rst>`_ that there are differences between mutable and immutable types in Python. Built-in immutable types have always a hash method, while mutable types don't. However, this leaves outside custom defined classes. By default, all instances of custom classes will have a hash value defined at creation and it will not change over time. Two instances of the same class will have two different hash values. For example:
+
+.. code-block:: python
+
+    class MyClass:
+        def __init__(self, value):
+            self.value = value
+
+    my_obj = MyClass(1)
+    print(my_obj.__hash__()) # 8757243744113
+    my_new_obj = MyClass(1)
+    print(my_new_obj.__hash__()) # -9223363279611078919
+
+If you run the code above, you will see that the hash value that you get from your objects changes every time. This is because the hash is derived from the object's id. Python allows you to define your own hash value, for example, you could alter ``MyClass`` like this:
+
+.. code-block:: python
+
+    class MyClass:
+        def __init__(self, var):
+            self.var = var
+
+        def __hash__(self):
+            return int(self.var)
+
+If you re run the example, you will see that both objects have the same hash value of 1. So, let's see what happens if we use them as the keys for a dictionary:
+
+.. code-block:: pycon
+
+    >>> my_obj = MyClass(1)
+    >>> my_obj_2 = MyClass(1)
+    >>> var = {my_obj: 'my_obj'}
+    >>> var[my_obj_2] = 'my_obj_2'
+    >>> print(var)
+    {My Class: 'my_obj', My Class: 'my_obj_2'}
+
+What you can see is that exactly as before with tuples and integers, even if the hash value is the same, they are distinct keys in the dictionary. There is still something else missing. Even if their hash values are the same, they are different objects:
+
+.. code-block:: pycon
+
+    >>> my_obj == my_obj_2
+    False
+
+We can tweak the ``MyClass`` class in order to output ``True`` when comparing it:
+
+.. code-block:: python
+
+    class MyClass:
+        def __init__(self, var):
+            self.var = var
+
+        def __hash__(self):
+            return int(self.var)
+
+        def __eq__(self, other):
+            return other.var == self.var
+
+The method ``__eq__`` is used to determine if two objects are equal or not. Because ``MyClass`` takes only one argument when instantiating, we just compare that value. For example, we would get:
+
+.. code-block:: pycon
+
+    >>> var1 = MyClass(1)
+    >>> var2 = MyClass(1)
+    >>> var3 = MyClass(2)
+    >>> var1 == var2
+    True
+    >>> var1 == var3
+    False
+
+It works as we would expect it to. If we try again with a dictionary:
+
+.. code-block:: pycon
+
+    >>> var4 = {var1: 'var1'}
+    >>> var4[var2] = 'var2'
+    >>> var4
+    {My Class: 'var2'}
+    >>> var4[var3] = 'var3'
+    >>> var4
+    {My Class: 'var2', My Class: 'var3'}
+
+Finally we see what is that dictionaries in Python are using for defining their keys. They do not only look at the hash value, they also look whether the keys are the same or not. If they are not, they will be assigned to a new element instead of the same one.
+
+Now you are starting to go through risky waters. If you would compare your object to something other than the ``MyClass`` instance (or better say, any object without a ``var`` attribute), an exception would be raised. You can also force the equality to be true regardless of the object you are comparing it to. So, for example:
+
+.. code-block:: python
+
+    class MyClass:
+        def __init__(self, var):
+            self.var = var
+
+        def __hash__(self):
+            return int(self.var)
+
+        def __eq__(self, other):
+            return True
+
+And now, we would find a strange behavior:
+
+.. code-block:: pycon
+
+    >>> my_obj = MyClass(1)
+    >>> var = 1
+    >>> my_obj == var
+    True
+    >>> var2 = {my_obj: 'my_obj'}
+    >>> var2[var] = 'var'
+    >>> print(var2)
+    {MyClass: 'var'}
+
+So now you see that dictionaries test two things: the hash value and the equality, if one of them doesn't match, then it is going to be assigned as a new key.
+
+Of course there are many details missing regarding how hash tables work, but this is a pretty good introduction into how some of the under-the-hood things work in Python. They may also give you a hint into why things work or stop working at apparently random places.
+
