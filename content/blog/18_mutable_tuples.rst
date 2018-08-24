@@ -3,10 +3,10 @@ Mutable or Immutable Tuples
 
 :date: 2018-08-24
 :author: Aquiles Carattino
-:subtitle: Understanding how tuples which are immutable, may seem to change.
+:subtitle: Understanding how tuples, which are immutable, may seem to change.
 :header: {attach}michal-pechardo-502908-unsplash.jpg
 :tags: Data, Types, Mutable, Immutable, Tuples
-:description: Understanding how tuples which are immutable, may seem to change.
+:description: Understanding how tuples, which are immutable, may seem to change.
 
 Broadly speaking, Python variables belong to one of two types: **mutable** and **immutable**. We have discussed this yesterday, in the `Introduction To Mutable and Immutable Data Types <{filename}17_mutable_and_immutable.rst>`_. The first one refers to those elements that can be changed without the need of creating a new one, while the latter refers to those that cannot be changed after instantiation. A paradigmatic example of immutable objects is tuples. However, as we are going to see in this article, tuples may seem to change.
 
