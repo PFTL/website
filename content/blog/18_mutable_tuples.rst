@@ -1,11 +1,10 @@
 Mutable or Immutable Tuples
 ===========================
 
-:status: draft
 :date: 2018-08-24
 :author: Aquiles Carattino
 :subtitle: Understanding how tuples which are immutable, may seem to change.
-:header: {attach}tobias-fischer-185901-unsplash.jpg
+:header: {attach}michal-pechardo-502908-unsplash.jpg
 :tags: Data, Types, Mutable, Immutable, Tuples
 :description: Understanding how tuples which are immutable, may seem to change.
 
@@ -37,7 +36,7 @@ Tuples are not limited to hold numbers in them, nor to elements of the same type
     >>> var[1]
     [1, 2, 3]
 
-What happens if you try the following code?
+What happens if you try to change the value of one of the elements of the list?
 
 .. code-block:: pycon
 
@@ -103,7 +102,7 @@ A lot of possibilities appear when you start playing around. However, your code 
 
 Tuples as Dictionary Keys
 -------------------------
-It is possible to use tuples as dictionary keys, for example:
+In principle, any immutable variable can be used as a dictionary key. Therefore, it is possible to also use tuples. For example:
 
 .. code-block:: pycon
 
@@ -131,3 +130,6 @@ The keys of dictionaries have to be immutable, and they must reference objects t
 Conclusions
 -----------
 This is a short article triggered by some comments that appear on the `discussion about mutable and immutable types <{filename}17_mutable_and_immutable.rst>`_. Wrapping your mind around this level of details may be hard at the beginning, but when you know these differences exist, you will be able to make better code, less prone to bugs. You may also start realizing why so many packages use tuples as default arguments instead of lists, etc.
+
+
+Header photo by `Michal Pechardo <https://unsplash.com/photos/O6XDQCNo4Hc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
