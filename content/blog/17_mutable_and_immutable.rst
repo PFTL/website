@@ -405,4 +405,6 @@ Some of the patterns you find in this article, probably are not going to be of a
 
 As always, `example code <https://github.com/PFTL/website/tree/master/example_code/17_mutable_immutable>`__ is available and the `source code <https://github.com/PFTL/website/blob/master/content/blog/17_mutable_and_immutable.rst>`__ for this page also.
 
+If you want to keep learning, you can read more about `why tuples may seem to change <{filename}18_mutable_tuples.rst`>_ and what happens when you use `mutable or immutable variables as class attributes <{filename}21_Default_Attributes_Classes.rst>`_.
+
 Header Photo by `rawpixel <https://unsplash.com/photos/EF8Jr-uPS2Y?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
