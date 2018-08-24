@@ -1,17 +1,16 @@
 Mutable and Immutable Attributes of Classes
 ===========================================
 
-:status: draft
-:date: 2018-08-12
+:date: 2018-08-24
 :author: Aquiles Carattino
 :subtitle: Understanding how tuples which are immutable, may seem to change.
-:header: {attach}tobias-fischer-185901-unsplash.jpg
+:header: {attach}dan-gold-382057-unsplash.jpg
 :tags: Data, Types, Mutable, Immutable, Tuples
 :description: Understanding how tuples which are immutable, may seem to change.
 
 We have seen how to leverage the differences between `mutable and immutable objects <17_mutable_and_immutable.rst>`_ and what happens when you use mutable types as default function arguments. However, we haven't discussed what happens when you use mutable types as default attributes of classes.
 
-Default values for attributes can be defined in different ways in your classes. Let's start by looking at what happens if you define them in the ``__init__`` method. Let's start with a simple class that takes one list as argument when instantiating:
+Default values for attributes can be defined in different ways in your classes. Let's start by looking at what happens if you define them in the ``__init__`` method. Let's start with a simple class that takes one list as the argument when instantiating:
 
 .. code-block:: python
 
@@ -25,7 +24,7 @@ Default values for attributes can be defined in different ways in your classes. 
         def __str__(self):
             return str(self.var)
 
-This is a very simple example that already will show a very peculiar behavior. The init takes one list as argument, and if it is not provided it will use an empty list as default. We have also added a method for appending values to the list. The ``__str__`` method was defined for convenience to explore the contents of the ``var`` attribute. We can instantiate the class and use it as always:
+This is a very simple example that already will show a very peculiar behavior. The ``__init__`` takes one list as the argument, and if it is not provided it will use an empty list as default. We have also added a method for appending values to the list. The ``__str__`` method was defined for convenience to explore the contents of the ``var`` attribute. We can instantiate the class and use it as always:
 
 .. code-block:: python
 
@@ -36,7 +35,7 @@ This is a very simple example that already will show a very peculiar behavior. T
     print(my_class)
     # [1]
 
-So far so good, but let's see what happens when we instantiate a second class:
+So far so good, but let's see what happens when we instantiate the second class:
 
 .. code-block:: python
 
@@ -195,7 +194,7 @@ You see that class attributes are still linked to the instances. It is very inte
     print(id(MyClass.var))
     # 10935520
 
-You see that all the attributes are the same object. When the value is replaced, since integer are immutable, a new object is created and is propagated to all the instances of the class. However, if you change the value of ``var`` in one of the instances, this will not hold anymore:
+You see that all the attributes are the same object. When the value is replaced, since integers are immutable, a new object is created and is propagated to all the instances of the class. However, if you change the value of ``var`` in one of the instances, this will not hold anymore:
 
 .. code-block:: python
 
@@ -211,4 +210,6 @@ You can see that both the attributes in ``MyClass`` and in ``my_class_2`` are st
 
 Keeping in mind the differences between methods' default values and class attributes open a lot of possibilities when designing a program. The fact that you can alter all objects from within a specific instance can be of great use when properties change at runtime. Even if not an extremely common scenario for short-lived scripts, it is very common when dealing with user interaction on programs that run for hours or days.
 
-As always, example code can be found here and the source of this page here. 
+As always, `example code can be found here <https://github.com/PFTL/website/tree/master/example_code/21_Classes_Mutables>`_ and `the source of this page here <https://github.com/PFTL/website/blob/master/content/blog/21_Default_Attributes_Classes.rst>`_.
+
+Header photo by `Dan Gold <https://unsplash.com/photos/mgaS4FlsYxQ?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
