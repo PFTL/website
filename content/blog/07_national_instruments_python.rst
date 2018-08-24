@@ -12,6 +12,8 @@ One of the most common devices in a lab is a National Instruments acquisition ca
 
 Once there is good documentation for one programming language, there are no limits for developers to expand the toolbox into other languages. For National Instruments devices, there is a project called `PyDAQmx <https://pythonhosted.org/PyDAQmx/>`_ that ported all the functions to be Python compatible. Since it is a port of the C code, what you should always bear in mind is that you have to check the `National Instruments documentation <http://zone.ni.com/reference/en-XX/help/370471AA-01/>`_ and adapt the code to Python.
 
+.. note:: since the writing of this article, a new Python package supporting NI-DAQmx was released by National Instruments itself. You can see the `documentation here <https://nidaqmx-python.readthedocs.io/en/latest/>`_. I didn't have time to test it yet, but looks very promising. Keep an eye on the `bugs and issues <https://github.com/ni/nidaqmx-python/issues>`_ because they may be a good source of information.
+
 Let's see how to get started. Remember that each card has different specifications and therefore some of the options may not be present in your current configuration. Let's assume we want to read an analog input from our device; you need to know the number that was assigned to your card in order to communicate with it; normally you should have National Instruments software that allows you to configure the number of your card.
 
 .. code-block:: python

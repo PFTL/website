@@ -197,5 +197,7 @@ One of the advantages of decorators is that even if a developer doesn't fully un
 
 In this article, we have shown a couple of very basic examples that can be greatly improved. If you have ever encountered decorators and didn't understand how to use them, or you are looking for more specific information, leave your message in the comment section below and we will use your feedback to write a follow up article specifically designed to answer your questions.
 
+If you want to learn more about decorators, there is a `Follow Up Article <{filename}04_how_to_use_decorators_2.rst>`_
+
 
 Header photo by `Victor Garcia <https://unsplash.com/photos/dECPx6gtKww?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
