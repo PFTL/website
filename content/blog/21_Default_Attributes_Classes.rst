@@ -8,7 +8,7 @@ Mutable and Immutable Attributes of Classes
 :tags: Data, Types, Mutable, Immutable, Tuples
 :description: Understanding how tuples which are immutable, may seem to change.
 
-We have seen how to leverage the differences between `mutable and immutable objects <17_mutable_and_immutable.rst>`_ and what happens when you use mutable types as default function arguments. However, we haven't discussed what happens when you use mutable types as default attributes of classes.
+We have seen how to leverage the differences between `mutable and immutable objects <{filename}17_mutable_and_immutable.rst>`_ and what happens when you use mutable types as default function arguments. However, we haven't discussed what happens when you use mutable types as default attributes of classes.
 
 Default values for attributes can be defined in different ways in your classes. Let's start by looking at what happens if you define them in the ``__init__`` method. Let's start with a simple class that takes one list as the argument when instantiating:
 
