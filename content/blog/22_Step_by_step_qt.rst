@@ -164,9 +164,61 @@ Buttons are called ``QPushButton``. Parts of the code are always the same, like 
 
 It looks very silly, but it is a very good start. The last remaining thing would be to do something when the button is pressed. In order to trigger something by a button press, you have to understand what *Signals and Slots* are in the context of Qt.
 
+Signals and Slots in Qt
+-----------------------
+
 When you develop complex applications, such as one with a user interface, you may want to trigger different actions under specific conditions. For example, you may want to send an e-mail to the user saying that the webcam finished acquiring a movie. However, you may want later to also add the possibility of saving the video to the hard drive, or publishing it to Youtube. Later, you decide that you would also like to save the video when a user presses a button, or publishing to Youtube when the computer receives an e-mail.
 
 A very convenient way of developing a program in which you can trigger actions at specific events would be if you could subscribe functions to signals that are generated at certain moments. Once the video is acquired, the program can emmit a message, which will be catch by all its subscribers. In this way you can write your code for acquiring a video once, but what happens when the video finishes can be easily changed.
 
-From the other side, you can write the function to save the video once, and trigger it either when the video finishes or when a user presses a button, etc. The main thing to know when developing user interfaces is that you don't know when things are going to happen. It may be that the user first acquires an image and then makes a video. It may be that the user doesn't acquire a video and tries to save the data, etc. Therefore, it is very handy to be able to trigger actions on specific events.
+From the other side, you can write the function to save the video once, and trigger it either when the video finishes or when a user presses a button, etc. The main thing to realize when developing user interfaces is that you don't know when things are going to happen. It may be that the user first acquires an image and then makes a video. It may be that the user doesn't acquire a video and tries to save the data, etc. Therefore, it is very handy to be able to trigger actions on specific events.
 
+In Qt, the whole idea of triggering actions with certain events is defined with *Signals*, which get triggered at specific moments and *Slots*, which are the actions that will be executed. With the button that we have defined, an action, or *signal*, could be its pressing. The event is whatever function we want it to be, for example, we will print to the terminal a message:
+
+.. code-block:: python
+    :hl_lines: 9
+
+    from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
+
+    def button_pressed():
+        print('Button Pressed')
+
+    app = QApplication([])
+    win = QMainWindow()
+    button = QPushButton('Test')
+    button.clicked.connect(button_pressed)
+    win.setCentralWidget(button)
+    win.show()
+    app.exit(app.exec_())
+
+Notice that we first define the function, in this case ``button_pressed``. The real magic happens in the highlighted line. The signal that we want to use is ``clicked``, and we connect that signal to ``button_pressed`` (note that we don't add the ``()`` in this line). If you run the program again and you press the button, you will se a message appearing on the terminal.
+
+To continue on the same line of what it was discussed above, you could define a new function that gets triggered whenever the button is pressed. You will end up with something like this (I have removed the parts that are common to keep the example short):
+
+.. code-block:: python
+
+    def button_pressed():
+        print('Button Pressed')
+
+    def new_button_pressed():
+        print('Another function')
+
+    button.clicked.connect(button_pressed)
+    button.clicked.connect(new_button_pressed)
+
+If you run the program again, you will see that every time you press the button, two messages appear on the terminal. Of course you could have used functions that you import from different packages. The last bit in order to provide a complete example is to add a second button and connect its ``clicked`` signal to ``button_pressed``.
+
+Adding a new widget to a Main Window requires some extra steps. As we have discussed earlier, every main window requires one (and only one) central widget. Since we want to add two buttons, the best would be to define an empty widget that will hold those two buttons. In turn, that widget will become the central widget of the window.
+
+.. code-block:: python
+
+    from PyQt5.QtWidgets import QApplication, QMainWindow, \
+        QPushButton, QVBoxLayout, QWidget
+
+    app = QApplication([])
+    win = QMainWindow()
+    central_widget = QWidget()
+    button = QPushButton('Test')
+    button2 = QPushButton('Second Test')
+
+In order to make the window look organized, we will add a layout.
