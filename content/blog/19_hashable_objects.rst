@@ -3,10 +3,10 @@ What are Hashable Objects
 
 :date: 2018-08-27
 :author: Aquiles Carattino
-:subtitle: Understanding how tuples which are immutable, may seem to change.
+:subtitle: Hashable objects are at the root of Python dictionaries, understand how they work.
 :header: {attach}yeo-khee-793533-unsplash.jpg
-:tags: Data, Types, Mutable, Immutable, Tuples
-:description: Understanding how tuples which are immutable, may seem to change.
+:tags: Hashable, Objects, Dictionaries, Hash
+:description: Hashable objects are at the root of Python dictionaries, understand how they work.
 
 To understand hashable objects in Python, it is important to review what a hash table is. Following `the article on Wikipedia <https://en.wikipedia.org/wiki/Hash_table>`_, a hash table is a data structure that can map keys to values and that implements a hash function to compute the index to an array of buckets or slots. Heavy words, I know.
 
