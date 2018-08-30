@@ -1,17 +1,18 @@
 Step by Step Guide to Building a GUI
 =====================================
 
-
 :date: 2018-08-27
 :author: Aquiles Carattino
-:subtitle: Using PyQt to build a GUI to your webcam
+:subtitle: Using PyQt to build a GUI for your webcam
 :header: {attach}yeo-khee-793533-unsplash.jpg
 :tags: Data, Types, Mutable, Immutable, Tuples
-:description: Using PyQt to build a GUI to your webcam
+:description: Using PyQt to build a GUI for your webcam
 
-You may find a lot of tutorials online on how to use Python for different tasks, but it is very hard to find a complete guide on how to build a desktop application using Python. In this tutorial, we are going to build a Graphical User Interface (GUI) to acquire images from your webcam. We are going to use OpenCV to quickly acquire an image from your camera and PyQt5 to build the user interface.
+In this tutorial, we are going to build a Graphical User Interface (GUI) to acquire images from your webcam. We are going to use OpenCV to quickly acquire an image from your camera and PyQt5 to build the user interface. You may find a lot of tutorials online on how to use Python for different tasks, but it is very hard to find a complete guide on how to build a desktop application using Python.
 
 Building GUI's is not complicated, what makes them complex are the considerations you have to make when you allow a user to randomly interact with your program. For instance, imagine that your program allows the user to choose the camera they want to use and then acquire an image. You have to consider what would happen if the user first tries to acquire an image. And this is only the tip of the iceberg.
+
+When you finish this tutorial you will have a good overview on how to structure a project, separating into modules the important parts. You will also learn how to start developing a PyQt application from scratch, building on complexity step by step. Finally, you will have a working example of how to interface with a real world device using a user interface.
 
 .. contents::
 
@@ -68,7 +69,7 @@ Now we are ready to develop the application.
 
 Welcome to OpenCV
 -----------------
-When developing this kind of applications, the first step is to understand what do we want to do, before embarking on designing and developing a User Interface. OpenCV makes it very simple to read from a webcam attached to a computer, you simply do the following:
+When developing this kind of applications, the first step is to understand what do we want to do before embarking on designing and developing a User Interface. OpenCV makes it very simple to read from a webcam attached to a computer, you simply do the following:
 
 .. code-block:: python
 
@@ -109,7 +110,7 @@ To go one step forward, we can also acquire a video from the camera. The only di
     cap.release()
     cv2.destroyAllWindows()
 
-So, now we have a clear picture of how the acquisition process works. We have to start the communication with the camera and then we can read from it. There are some parameters that we can either change to the image itself, like transforming to black and white, or to the camera. For example, we could increase the brightness by adding the following right after ``VideoCapture``:
+Now we have a clear picture of how the acquisition process works. We have to start the communication with the camera and then we can read from it. There are some parameters that we can either change to the image itself, like transforming to black and white, or to the camera. For example, we could increase the brightness by adding the following right after ``VideoCapture``:
 
 .. code-block:: python
 
@@ -121,9 +122,9 @@ To make a video you need to continuously acquire from the camera, in an infinite
 
 Welcome to PyQt
 ---------------
-Qt, similarly to OpenCV, is a general library, written in C++ and available for a lot of platforms. PyQt are python bindings to Qt, i.e. a translation of the original code to objects that can be used from within Python. The main difficulty of working with Qt comes from the fact that a lot of the available documentation is not available for the Python bindings but for the original code. This implies that the user has to make a translation from one language to another. Once you get used to it, it just works fine but takes time to learn.
+Qt, similarly to OpenCV, is a general library, written in C++ and available for a lot of platforms. PyQt are python bindings to Qt, i.e. a translation of the original code to objects that can be used from within Python. The main difficulty of working with Qt comes from the fact that a lot of the documentation is not available for the Python bindings but for the original code. This implies that the user has to make a translation from one language to another. Once you get used to it, it just works fine but takes time to learn.
 
-.. note:: There are a different set of bindings available for Python, called PySide2. They are the officially released bindings by Qt and, for practical matters, they work exactly the same. The main difference is the license under which they are released. If you are concerned about releasing your code, you should check the options.
+.. note:: There is a different set of bindings available for Python, called PySide2. They are the officially released bindings by Qt and, for practical matters, they work exactly the same. The main difference is the license under which they are released. If you are concerned about releasing your code, you should check the options.
 
 A user interface consists of an infinite loop in which the windows are drawn, the user interaction is grabbed, images from the webcam are displayed, etc. If the loop is broken, the application finishes, closing all the windows. So, let's get started with a simple window:
 
@@ -166,14 +167,13 @@ It looks very silly, but it is a very good start. The last remaining thing would
 
 Signals and Slots in Qt
 -----------------------
-
-When you develop complex applications, such as one with a user interface, you may want to trigger different actions under specific conditions. For example, you may want to send an e-mail to the user saying that the webcam finished acquiring a movie. However, you may want later to also add the possibility of saving the video to the hard drive or publishing it to Youtube. Later, you decide that you would also like to save the video when a user presses a button or publishing to Youtube when the computer receives an e-mail.
+When you develop complex applications, such as one with a user interface, you may want to trigger different actions under specific conditions. For example, you may want to send an e-mail to the user saying that the webcam finished acquiring a movie. However, you may want later to also add the possibility of saving the video to the hard drive or publishing it to Youtube. At another time, you decide that you would also like to save the video when a user presses a button or publishing to Youtube when the computer receives an e-mail.
 
 A very convenient way of developing a program in which you can trigger actions at specific events would be if you could subscribe functions to signals that are generated at certain moments. Once the video is acquired, the program can emit a message, which will be caught by all its subscribers. In this way you can write your code for acquiring a video once, but what happens when the video finishes can be easily changed.
 
 From the other side, you can write the function to save the video once, and trigger it either when the video finishes or when a user presses a button, etc. The main thing to realize when developing user interfaces is that you don't know when things are going to happen. It may be that the user first acquires an image and then makes a video. It may be that the user doesn't acquire a video and tries to save the data, etc. Therefore, it is very handy to be able to trigger actions on specific events.
 
-In Qt, the whole idea of triggering actions with certain events is defined with *Signals*, which get triggered at specific moments and *Slots*, which are the actions that will be executed. With the button that we have defined, an action, or *signal*, could be its pressing. The event is whatever function we want it to be, for example, we will print to the terminal a message:
+In Qt, the whole idea of triggering actions with certain events is defined with *Signals*, which get triggered at specific moments and *Slots*, which are the actions that will be executed. With the button that we have defined, an action, or *signal*, could be its pressing. The *slot* is whatever function we want it to be, for example, we will print a message to the terminal:
 
 .. code-block:: python
     :hl_lines: 9
@@ -230,7 +230,7 @@ You can add all the normal things that a window has, such as a menu, toolbar, et
     win.show()
     app.exit(app.exec_())
 
-When we define the buttons, the second argument, in this case, means which is the parent class of the widget. It is a fast way of adding elements to widgets and to establish a clear relationship between each other, as we will see later. If you run the code above, you will see only the ``Second Test`` button appearing. If you would change the order in which you define ``button`` and ``button2``, you will see that actually, one button is on top of the other. Since ``Second Test`` takes more space, it didn't let you see the ``Test`` that was under it.
+When we define the buttons, the second argument, means which element is the parent of the widget. It is a fast way of adding elements to widgets and to establish a clear relationship between each other, as we will see later. If you run the code above, you will find only the ``Second Test`` button appearing. If you would change the order in which you define ``button`` and ``button2``, you will see that actually, one button is on top of the other. Since ``Second Test`` takes more space, it didn't let you see the ``Test`` that was under it.
 
 To set the position of the buttons (or of any other widget), you can use the method ``setGeometry``. It takes four arguments, the first two are the position in x,y coordinates relative to the parent widget. Since widgets can be nested, it is important to keep this in mind. The other two arguments are the width and the height. We can do the following:
 
@@ -259,7 +259,7 @@ Adding Layouts for Styling
 --------------------------
 Adding two buttons by setting their geometry works, but is not the handiest thing ever. If you change the number of characters in a button, the text may not fit in the space, you need to keep track of the position of every button in order to add the other one just below, etc. With more complicated layouts, when you have input fields or different kinds of widgets, setting the geometry individually would be incredibly cumbersome. Fortunately, we can use Layouts to speed and simplify our design.
 
-A layout is a way of telling Qt how to organize elements relative to each other. For instance, if we want the two buttons one below the other, we could use a vertical layout. Layouts are assigned to widgets, and therefore to the ``central_widget`` in our example above it would become:
+A layout is a way of telling Qt how to organize elements relative to each other. For instance, if we want the two buttons one below the other, we could use a vertical layout. Layouts are assigned to widgets, and therefore to the ``central_widget``. In our example it would become:
 
 .. code-block:: python
 
@@ -285,7 +285,7 @@ And now the window looks much better:
     :alt: Main window with two buttons using layout
     :class: center-img
 
-You can go ahead and try to resize the window and see how the buttons adapt. Compare that to the case where you didn't use the layout. Of course, you may want to put one button next to the other, in which case you will use a ``QHBoxLayout``, but the rest of the code is the same. Of course, connecting signals to functions works in exactly the same way, because the button is the same, regardless of whether it is inside a layout or not.
+You can go ahead and try to resize the window and see how the buttons adapt. Compare that to the case where you didn't use the layout. Of course, you may want to put one button next to the other, in which case you will use a ``QHBoxLayout``, but the rest of the code is the same.Connecting signals to functions works in exactly the same way, because the button is the same, regardless of whether it is inside a layout or not.
 
 Acquiring An Image from the GUI
 -------------------------------
@@ -330,7 +330,7 @@ Every time you click one of the buttons, you will get a message on the terminal 
 
 Layout of the Program: MVC design pattern
 -----------------------------------------
-What we are going to do before continuing improving the user interface is to improve the code itself by developing different modules and classes that can be easily imported from the main file. When we refer to the names of the files, we will use **bold** characters, to avoid confusion. All the files should be located in the same folder, doesn't really matter where on your computer as long as you have write access.
+What we are going to do before continuing improving the user interface is to improve the code itself by developing different modules and classes that can be easily imported from a main file. When we refer to the names of the files, we will use **bold** characters, to avoid confusion. All the files should be located in the same folder, doesn't really matter where on your computer as long as you have write access.
 
 Developing great and sustainable programs is a tough task that involves much more thinking than coding. There is no recipe that satisfies absolutely everyone. However, there are some common practices that can make your program much clearer to newcomers. There is a common pattern in programming known as the Model-View-Controller (MVC). You can read a lot about it, and most likely you will find plenty of examples on how to use it when developing websites.
 
@@ -346,7 +346,7 @@ If you want to see the code in its final version, you can check the `Github Repo
 
 The Camera Model
 ----------------
-Since OpenCV took care of the controller of our camera, we can start developing the model for it. The best idea is to generate a skeleton of what we want to do with our camera. Lay out the methods, inputs, etc. that we know we are going to use. And then we look into them. Create a file called **models.py** and include the following:
+Since OpenCV took care of the controller of our camera, we can start developing the model for it. You can see in the repository how `the final model <https://github.com/PFTL/website/blob/master/example_code/22_Step_By_Step_Qt/AI_camera_model/models.py>`_ will look like. The best idea is to generate a skeleton of what we want to do with our camera. Lay out the methods, inputs, etc. that we know we are going to use. And then we look into them. Create a file called **models.py** and include the following:
 
 .. code-block:: python
 
@@ -368,7 +368,7 @@ Since OpenCV took care of the controller of our camera, we can start developing 
 
 We are developing a very simple model for our device. If you want to see how a model looks for scientific cameras, you can see what I have developed `for a Hamamatsu Orca camera <https://github.com/uetke/UUTrack/blob/master/UUTrack/Model/Cameras/Hamamatsu.py>`_. The advantage of developing a model at this stage is that if later I decide to change the camera or the driver, the only thing I need to do is to update the way the model works, and the rest of the program will keep running.
 
-There are few things to note about the model. You can see that we expect the ``__init__`` method to take one argument, the camera number. This is the argument that the ``VideoCapture`` of OpenCV requires. ``get_frame`` and ``acquire_movie`` are going to be responsible from reading from the camera and the ``set_brightness`` is an example of setting a parameter on a camera. The ``__str__`` method is going to help us if we need to identify the camera and is going to be handy on our GUI.
+There are few things to note about the model. You can see that we expect the ``__init__`` method to take one argument, the camera number. This is the argument that the ``VideoCapture`` of OpenCV requires. ``get_frame`` and ``acquire_movie`` are going to be responsible for reading from the camera and the ``set_brightness`` is an example of setting a parameter on a camera. The ``__str__`` method is going to help us if we need to identify the camera and is going to be handy on our GUI.
 
 We have the skeleton of the model, now is time to add some meaning to the methods. The advantage of using a class is that we can store the important parameters in the class itself. When we initialize, we should store the ``cap`` variable, in order to make accessible to the other methods.
 
@@ -389,14 +389,14 @@ We have also modified the ``__str__`` method in order to show that it is an Open
         cam = Camera(0)
         print(cam)
 
-If you just run ``models.py``, you will see a message is printed to the screen. You may have noticed also that in the example above, we are not closing the camera, we have forgotten about that method! Of course, you can always access the ``cam.cap`` attribute, but it would be much more elegant not to access the controller itself, since later on, another camera may use a different method for finalizing the communication. Now that we are at it, we can define the new method:
+If you just run ``models.py``, you will see a message printed to the screen. You may have noticed also that in the example above, we are not closing the camera, we have forgotten about that method! Of course, you can always access the ``cam.cap`` attribute, but it would be much more elegant not to access the controller itself, since later on, another camera may use a different method for finalizing the communication. Now that we are at it, we can define the new method:
 
 .. code-block:: python
 
     def close_camera(self):
         self.cap.release()
 
-And it could be actually nice to initialize the communication with the camera not when we initialize the class, but when we decide to initialize it. In that way, we can re-open the camera even if we have executed the ``close_camera`` method.
+And it could be actually nice to initialize the communication with the camera not when we instantiate the class, but when we decide. In that way, we can re-open the camera even if we have executed the ``close_camera`` method.
 
 .. code-block:: python
 
@@ -407,7 +407,7 @@ And it could be actually nice to initialize the communication with the camera no
     def initialize(self):
         self.cap = cv2.VideoCapture(self.cam_num)
 
-In the ``__init__`` method we define ``self.cap`` as None because it is a style rule to define all the attributes of the class in the initialization. In that way, you can see very quickly what attributes you will have available. It will also allow you to check whether the ``cap`` is available before you try to do something with it. With these changes, you will also need to update the example at the bottom of the file:
+In the ``__init__`` method we define ``self.cap`` as None because it is a style rule to define all the attributes of the class in the initialization. In that way, you can see very quickly what attributes you will have available. It will also allow you to check whether the ``cap`` is defined before you try to do something with it. With these changes, you will also need to update the example at the bottom of the file:
 
 .. code-block:: python
 
@@ -437,7 +437,7 @@ If you are following from the beginning, it should be clear to you what is happe
         print(frame)
         cam.close_camera()
 
-Which will output a very long array, with all the values read by your camera. Now we can work on the movie method. We have seen at the beginning that movies are just acquiring images one after the other, in an infinite loop. Since infinite loops are a bit dangerous (it is hard to stop them nicely), we will add a parameter called number of frames. We will learn how to acquire continuously later on.
+Which will output a very long array, with all the values read by your camera. Now we can work on the movie method. We have seen at the beginning that movies are just acquiring images one after the other, in an infinite loop. Since infinite loops are a bit dangerous (it is hard to stop them nicely), we will add a parameter called number of frames.
 
 .. code-block:: python
 
@@ -451,7 +451,7 @@ We start by generating an empty list in which we are going to store the images a
 
 .. note:: when dealing with more sophisticated cameras, normally the starting of a movie and the reading from the camera are done in two separate steps. This ensures the correct timing between frames, even if the program is running slower.
 
-You may already see that the method is not efficient at all. Appending to lists can be very slow, if the numbers of frames are too many it will give memory errors, etc. For the time being, we can work with this, but we are going to improve it later on.
+You may already see that the method is not efficient at all. Appending to lists can be very slow, if the numbers of frames are too many it will give memory errors, etc. For the time being, we can work with this.
 
 The last remaining method to develop is the ``set_brighntess``. This one is much easier, you can do the following:
 
@@ -482,7 +482,7 @@ Now that the model is ready, we can start developing a user interface.
 
 Reusable Qt Windows: Subclassing
 --------------------------------
-When we started to play around with Qt windows, we have developed everything as a script file that you could run. However, it is very hard to maintain and reuse that kind of code. The easiest is to develop classes that inherit from the base Qt classes. For example, let's reproduce the window with the two buttons, but in a more reliable way. Let's start creating a file called **views.py** and add the following to it:
+When we started to play around with Qt windows, we have developed everything as a script file that you could run. However, it is very hard to maintain and reuse that kind of code. The easiest is to develop classes that inherit from the base Qt classes. For example, let's reproduce the window with the two buttons, but in a more elegant way. Let's start by creating a file called **views.py** and add the following to it:
 
 .. code-block:: python
 
@@ -500,7 +500,7 @@ When we started to play around with Qt windows, we have developed everything as 
             self.layout.addWidget(self.button_max)
             self.setCentralWidget(self.central_widget)
 
-What we have done here is very similar to what we did earlier with the two buttons, the only difference is that we have moved everything into a class called ``StartWindow`` that inherits from ``QMainWindow``. This is a very efficient way of extending the functionality of classes. We have to run ``super().__init__`` in order to have all the properties of the Main Window available also in our class. We define an empty widget, two buttons, and a layout, exactly as we have done before. The most important thing is that we add the ``self.`` before the attributes in order to be able to use the buttons, layout, etc. in any part of the class.
+You can find the `final version of the views <https://github.com/PFTL/website/blob/master/example_code/22_Step_By_Step_Qt/AI_camera_model/views.py>`_ file in the repository as well. What we have done here is very similar to what we did earlier with the two buttons, the only difference is that we have moved everything into a class called ``StartWindow`` that inherits from ``QMainWindow``. This is a very efficient way of extending the functionality of classes. We have to run ``super().__init__`` in order to have all the properties of the Main Window available also in our class. We define an empty widget, two buttons, and a layout, exactly as we have done before. The most important thing is that we add the ``self.`` before the attributes in order to be able to use the buttons, layout, etc. in any part of the class.
 
 To use the window, the code becomes much simpler. You can add it at the end of **views.py**:
 
@@ -621,7 +621,7 @@ Notice that we are updating ``frame.T`` instead of ``frame``, this is a matter o
 
 Adding a Scrollbar for the Brightness
 -------------------------------------
-Before we move to the problem of acquiring a movie continuously, let's add a slider that can control the brightness of the image. As usual, everything starts within the ``__init__`` method, again, I am showing only the relevant code:
+Before we move to the problem of acquiring a movie continuously, let's add a slider that can control the brightness of the image. As usual, everything starts within the ``__init__`` method. I am showing only the relevant code:
 
 .. code-block:: python
 
@@ -648,7 +648,7 @@ The code above will generate a horizontal slider. The range only works with inte
         value /= 10
         self.camera.set_brightness(value)
 
-The signal, when is emitted, comes together with the value. Since brightness is in the range from 0 to 10, we have to convert the value of the slider before sending it to the camera. Of course, the changes are not going to be reflected until you acquire a new image. If you want, you could also connect the change of the slider to acquiring an image.
+The signal, when is emitted, comes together with the value and will be passed as argument to the function to which you connected it. Since brightness is in the range from 0 to 10, we have to convert the value of the slider before sending it to the camera. Of course, the changes are not going to be reflected until you acquire a new image. If you want, you could also connect the change of the slider to acquiring an image.
 
 Acquiring a Movie: QtThreads
 ----------------------------
@@ -689,13 +689,17 @@ With just this code, we are starting a new thread in which the camera will be ac
 
 While you acquire the movie you can also change the brightness and see the output in real time. You can find the complete code in the `Examples Folder of our repository <https://github.com/PFTL/website/tree/master/example_code/22_Step_By_Step_Qt/AI_camera_model>`_
 
+Extra Steps that You Can Try
+----------------------------
+Now that you have a good overview of how to develop a user interface, I will leave some extra points for you to work on. One is that we are setting the number of frames of the movie hardcoded into the program. You can add a ``QLineEdit`` widget in order to let the user define the number.
+
+Another thing that is missing is the possibility of continuous acquiring a movie. To do so, you could change the loop in the model and make it run forever if you set the number of frames to ``0``, or ``None``. However, if you do this, you will have to **find a way to stop the recording of the movie**.
+
+Finally, the model is accumulating all the data into an attribute. It could be nice to have the option to save the movie or the picture somewhere. You can add an extra button to achieve it, and if you are willing, you can use `HDF5 files <{filename}02_HDF5_python.rst>`_ to store the data.
+
 Conclusions
 -----------
-In this article, you have seen everything that it takes to start building user interfaces interfacing with real-world devices such as a camera. What you have seen is only the tip of the iceberg, there are many, many more things to cover in order to achieve more complex behaviors. However, it is a very good kickstart for structuring larger projects.
-
-There are still some important pieces missing. For instance, there is no way of stopping an acquisition, or to acquire continuously. So far, we are only acquiring 200 frames (or whatever number you decide on). You can think about different ways of stopping the camera while a movie is running.
-
-There is no way to save the movie yet or to prevent a user to start a second video while the first is still running. From here on, you can experiment as much as you want, the options are endless.
+In this article, you have seen everything that it takes to start building user interfaces interfacing with real-world devices such as a camera. What you have seen is only the tip of the iceberg, there are many, many more things to cover in order to achieve more complex behaviors. However, it is a very good kickstart for structuring larger projects. From here on, you can experiment as much as you want, the options are endless.
 
 If you build something that you would like to show to the rest, you can do it at `forum.pythonforthelab.com <https://forum.pythonforthelab.com>`_. You can also check `our book <http://pythonforthelab.com/books>`_, in which we cover many more details about designing software and building user interfaces.
 
