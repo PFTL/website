@@ -1,7 +1,7 @@
 Step by Step Guide to Building a GUI
 =====================================
 
-:status: draft
+
 :date: 2018-08-27
 :author: Aquiles Carattino
 :subtitle: Using PyQt to build a GUI to your webcam
@@ -341,6 +341,8 @@ In the model, we would place all the logic of how we use the device, which is no
 The view is clear that relates to the user interface and hence everything that belongs to Qt. It is important to note that a safe way of developing applications is by stripping all the logic from the view. If something is not supposed to run because the webcam is not ready, etc. then it should be the responsibility of the model and not of the view to prevent that from happening.
 
 The MVC pattern is very common to find in different applications, however, you have to be flexible enough as to understand what each component means, especially when you are developing an application from scratch, as is the case in this tutorial. When you use frameworks such as Django or Flask for web development, the framework itself pushes you to follow some specific patterns. For desktop and scientific applications such frameworks are not as mature yet and you have to start from scratch.
+
+If you want to see the code in its final version, you can check the `Github Repository for this article <https://github.com/PFTL/website/tree/master/example_code/22_Step_By_Step_Qt/AI_camera_model>`_.
 
 The Camera Model
 ----------------
@@ -685,7 +687,7 @@ To use it, we need to update the ``start_movie`` method:
 
 With just this code, we are starting a new thread in which the camera will be acquiring frames, but we are still not displaying them. For this, we will create a timer, which will be responsible for periodically updating the picture that is being displayed.
 
-While you acquire the movie you can also change the brightness and see the output in real time.
+While you acquire the movie you can also change the brightness and see the output in real time. You can find the complete code in the `Examples Folder of our repository <https://github.com/PFTL/website/tree/master/example_code/22_Step_By_Step_Qt/AI_camera_model>`_
 
 Conclusions
 -----------
@@ -696,3 +698,5 @@ There are still some important pieces missing. For instance, there is no way of 
 There is no way to save the movie yet or to prevent a user to start a second video while the first is still running. From here on, you can experiment as much as you want, the options are endless.
 
 If you build something that you would like to show to the rest, you can do it at `forum.pythonforthelab.com <https://forum.pythonforthelab.com>`_. You can also check `our book <http://pythonforthelab.com/books>`_, in which we cover many more details about designing software and building user interfaces.
+
+Header Photo by `Alvaro Reyes <https://unsplash.com/photos/qWwpHwip31M?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
