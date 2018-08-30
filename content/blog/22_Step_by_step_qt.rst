@@ -208,7 +208,13 @@ To continue on the same line of what it was discussed above, you could define a 
 
 If you run the program again, you will see that every time you press the button, two messages appear on the terminal. Of course you could have used functions that you import from different packages. The last bit in order to provide a complete example is to add a second button and connect its ``clicked`` signal to ``button_pressed``.
 
-Adding a new widget to a Main Window requires some extra steps. As we have discussed earlier, every main window requires one (and only one) central widget. Since we want to add two buttons, the best would be to define an empty widget that will hold those two buttons. In turn, that widget will become the central widget of the window.
+Adding a new widget to a Main Window requires some extra steps. As we have discussed earlier, every main window requires one (and only one) central widget. The skeleton of the Main Window looks like this:
+
+.. image:: /images/22_images/02_mainwindowlayout.png
+    :alt: Main window layout
+    :class: center-img
+
+You can add all the normal things that a windows has, such as a menu, toolbar, etc., but there is only one central widget. Since we want to add two buttons, the best would be to define an empty widget that will hold those two buttons. In turn, that widget will become the central widget of the window.
 
 .. code-block:: python
 
@@ -218,7 +224,366 @@ Adding a new widget to a Main Window requires some extra steps. As we have discu
     app = QApplication([])
     win = QMainWindow()
     central_widget = QWidget()
-    button = QPushButton('Test')
-    button2 = QPushButton('Second Test')
+    button = QPushButton('Test', central_widget)
+    button2 = QPushButton('Second Test', central_widget)
+    win.setCentralWidget(central_widget)
+    win.show()
+    app.exit(app.exec_())
 
-In order to make the window look organized, we will add a layout.
+When we define the buttons, the second argument in this case means which is the parent class of the widget. It is a fast way of adding elements to widgets and to establish a clear relationship between each other, as we will see later. If you run the code above, you will see only the ``Second Test`` button appearing. If you would change the order in which you define ``button`` and ``button2``, you will see that actually one button is on top of the other. Since ``Second Test`` takes more space, it didn't let you see the ``Test`` that was under it.
+
+To set the position of the buttons (or of any other widget), you can use the method ``setGeometry``. It takes four arguments, the first two are the position in x,y coordinates relative to the parent widget. Since widgets can be nested, it is important to keep this in mind. The other two arguments are the width and the height. We can do the following:
+
+.. code-block:: python
+
+    button.setGeometry(0,50,120,40)
+
+This will move the button ``Test`` 50 pixels down and will make it 120 pixels wide and 40 pixels tall. If you run the code again, you will see a window like this:
+
+.. image:: /images/22_images/03_two_buttons.png
+    :alt: Main window with two buttons
+    :class: center-img
+
+It is not a work of art, but you can see both buttons one of top of the other. If you feel adventurous, you can play with the ``setGeometry`` method of the main window. What happens if you make it smaller than the space the buttons take, or larger, etc. With this kind of examples you see how powerful Qt is, but also how complicated it may become to make things look exactly as you want.
+
+After all this digression to add two buttons, it is time to hook them to functions. The procedure is the same as for one button, using the ``clicked`` signal of each one of them:
+
+.. code-block:: python
+
+    button.clicked.connect(button_pressed)
+    button2.clicked.connect(button_pressed)
+
+If you run the program again, you will see that regardless of what button you are pressing, the same function is executed. You can also connect both buttons to different functions, to more than one, etc. This programming pattern makes your code much simpler to maintain, but also more complicated to follow for beginners. Since the action to be triggered can be defined anywhere in a program, it may take a while to understand what happens when.
+
+Adding Layouts for Styling
+--------------------------
+Adding two buttons by setting their geometry works, but is not the handiest thing ever. If you change the amount of characters in a button, the text may not fit in the space, you need to keep track of the position of every button in order to add the other one just below, etc. With more complicated layouts, when you have input fields or different kinds of widgets, setting the geometry individually would be incredibly cumbersome. Fortunately, we can use Layouts to speed and simplify our design.
+
+A layout is a way of telling Qt how to organize elements relative to each other. For instance, if we want the two buttons one below the other, we could use a vertical layout. Layouts are assigned to widgets, and therefore to the ``central_widget`` in our example above it would become:
+
+.. code-block:: python
+
+    from PyQt5.QtWidgets import QApplication, QMainWindow, \
+        QPushButton, QVBoxLayout, QWidget
+
+
+    app = QApplication([])
+    win = QMainWindow()
+    central_widget = QWidget()
+    button2 = QPushButton('Second Test', central_widget)
+    button = QPushButton('Test', central_widget)
+    layout = QVBoxLayout(central_widget)
+    layout.addWidget(button2)
+    layout.addWidget(button)
+    win.setCentralWidget(central_widget)
+    win.show()
+    app.exit(app.exec_())
+
+And now the window looks much better:
+
+.. image:: /images/22_images/04_two_buttons_layout.png
+    :alt: Main window with two buttons using layout
+    :class: center-img
+
+You can go ahead and try to resize the window and see how the buttons adapt. Compare that to the case where you didn't use the layout. Of course, you may want to put one button next to the other, in which case you will use a ``QHBoxLayout``, but the rest of the code is the same. Of course, connecting signals to functions works in exactly the same way, because the button is the same, regardless of whether it is inside a layout or not.
+
+Acquiring An Image from the GUI
+-------------------------------
+Now you have completed a first building step into how to start developing a user interface with Qt. However, it is time for us to do something with it. Since we are set in the task of controlling the webcam, we are going to do that. You have seen that connecting buttons to functions is very easy. We can use exactly what we saw earlier to read a frame from the camera. First, let's import OpenCV and define the functions that we are going to use:
+
+.. code-block:: python
+
+    import cv2
+    import numpy as np
+    from PyQt5.QtWidgets import QApplication, QMainWindow, \
+        QPushButton, QVBoxLayout, QWidget
+
+    cap = cv2.VideoCapture(0)
+    def button_min_pressed():
+        ret, frame = cap.read()
+        print(np.min(frame))
+
+    def button_max_pressed():
+        ret, frame = cap.read()
+        print(np.max(frame))
+
+You can se that we defined two functions, one that outputs the minimum value of the recorded frame and one that outputs the maximum. Now, we need to build the rest of the user interface and connect the two buttons to those functions. Pay attention to the new names that the buttons take:
+
+.. code-block:: python
+
+    app = QApplication([])
+    win = QMainWindow()
+    central_widget = QWidget()
+    button_min = QPushButton('Get Minimum', central_widget)
+    button_max = QPushButton('Get Maximum', central_widget)
+    button_min.clicked.connect(button_min_pressed)
+    button_max.clicked.connect(button_max_pressed)
+    layout = QVBoxLayout(central_widget)
+    layout.addWidget(button_min)
+    layout.addWidget(button_max)
+    win.setCentralWidget(central_widget)
+    win.show()
+    app.exit(app.exec_())
+    cap.release()
+
+Every time you click one of the buttons, you will get a message on the terminal saying what is the maximum or minimum value in the image. The next step would be to display the image within the GUI. However, as you can see, code starts to be less clear as we add more functionality. From a perspective of efficiency, it would be desirable to acquire the image once and then computing maximum and minimum. However, when having a simple script file, it becomes very complicated to share information. It is time to improve the layout of our program before going forward with the solution.
+
+Layout of the Program: MVC design pattern
+-----------------------------------------
+What we are going to do before continuing improving the user interface is to improve the code itself by developing different modules and classes that can be easily imported from a main file. When we refer to the names of the files, we will use **bold** characters, to avoid confusion. All the files should be located in the same folder, doesn't really matter where in your computer as long as you have write access.
+
+Developing great and sustainable programs is a tough task that involves much more thinking than coding. There is no recipe that satisfies absolutely everyone. However, there are some common practices that can make your program much clearer to newcomers. There is a common pattern in programming known as the Model-View-Controller (MVC). You can read a lot about it, and most likely you will find plenty of examples on how to use it when developing websites.
+
+When developing desktop applications that interface with real-world devices, then the meanings of each element in the MVC structure change. For instance, a controller would be the driver that is able to communicate with a device, which in our case is the camera. The driver was developed by OpenCV, but it is very likely that at some point we would `develop our own drivers <{filename}06_introducing_lantz.rst>`_.
+
+In the model we would place all the logic of how we use the device, which is not necessarily how the device was designed to work. For instance with the camera, we could implement a method called ``movie`` even if the specific camera with which we are working only supports acquiring single frames. We could perform checks, etc. according to how we expect to use a device for our needs.
+
+The view is clear that relates to the user interface and hence everything that belongs to Qt. It is important to note that a safe way of developing applications is by stripping all the logic from the view. If something is not supposed to run because the webcam is not ready, etc. then it should be responsibility of the model and not of the view to prevent that from happening.
+
+The MVC pattern is very common to find in different applications, however you have to be flexible enough as to understand what each component means, especially when you are developing an application from scratch, as is the case in this tutorial. When you use frameworks such as Django or Flask for web development, the framework itself pushes you to follow some specific patterns. For desktop and scientific applications such frameworks are not as mature yet and you have to start from scratch.
+
+The Camera Model
+----------------
+Since OpenCV took care of the controller of our camera, we can start developing the model to it. The best idea is to generate a skeleton of what we want to do with our camera. Lay out the methods, inputs, etc. that we know we are going to use. And then we look into them. Create a file called **models.py** and include the following:
+
+.. code-block:: python
+
+    class Camera:
+        def __init__(self, cam_num):
+            pass
+
+        def get_frame(self):
+            pass
+
+        def acquire_movie(self, num_frames):
+            pass
+
+        def set_brightness(self, value):
+            pass
+
+        def __str__(self):
+            return 'Camera'
+
+We are developing a very simple model for our device. If you want to see how a model looks for scientific cameras, you can see what I have developed `for a Hamamatsu Orca camera <https://github.com/uetke/UUTrack/blob/master/UUTrack/Model/Cameras/Hamamatsu.py>`_. The advantage of developing a model at this stage is that if later I decide to change the camera or the driver, the only thing I need to do is to update the way the model works, and the rest of the program will keep running.
+
+There are few things to note about the model. You can see that we expect the ``__init__`` method to take one argument, the camera number. This is the argument that the ``VideoCapture`` of OpenCV requires. ``get_frame`` and ``acquire_movie`` are going to be responsible from reading from the camera and the ``set_brightness`` is an example of setting a parameter on a camera. The ``__str__`` method is going to help us if we need to identify the camera, and is going to be handy on our GUI.
+
+We have the skeleton of the model, now is time to add some meaning to the methods. The advantage of using a class is that we can store the important parameters in the class itself. When we initialize, we should store the ``cap`` variable, in order to make accessible to the other methods.
+
+.. code-block:: python
+
+    def __init__(self, cam_num):
+        self.cap = cv2.VideoCapture(cam_num)
+        self.cam_num = cam_num
+
+    def __str__(self):
+        return 'OpenCV Camera {}'.format(self.cam_num)
+
+We have also modified the ``__str__`` method in order to show that it is an Open CV camera and its number. If you want to test the code quickly, the best is to add a block at the end of the **models.py** file with the following:
+
+.. code-block:: python
+
+    if __name__ == '__main__':
+        cam = Camera(0)
+        print(cam)
+
+If you just run ``models.py``, you will see a message being printed to the screen. You may have noticed also that in the example above, we are not closing the camera, we have forgotten about that method! Of course you can always access the ``cam.cap`` attribute, but it would be much more elegant not to access the controller itself, since later on another camera may use a different method for finalizing the communication. Now that we are at it, we can define the new method:
+
+.. code-block:: python
+
+    def close_camera(self):
+        self.cap.release()
+
+And it could be actually nice to initialize the communication with the camera not when we initialize the class, but when we decide to initialize it. In that way, we can re-open the camera even if we have executed the ``close_camera`` method.
+
+.. code-block:: python
+
+    def __init__(self, cam_num):
+        self.cam_num = cam_num
+        self.cap = None
+
+    def initialize(self):
+        self.cap = cv2.VideoCapture(self.cam_num)
+
+In the ``__init__`` method we define ``self.cap`` as None because it is a style rule to define all the attributes of the class in the initialization. In that way you can see very quickly what attributes you will have available. It will also allow you to check whether the ``cap`` is available before you try to do something with it. With these changes, you will also need to update the example at the bottom of the file:
+
+.. code-block:: python
+
+    if __name__ == '__main__':
+        cam = Camera(0)
+        cam.initialize()
+        print(cam)
+        cam.close_camera()
+
+Now the interesting part comes. We have to define the methods for reading the camera. We have to decide also if we want to return a value that can be used by another module or if we want to store the values in the class itself. We can also combine both options:
+
+.. code-block:: python
+
+    def get_frame(self):
+        ret, self.last_frame = self.cap.read()
+        return self.last_frame
+
+If you are following from the beginning, it should be clear to you what is happening. You can also see that we are storing the frame as ``self.last_frame`` within the class itself. If you want to show how to use it, you can update the code at the end of the file. So far, we have something like this:
+
+.. code-block:: python
+
+    if __name__ == '__main__':
+        cam = Camera(0)
+        cam.initialize()
+        print(cam)
+        frame = cam.get_frame()
+        print(frame)
+        cam.close_camera()
+
+Which will output a very long array, with all the values read by your camera. Now we can work on the movie method. We have seen at the beginning that movies are just acquiring images one after the other, in an infinite loop. Since infinite loops are a bit dangerous (it is hard to stop them nicely), we will add a parameter called number of frames. We will learn how to acquire continuously later on.
+
+.. code-block:: python
+
+    def acquire_movie(self, num_frames):
+        movie = []
+        for _ in range(num_frames):
+            movie.append(self.get_frame())
+        return movie
+
+We start by generating an empty list in which we are going to store the images and then we start a for-loop for the given number of frames. In each iteration we append the data generated by the method ``get_frame``. One of the advantages of this is that we are going to automatically have the ``last_frame`` attribute available.
+
+.. note:: when dealing with more sophisticated cameras, normally the starting of a movie and the reading from the camera are done in two separate steps. This ensures the correct timing between frames, even if the program is running slower.
+
+You may already see that the method is not efficient at all. Appending to lists can be very slow, if the numbers of frames are too many it will give memory errors, etc. For the time being we can work with this, but we are going to improve it later on.
+
+The last remaining method to develop is the ``set_brighntess``. This one is much easier, you can do the following:
+
+.. code-block:: python
+
+    def set_brightness(self, value):
+        self.cap.set(cv2.CAP_PROP_BRIGHTNESS, value)
+
+You can also ask yourself if it is possible to get the value of the brightness, and it actually is, if you replace ``cap.set`` by ``cap.get``. The same is value for all the properties of the camera, such as the number of pixels, etc. We can develop a new method, not considered when we started, called ``get_brightness``:
+
+.. code-block:: python
+
+    def get_brightness(self):
+        return self.cap.get(cv2.CAP_PROP_BRIGHTNESS)
+
+And to use both methods, you can improve the ``__main__`` code:
+
+.. code-block:: python
+
+    cam.set_brightness(1)
+    print(cam.get_brightness())
+    cam.set_brightness(0.5)
+    print(cam.get_brightness())
+
+Remember that since you are setting parameters to the camera, they are going to stay, even if you open the camera with a different program. If you set the brightness too low or too high, you will notice it on your next Skype call (true story).
+
+Now that the model is ready, we can start developing a user interface.
+
+Reusable Qt Windows: Subclassing
+--------------------------------
+When we started to play around with Qt windows, we have developed everything as a script file that you could run. However, it is very hard to maintain and reuse that kind of code. The easiest is to develop classes that inherit from the base Qt classes. For example, let's reproduce the window with the two buttons, but in a more reliable way. Let's start creating a file called **views.py** and add the following to it:
+
+.. code-block:: python
+
+    from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication
+
+
+    class StartWindow(QMainWindow):
+        def __init__(self):
+            super().__init__()
+            self.central_widget = QWidget()
+            self.button_min = QPushButton('Get Minimum', self.central_widget)
+            self.button_max = QPushButton('Get Maximum', self.central_widget)
+            self.layout = QVBoxLayout(self.central_widget)
+            self.layout.addWidget(self.button_min)
+            self.layout.addWidget(self.button_max)
+            self.setCentralWidget(self.central_widget)
+
+What we have done here is very similar to what we did earlier with the two buttons, the only difference is that we have moved everything into a class called ``StartWindow`` that inherits from ``QMainWindow``. This is a very efficient way of extending the functionality of classes. We have to run ``super().__init__`` in order to have all the properties of the Main Window available also in our class. We define an empty widget, two buttons and a layout, exactly as we have done before. The most important thing is that we add the ``self.`` before the attributes in order to be able to use the buttons, layout, etc. in any part of the class.
+
+To use the window, the code becomes much simpler. You can add it at the end of **views.py**:
+
+.. code-block:: python
+
+    if __name__ == '__main__':
+        app = QApplication([])
+        window = StartWindow()
+        window.show()
+        app.exit(app.exec_())
+
+It only takes four lines now to have a window with the two buttons nicely displayed. If you want to add functionality to the buttons you can add methods to the class, pretty much the same as before, but instead of plain functions, they become methods of the class:
+
+.. code-block:: python
+
+    def __init__(self):
+        [...]
+        self.button_max.clicked.connect(self.button_clicked)
+
+    def button_clicked(self):
+        print('Button Clicked')
+
+I have removed some lines in order to keep the example short. The advantage of this procedure is that the code to run is exactly the same. Just run **views.py** and you will get the same window as before, plus the added functionality of the button.
+
+Displaying an Image on the GUI
+------------------------------
+Now we are ready to do something more interesting, like displaying an image onto the GUI. First, we need to decide how are we going to trigger the camera. Ideally we are going to have the model for the camera available in the ``StartWindow`` class, so the method would look something like this:
+
+.. code-block:: python
+
+    def update_image(self):
+        frame = self.camera.get_frame()
+        # Plot_the_frame
+
+This works only if we have ``self.camera`` available. The best in this case is to take the camera as an argument in the ``__init__``, like this:
+
+.. code-block:: python
+
+    class StartWindow(QMainWindow):
+        def __init__(self, camera):
+            super().__init__()
+            self.camera = camera
+
+This strategy is what allows us to combine the models and the views in a very simple way. You could find better solutions, of course, but this one is easy to debug and implement. It also implies that there is a third file in which you combine models and views. But before focusing into that file, let's finish up with the view in order to do something with the camera. First, let's update the buttons and connect one of them to ``update_image``:
+
+.. code-block:: python
+
+    import numpy as np
+
+    from PyQt5.QtWidgets import QMainWindow, QWidget, QPushButton, QVBoxLayout, QApplication
+
+
+    class StartWindow(QMainWindow):
+        def __init__(self, camera = None):
+            super().__init__()
+            self.camera = camera
+
+            self.central_widget = QWidget()
+            self.button_frame = QPushButton('Acquire Frame', self.central_widget)
+            self.button_movie = QPushButton('Start Movie', self.central_widget)
+            self.layout = QVBoxLayout(self.central_widget)
+            self.layout.addWidget(self.button_frame)
+            self.layout.addWidget(self.button_movie)
+            self.setCentralWidget(self.central_widget)
+
+            self.button_frame.clicked.connect(self.update_image)
+
+        def update_image(self):
+            frame = self.camera.get_frame()
+            print('Maximum in frame: {}, Minimum in frame: {}'.format(np.max(frame), np.min(frame)))
+
+The structure is exactly the same, we have just updated the name of the buttons and the text on them. In order to use both the model and the view, we have to create a new file, that we can call **start.py**, and add the following:
+
+.. code-block:: python
+
+    from PyQt5.QtWidgets import QApplication
+
+    from models import Camera
+    from views import StartWindow
+
+    camera = Camera(0)
+    camera.initialize()
+
+    app = QApplication([])
+    start_window = StartWindow(camera)
+    start_window.show()
+    app.exit(app.exec_())
+
