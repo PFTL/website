@@ -5,7 +5,7 @@ Step by Step Guide to Building a GUI
 :author: Aquiles Carattino
 :subtitle: Using PyQt to build a GUI for your webcam
 :header: {attach}yeo-khee-793533-unsplash.jpg
-:tags: Data, Types, Mutable, Immutable, Tuples
+:tags: PyQt, PyQt5, Qt, GUI, OpenCV, webcam, User Interface
 :description: Using PyQt to build a GUI for your webcam
 
 In this tutorial, we are going to build a Graphical User Interface (GUI) to acquire images from your webcam. We are going to use OpenCV to quickly acquire an image from your camera and PyQt5 to build the user interface. You may find a lot of tutorials online on how to use Python for different tasks, but it is very hard to find a complete guide on how to build a desktop application using Python.
