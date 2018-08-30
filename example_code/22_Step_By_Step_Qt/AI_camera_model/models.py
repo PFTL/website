@@ -1,3 +1,5 @@
+import numpy as np
+
 import cv2
 
 
@@ -5,7 +7,7 @@ class Camera:
     def __init__(self, cam_num):
         self.cam_num = cam_num
         self.cap = None
-        self.last_frame = None
+        self.last_frame = np.zeros((1,1))
 
     def initialize(self):
         self.cap = cv2.VideoCapture(self.cam_num)
