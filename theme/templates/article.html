@@ -68,10 +68,10 @@
 {% endblock %}
 
 {% block footer_scripts %}
-    <script src="{{ SITEURL }}/theme/js/comment_submit.js"></script>
+{#    <script src="{{ SITEURL }}/theme/js/comment_submit.js"></script>#}
     <script src="{{ SITEURL }}/theme/js/newsletter_subscribe.js"></script>
 {#    <script src="{{ SITEURL }}/theme/js/newsletter_popup.js"></script>#}
-    <script>
+{#    <script>#}
 {#    function subscriptionPopup(){#}
 {#    // get the mPopup#}
 {#    var mpopup = $('#mpopupBox');#}
@@ -90,20 +90,20 @@
 {#            mpopup.hide();#}
 {#        }#}
 {#    });#}
-        $(document).ready(function () {
-            $.ajax({
-                type: 'GET',
-                url: '/comments/{{ article.url }}/comments.html',
-                success: function (data) {
-                    $('#current-comments').html(data);
-                },
-                error: function () {
-                    $('#current-comments').html('<h3 class="mb-3">No comments yet, be the first!</h3>');
-                }
-            });
-            setTimeout( function() {
-                subscriptionPopup();
-            },30000);
-        });
-    </script>
+{#        $(document).ready(function () {#}
+{#            $.ajax({#}
+{#                type: 'GET',#}
+{#                url: '/comments/{{ article.url }}/comments.html',#}
+{#                success: function (data) {#}
+{#                    $('#current-comments').html(data);#}
+{#                },#}
+{#                error: function () {#}
+{#                    $('#current-comments').html('<h3 class="mb-3">No comments yet, be the first!</h3>');#}
+{#                }#}
+{#            });#}
+{#            setTimeout( function() {#}
+{#                subscriptionPopup();#}
+{#            },30000);#}
+{#        });#}
+{#    </script>#}
 {% endblock %}
