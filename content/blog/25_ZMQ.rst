@@ -15,6 +15,8 @@ For example, I have recently `released PyNTA <{filename}24_Releasing_PyNTA.rst>`
 
 We are going to be a program the acquired images from the webcam of the computer continuously and is going to broadcast them. Then, we are going to develop two other processes, one to save the data to the hard drive and another to analyze the images. With these examples, you are going to have a complete picture of what can be done with ZMQ for Python, and we are going to build on top of previous tutorials.
 
+.. contents::
+
 ZMQ
 ---
 ZMQ is a very complex library, designed to enable developers to build distributed applications. In the `official website <http://zeromq.org/>`_ you can find a lot of information about the project and its benefits. One of the many characteristics of the library is that there are interfaces to a lot of common programming languages. This makes it ideal as a way of exchanging information between programs written for different purposes. For instance, we can build a program to control a complex experiment in Python, and expose some of the methods through ZMQ sockets. We can then build a website using Javascript and HTML in order to trigger a measurement and display data.
