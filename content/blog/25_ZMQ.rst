@@ -1,19 +1,18 @@
-Using pyZMQ for inter-process communication
-===========================================
+Using pyZMQ for inter-process communication: Part 1
+===================================================
 
-:status: draft
-:date: 2018-12-14
+:date: 2018-12-17
 :author: Aquiles Carattino
 :subtitle: Introduction to using sockets for communication between different processes
 :header: {attach}thomas-jensen-592813-unsplash.jpg
 :tags: ZMQ, Socket, Communication, Parallel, Data
 :description: Introduction to using sockets for communication between different processes
 
-Working with threads and processes in Python (and in any other language) always posses the challenge on how to exchange information between them. We are not talking about parallelizing code in a traditional way, where an expensive computation is spread through different cores, but rather adapt the computational load based on different inputs.
+Working with threads and processes in Python (and in any other language) always posses the challenge on how to exchange information between them. We are not talking about parallelizing code in a traditional way, where an expensive computation is spread through different cores, but rather being able to share the computational load among different cores with an architecture that allows changes at runtime.
 
-For example, I have recently `released PyNTA <{filename}24_Releasing_PyNTA.rst>`_, a program to acquire images from a camera with the option to analyze them in real time or to store them to the hard drive. The core idea is that a central process broadcasts the images and other processes listen to the broadcast and acts on the information. In this tutorial, we are going to cover from the basic exchange of messages between processes to building classes to simplify the process.
+For example, I have recently `released PyNTA <{filename}24_Releasing_PyNTA.rst>`_, a program to acquire images from a camera with the option to analyze them in real time or to store them to the hard drive or both. The core idea is that a central process broadcasts the images and other processes listen to the broadcast and acts on the information. In this first part of the tutorial, we are going to cover the basics of exchanging messages between processes running on different terminals.
 
-We are going to be a program the acquired images from the webcam of the computer continuously and is going to broadcast them. Then, we are going to develop two other processes, one to save the data to the hard drive and another to analyze the images. With these examples, you are going to have a complete picture of what can be done with ZMQ for Python, and we are going to build on top of previous tutorials.
+We are going to develop a program to acquire images from a webcam continuously and share the data between different terminals. We are going to explore different patterns provided by the excellent pyZMQ library, focusing on practical examples and discussing the benefits and limitations of them. The examples are going to be the base of the next part of this tutorial, in which we are going to focus on how to implement the same patterns using the multi-threading and multi-processing libraries of Python.
 
 .. contents::
 
