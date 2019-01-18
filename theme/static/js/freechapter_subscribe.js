@@ -7,7 +7,7 @@ $(document).ready(function () {
         type: "POST",
         dataType: 'json',
         contentType: 'application/json',
-        url: "http://uetke.uetke.com/free_chapter",
+        url: "https://uetke.uetke.com/free_chapter",
         data: JSON.stringify(email),
         beforeSend: function () {
           $("#send").prop("disabled", true);
