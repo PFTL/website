@@ -1,9 +1,8 @@
-def save_list_to_file(filename, data):
-    f = open(filename, 'w')
-    for element in data:
-        f.write(element)
-    f.close()
+from time import sleep
 
-my_list = ['First line\n', 'Second Line\n', 3]
+file = open('My_File.txt', 'w')
+file.write('This is the first line\n')
 
-save_list_to_file('AA_save_list.dat', my_list)
+sleep(600)
+file.close()
+
