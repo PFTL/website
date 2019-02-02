@@ -1,7 +1,6 @@
 The with command and custom classes
 ===================================
 
-:status: draft
 :date: 2019-09-01
 :author: Aquiles Carattino
 :subtitle: Using the with command and developing classes that support it
