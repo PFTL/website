@@ -3,3 +3,4 @@ EMAIL:
   password: my_password
   port: 1234
   smtp_server: smtp.server
+  pop_server: pop.server

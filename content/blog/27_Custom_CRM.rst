@@ -20,7 +20,7 @@ The CRM should prevent me from sending the same e-mail twice to the same person 
 
 The Choices
 -----------
-First, we will need a way of sending and receiving e-mail. If you are a GMail user, you can check `this guide <https://support.google.com/mail/answer/7104828?hl=en>`_ and `this other one <https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server>`_ on how to setup the server (you will need this information later on, so keep it in hand). If you want ot use a custom domain to send and receive e-mail, I strongly suggest you to use `Dreamhost <https://www.dreamhost.com/r.cgi?181470/promo/dreamsavings50/>`_ which is what I use myself (if you use the link, you will get 50U$ discount and at the same time you will help me keep this website running). If you expect to send more than 100 e-mails per hour, I suggest you to check `Amazon SES <https://aws.amazon.com/ses/>`_ which is very easy to setup and has a reasonable pricing.
+First, we will need a way of sending and receiving e-mail. If you are a GMail user, you can check `this guide <https://support.google.com/mail/answer/7104828?hl=en>`__ and `this other one <https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server>`_ on how to setup the server (you will need this information later on, so keep it in hand). If you want ot use a custom domain to send and receive e-mail, I strongly suggest you to use `Dreamhost <https://www.dreamhost.com/r.cgi?181470/promo/dreamsavings50/>`_ which is what I use myself (if you use the link, you will get 50U$ discount and at the same time you will help me keep this website running). If you expect to send more than 100 e-mails per hour, I suggest you to check `Amazon SES <https://aws.amazon.com/ses/>`_ which is very easy to setup and has a reasonable pricing.
 
 Next, we need to define how to send the e-mails. That we are going to use Python is out of question. But here we have several choices to make. I believe the best is to use Jupyter notebooks. They have the advantage of allowing you to run different pieces of code, see the output inline, etc. It is easier to have interaction through a Jupyter notebook than through plain scripts. Building a user interface (either a desktop app or a web app) would be too time consuming for a minimum increase in usability.
 
@@ -82,10 +82,182 @@ Let's start by creating a configuration file in which we will store some useful 
       port: 1234
       smtp_server: smtp.server
 
-The format of this file is called YAML, which is a very simple markup language in which blocks are indented by **2 spaces**. Replace the different variables by what you need, i.e., replace ``my_username`` with the username of your server, etc.
+The format of this file is called YAML, which is a very simple markup language in which blocks are indented by **2 spaces**. Replace the different variables by what you need, i.e., replace ``my_username`` with the username of your server, etc. My choice of putting this information on a different file is that now I can share my Jupyter notebooks without exposing my password. In order to work with YAML files in Python, you will need to install ``pyyaml``:
+
+.. code-block:: bash
+
+    pip install pyyaml
+
+Now we are ready to start. Let's create a new Python notebook. Let's call it, for example, **simple_crm**. The first thing to do is to load the configuration:
+
+.. code-block:: ipython3
+
+    import pyyaml
+
+    with open('config.yml', 'r') as config_file:
+        config = yaml.load(config_file)
+
+If you are not familiar with the ``with`` command you can check `this article about the context manager <16_context_manager.rst>`__. If you want to explore how your variable ``config`` looks like, you can simply write it in a different cell and press Ctrl+Enter. The result is a dictionary with the needed parameters for sending e-mail. So, let's get to it.
+
+First, let's compose a short message and subject:
+
+.. code-block:: ipython3
+
+    msg_sbj = 'Testing my brand new CRM with Jupyter notebooks'
+    msg_text = '''This is the body of the message that will be sent.\n
+    Even if basic, it will prove the point.\n\n
+    Hope to hear again from you!'''
+
+Now, the way of composing the message requires to import a special module of Python called ``email``. The code would look like this:
+
+.. code-block:: ipython3
+
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+
+    me = "Aquiles <my@from.com>"
+    you = "Aquiles <your@to.com>"
+    msg = MIMEMultipart()
+    msg['From'] = me
+    msg['To'] = you
+    msg['Subject'] = msg_sbj
+    msg.attach(MIMEText(msg_text, 'plain'))
+
+We first create a ``msg``, which will be ready to send both plain and html e-mails. We specify the ``from``, ``to``, and ``subject`` of the email. Remember that if you specify the wrong ``from``, your message has a high chance of being filtered either by your SMTP provider or the receiver's server as spam. Be sure you use the proper e-mail from-address that you have configured.
+
+The last line is attaching to the message the plain version of the e-mail. We will see that it is also possible to send more complex messages, with a plain text version and an html version. Now that we have our e-mail ready, we need to send it.
+
+.. code-block:: ipython3
+
+    import smtplib
+
+    with smtplib.SMTP(config['EMAIL']['smtp_server'], config['EMAIL']['port']) as s:
+        s.ehlo()
+        s.login(config['EMAIL']['username'],config['EMAIL']['password'])
+        s.sendmail(me, you, msg.as_string())
+        s.quit()
+
+First you see that we start the SMTP connection using the configuration parameters that were defined on the **config.yml** file. The ``ehlo`` command is a way of telling the server *hello* and start the exchange of information. We then login and finally send the message. See that we defined both the sender and receiver twice: they are used in the ``sendmail`` command, but also they are defined within the ``msg`` object.
+
+If you used real e-mails, you should by now receive the example message.
+
+.. warning:: Sometimes GMail does not deliver messages that you send to yourself from different aliases. If nothing arrives, you can try to send an e-mail to a different address which you control.
+
+Now, imagine you would like to personalize the message before sending it. For example, we would like to address the recipient by name. We can improve our message, to make it look like a template, like this:
+
+.. code-block:: ipython3
+
+    msg_text = '''Hello {name},
+    This is the body of the message that will be sent.
+    Even if basic, it will prove the point.
+    Hope to hear again from you!'''
+
+And you can use it like this:
+
+.. code-block:: ipython3
+
+    msg_text.format(name='Aquiles')
+
+Which will output the message exactly as you expected. If you now would like to send a message to different people, you could simply do a for-loop. Remember that before generating the message body, you replace the name by the name of your contact as shown in the code above.
+
+.. note:: I will not go into the details of how to implement the loop because we will work on this later on, in a much more complete solution.
+
+Adding HTML to the message
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Now it is time to make your messages more beautiful by adding HTML to them. Coding HTML e-mails is a complicated subject because there are many things to take into account. First, e-mail clients work differently from each other, meaning that the way your e-mail is displayed depends on how it is opened. Screen sizes change, and therefore your e-mail should have a fixed width or it will look very ugly on some devices. Being aware of these problems, I would suggest you to check ready-made templates developed by designers who took care of all of this.
+
+In this tutorial, we are going to use `Cerberus <https://tedgoas.github.io/Cerberus/>`_ which, among other things, is open source and free. If you unzip the contents, you will find 3 important files: **cerberus-fluid.html**, **cerberus-responsive.html**, and **cerberus-hybrid.html**. Those are three different templates which you can use. We are going to use the responsive version.
+
+You should open the files with your browser in order to have an idea of how they look. Also, check the source code to understand how you can utilize different elements, change the color, etc. The documentation is your best friend. I have stripped down a bit the template. You can find it `here <https://github.com/PFTL/website/blob/master/example_code/27_CRM/base_email.html>`__. For practical purposes it doesn't really matter, you can use the original also.
+
+What we will do is keep the e-mail template as a separated file, so we don't pollute the notebook that much. In order to add it to our message, we need to do the following:
+
+.. code-block:: ipython3
+
+    with open('base_email.html') as f:
+        msg_html = f.read()
+
+And then, the only two things we need to add to the message is the following:
+
+.. code-block:: ipython3
+
+    msg = MIMEMultipart('alternative')
+    msg.attach(MIMEText(msg_html, 'html'))
+
+Pay attention that we need to initialize the message with the argument ``'alternative'``. If we fail to do this, the message will include both the text and the html versions.
+
+The idea of attaching both the text and the html version of the e-mail is that we keep in mind that not all people accept html messages. You can configure most e-mail clients to use only plain text messages. This is a good way of preventing trackers from spying on you and makes e-mails easier to read. Moreover, it can make phishing attempts easier to spot.
+
+The e-mail, if you attach both versions, will be shown as html if the client supports it and will fall back to the text version if it doesn't. In general lines, we can say that adding html versions of your messages is up to you, adding the text version should be mandatory.
 
 Receiving Email
 ---------------
+Sending e-mails is half of what a CRM should do. The other half is checking e-mails. This will allow the system to store messages associated to the people with whom you interact. This will allow you to check who never replied to your questions, for example. We will start by updating the configuration file, since we now need to add the POP3 server:
+
+.. code-block:: yaml
+
+    EMAIL:
+      username: my_username
+      password: my_password
+      port: 1234
+      smtp_server: smtp.server
+      pop_server: pop.server
+
+If you would need a different username or password for the POP server, you can add them also to the config file. Remember that you will need to reload the configuration file in order to have the new variable available.
+
+Reding from the server is relatively easy:
+
+.. code-block:: ipython3
+
+    import poplib
+    server = poplib.POP3(config['EMAIL']['pop_server'])
+    server.user(config['EMAIL']['username'])
+    server.pass_(config['EMAIL']['password'])
+
+If you run the block again and it works out correctly, you will see the following message:
+
+.. code-block:: ipython3
+
+    b'+OK Logged in.'
+
+Now we need to download the list of messages that are available on the server:
+
+.. code-block:: ipython3
+
+    resp, items, octets = server.list()
+
+Bear in mind that if there are no messages available, you won't be able to do anything else. You can always send one or more e-mails to yourself in order to test the code. Items will hold information regarding the available messages. If you explore the ``items`` variable, you will see an output like the following:
+
+.. code-block:: ipython3
+
+    [b'1 34564', b'2 23746', b'3 56465']
+
+In this case, the server has 3 available messages. The first number is the id of the message, while the second is its size. If we want to retrieve the first message, for example, we can do the following:
+
+.. code-block:: ipython3
+
+    msg = server.retr('1')
+
+If you explore the ``msg``, you will see it is a tuple with 3 elements. The message itself is stored in ``msg[1]``. However, it is a list, full of information regarding the message you have downloaded. Without going into too much detail, first, you need to transform the list into a single array, and then we can use the mail tools to parse the information to a usable format:
+
+.. code-block:: ipython3
+
+    import email
+
+    raw_email = b'\n'.join(msg[1])
+    parsed_email = email.message_from_bytes(raw_email)
+
+You are free to explore each step independently to try to understand what is available in your message. The ``parsed_email`` has a lot of information, not only regarding who sent the message and to whom, but also the server used, spam filtering options, etc. We would like to show the contents of the e-mail, both the html and the text formats, so we can do the following:
+
+.. code-block:: ipython3
+
+    for part in parsed_email.walk():
+        if part.get_content_type() == 'text/plain':
+            print(part.get_payload()) # prints the raw text
+
+This will go through all the available information in the message, and if it finds it is of type ``text/plain``, it will print it to the screen. You can change it to ``text/html`` and it will show the other version, if available.
+
+As you can see, retrieving e-mails is relatively more complex than sending e-mails. There are also some other concerns regarding what you do with the messages you downloaded. For example, you can leave them on the server, thus they will be available from other clients as well. You can also choose to delete them from the server after reading, etc. Each pattern has advantages and disadvantages, so that will be up to the workflow you are considering. 
 
 Using a Database
 ----------------
