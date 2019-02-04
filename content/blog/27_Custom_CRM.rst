@@ -64,10 +64,11 @@ The advantage of Jupyter notebooks is that they also keep the output when you sh
 
 If you haven't used Jupyter notebooks before, now it is a great chance to get started. They are very useful for prototyping code that later can became an independent program. From now on, I will not stress every single time that the code should go into a notebook, but you should assume it.
 
-As always, all the code for this project `can be found here <https://github.com/PFTL/website/tree/master/example_code/27_CRM>`_. The majority of the code that goes into the Jupyter notebooks can also be copy-pasted into plain Python script files. Just keep in mind that the order in which you can run cells is up to you and not necesarily from top to bottom as is the case for scripts.
+As always, all the code for this project `can be found here <https://github.com/PFTL/website/tree/master/example_code/27_CRM>`_. The majority of the code that goes into the Jupyter notebooks can also be copy-pasted into plain Python script files. Just keep in mind that the order in which you can run cells is up to you and not necessarily from top to bottom as is the case for scripts.
 
 Sending Email
 -------------
+
 
 Receiving Email
 ---------------

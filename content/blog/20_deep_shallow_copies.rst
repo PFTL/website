@@ -1,7 +1,6 @@
 Deep and Shallow Copies of Objects
 ==================================
 
-:status: draft
 :date: 2019-02-04
 :author: Aquiles Carattino
 :subtitle: Understanding how tuples which are immutable, may seem to change.
