@@ -124,7 +124,7 @@ Which will generate the following output:
     140397059541368
     [0, 2]
 
-You see that by simply copying the class with the ``=`` , we get two objects with the same id. Moreover, if one of the mutable attributes of the class changes, it will also change in all the other objects. An easy solution would be to use the ``copy`` module:
+You see that by simply copying the class with the ``=`` , we get two references to the same object, and therefore the id is the same. Moreover, if one of the mutable attributes of the class changes, it will also change in all the other objects. An easy solution would be to use the ``copy`` module:
 
 .. code-block:: python
 
