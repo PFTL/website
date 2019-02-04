@@ -257,10 +257,257 @@ You are free to explore each step independently to try to understand what is ava
 
 This will go through all the available information in the message, and if it finds it is of type ``text/plain``, it will print it to the screen. You can change it to ``text/html`` and it will show the other version, if available.
 
-As you can see, retrieving e-mails is relatively more complex than sending e-mails. There are also some other concerns regarding what you do with the messages you downloaded. For example, you can leave them on the server, thus they will be available from other clients as well. You can also choose to delete them from the server after reading, etc. Each pattern has advantages and disadvantages, so that will be up to the workflow you are considering. 
+As you can see, retrieving e-mails is relatively more complex than sending e-mails. There are also some other concerns regarding what you do with the messages you downloaded. For example, you can leave them on the server, thus they will be available from other clients as well. You can also choose to delete them from the server after reading, etc. Each pattern has advantages and disadvantages, so that will be up to the workflow you are considering.
+
+The code up to here can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_01.ipynb>`__. Now we are going to focus a bit more onto expanding the usability of our tools.
 
 Using a Database
 ----------------
+In the previous sections we have seen how you can send and receive e-mails with Python directly from a Jupyter notebook. Now it is time to focus onto a different topic. It is important when you want to establish relationships with customers, to have a way of storing information persistently. For example, you would like to keep an agenda of contacts, you would like to know when was the last time you contacted someone, etc.
+
+In order to achieve a high level of flexibility, we are going to use a database to store all our information. Fortunately, Python supports SQLite databases out of the box. We have discussed about them in a `different article <{filename}15_Storing_data_3.rst>`_ that may be useful for you to check if you want to dig into the details. We are going to use a library called SQLAlchemy, which will allow us to define relationships between elements much faster. You can install it like any other Python package:
+
+.. code-block:: bash
+
+    pip install sqlalchemy
+
+The first thing we will do is creating a new notebook to explore how to use the database from within Jupyter. Let's start by importing all the needed modules:
+
+.. code-block:: ipython3
+
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String
+    from sqlalchemy.ext.declarative import declarative_base
+
+Next, we create the database engine:
+
+.. code-block:: ipython3
+
+    engine = create_engine('sqlite:///crm.db', echo=True)
+
+Note that the engine supports other types of databases, not only sqlite. However, sqlite is by far the easiest to work with for small applications such as ours.
+
+We also define a declarative base, that will allow us to define classes that will be mapped to tables:
+
+.. code-block:: ipython3
+
+    Base = declarative_base()
+
+Now it is time to define what information we want to store to the database. For the CRM it seems reasonable to start by defining customers. The advantage of using SQLAlchemy is that instead of working directly on the database, we can do that through the engine and the base. To define what information we want to store, we have to define a class:
+
+.. code-block:: ipython3
+
+    class Customer(Base):
+        __tablename__ = 'customers'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        last_name = Column(String)
+        email = Column(String)
+
+        def __repr__(self):
+            return "<Customer(name='{}', last_name='{}', email='{}')>".format(
+            self.name, self.last_name, self.email)
+
+I think the code above it is self explanatory. We define the name of the table we want to use. Each attribute defined with ``Column`` will be transformed into a column in the table, of the specified type, in our case we have ``Integer`` for ``id`` and ``String`` for all the rest. In order to create the table, we have to run the following command:
+
+.. code-block:: ipython3
+
+    Base.metadata.create_all(engine)
+
+You will see a lot of content appearing to the screen. If you are familiar with SQL you will notice the commands that are being executed. Now what we have is a very nice relationship between a class (``Customer``) and a table (``customers``) on our database. Let's create our first customer:
+
+.. code-block:: ipython3
+
+    first_customer = Customer(name='Aquiles', last_name='Carattino', email='aquiles@uetke.com')
+
+And now we need to add it to the database. This is achieved through the creation of a session:
+
+.. code-block:: ipython3
+
+    from sqlalchemy.orm import sessionmaker
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+The last step is to add the customer to the database:
+
+.. code-block:: ipython3
+
+    session.add(ed_user)
+    session.commit()
+
+And that is all. If you know how to explore the database with an external tool, you will see the data that we have just added. You can follow the steps above for as many customers as you want. To retrieve information from the database, we can use the session and the ``Customer`` class directly. For example:
+
+.. code-block:: ipython3
+
+    one_customer = session.query(Customer).filter_by(name='Aquiles').first()
+    print(one_customer)
+
+It will give you as output the information of your customer. Pay attention to the fact that when you filter in this way, the options are case sensitive. We will not cover all the details regarding how to use SQLAlchemy, especially because `their documentation <https://docs.sqlalchemy.org/en/latest/index.html>`__ is very extensive, but it is important to see how to search with partial information, for example looking by parts of the name:
+
+.. code-block:: ipython3
+
+    one_customer = session.query(Customer).filter(Customer.name.like('aqui%')).first()
+
+This will find all customers with a name that starts with ``aqui``, regardless of their case. There is a detail that it is also very important and that I haven't mentioned yet, the ``first()`` that appears at the end. Let's see what happens if you have two customers in the database, and they have similar names, so that the command above gets both of them:
+
+.. code-block:: ipython3
+
+    second_customer = Customer(name='Aquileo', last_name='Doe', email='aquileo@doe.com')
+    session.add(second_customer)
+    session.commit()
+
+Let's remove the ``first()``, and let's run the same command as before:
+
+.. code-block:: ipython3
+
+    answer = session.query(Customer).filter(Customer.name.like('aqui%'))
+    print(answer)
+
+Will give you as output:
+
+.. code-block:: ipython3
+
+    <sqlalchemy.orm.query.Query at 0x7f003da05390>
+
+The answer is not a list of customers, but an object called Query. If you want to go through each element, you can do the following:
+
+.. code-block:: ipython3
+
+    for c in answer:
+        print(c)
+
+The idea of the query is that it knows how many elements are there but it didn't load the information to memory. This makes it incredibly handy if you are working with very large databases.
+
+With a bit of creativity, you can already merge what we learned before in order to send e-mails to all the customers in your database. Before discussing how to implement that, I would like to focus into one more topic, which is how to add tags to the customers and keep track of the sent messages.
+
+Database Relationships
+~~~~~~~~~~~~~~~~~~~~~~
+One of the features we want to have in our CRM is to be able to keep track of the sent messages, so we avoid sending twice the same e-mail to the same person, or we can check how long it was since we sent the e-mail, etc.  We will define a new class called ``Message`` in which we will hold the information of every message sent. It will look like this:
+
+.. code-block:: ipython3
+
+    from sqlalchemy import Text, Date, ForeignKey
+    from sqlalchemy.orm import relationship
+
+    class Message(Base):
+        __tablename__ = 'messages'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        text = Column(Text)
+        date = Column(Date)
+
+        customer_id = Column(Integer, ForeignKey('customers.id'))
+        customer = relationship("Customer", back_populates="messages")
+
+        def __repr__(self):
+            return "<Message(name='{}', date='{}', customer='{}')>".format(
+            self.name, self.date, self.customer)
+
+Bear in mind that the imports complement the ones of the previous section, they do not replace the others but are new for this piece of code. The beginning is very similar to the previous class, but the main difference is the part referring to the customers. Each message will be sent to a specific customer. To make this bridge, we use the ``ForeignKey``. This means that the value that is going to be stored in ``customer_id`` has to be an existing customer id. In this way we can add more dimensions to our plain tables.
+
+The ``relationship`` is a way of telling SQLAlchemy where the data is going to be accessed. Having the id of the customer is handy, but it is better if we have direct access to the information. In such a case, if we would like to know the name of the customer who got the message, we can do something like ``message.customer.name``. The opposite relationship is also valid, and we need to add it. We can simply do:
+
+.. code-block:: ipython3
+
+    Customer.messages = relationship('Message', order_by=Message.id, back_populates='customer').
+
+And then you just need to update the engine:
+
+.. code-block:: ipython3
+
+    Base.metadata.create_all(engine)
+
+Now, let's create some messages to understand how we can use this new strategy. We first need to get at least one customer, so we can assign the messages to it:
+
+.. code-block:: ipython3
+
+    from datetime import datetime
+
+    c = session.query(Customer).first()
+    new_message = Message(name='Welcome', text='Welcome to the new CRM', date=datetime.now(), customer=c)
+    session.add(new_message)
+    session.commit()
+
+We get the first customer from the table, and then we create a new message. This is just an example, but in principle the variable ``text`` could be much longer. If we want to retrieve this message from the database, we can do the following:
+
+.. code-block:: ipython3
+
+    message = session.query(Message).first()
+    print(message)
+
+And now you will see that you have the information not only about this message, but also about the customer to whom the message was sent. You can also try the other way around, see all the messages sent to a particular customer, by doing the following:
+
+.. code-block:: ipython3
+
+    c = session.query(Customer).first()
+    print(c.messages)
+
+And you will get a list of all the messages that were sent. Now you have an idea of how this can very quickly start to be a useful tool, not just a mere exercise.
+
+The relationship between messages and customers is called many-to-one, because a customer can have many messages associated with it, but each message will be associated to a single customer. There is also another relationship possible, which is called many-to-many. This would be the case of having lists of customers. A customer can belong to several lists, and at the same time each list can contain several customers.
+
+If you think that a database is nothing more than a collection of tables in which each entry has a unique identifier, you will realize that there is no way of making this many-to-many between two tables directly. We will need to define an intermediate table which will hold these relationships. First, let's start by the list itself:
+
+.. code-block:: ipython3
+
+    class List(Base):
+        __tablename__ = 'lists'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+
+    Base.metadata.create_all(engine)
+
+And now we need to create the intermediate table:
+
+.. code-block:: ipython3
+
+    from sqlalchemy import Table
+
+    association_table = Table('list_customer', Base.metadata,
+        Column('left_id', Integer, ForeignKey('customers.id')),
+        Column('right_id', Integer, ForeignKey('lists.id'))
+    )
+
+    Base.metadata.create_all(engine)
+
+See, that it is a table that has two columns each with a foreign key, one for the customer and one for the list.
+
+We can do the same we did earlier in order to be able to use ``customer.lists`` to get the lists to which the customer is subscribed:
+
+.. code-block:: ipython3
+
+    Customer.lists = relationship("List",
+                        secondary=association_table,
+                        backref="customers")
+
+    Base.metadata.create_all(engine)
+
+And now, it is time to create a list, append a user and save it:
+
+.. code-block:: ipython3
+
+    c_list = List(name='New List')
+    customer = session.query(Customer).first()
+    c_list.customers.append(customer)
+    session.add(c_list)
+    session.commit()
+
+Remember not to use a plain ``list`` variable, since it is a Python keyword. I think it is pretty clear what is going on. Finally, if you want to retrieve a list and find the customers subscribed to it, you would do:
+
+.. code-block:: ipython3
+
+    las_list = session.query(List).first()
+    print(las_list.customers)
+
+On the other hand, you can check the lists to which a user is subscribed:
+
+.. code-block:: ipython3
+
+    print(customer.lists)
+
+See that the output of this last command is not particularly nice. This is because we haven't defined a specific ``__repr__`` method as we have done for the other classes.
+
+With this, we are done regarding how to use databases to store information. Now it is time to get into the action. The full code can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_crm_02.ipynb>`__. Now it is time to clean up the code in order to make more usable and extendable.
 
 Sending To All Customers
 ------------------------
