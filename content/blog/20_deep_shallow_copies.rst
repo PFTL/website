@@ -5,7 +5,7 @@ Deep and Shallow Copies of Objects
 :author: Aquiles Carattino
 :subtitle: Understanding how tuples which are immutable, may seem to change.
 :header: {attach}rebecca-georgia-269933-unsplash.jpg
-:tags: Data, Types, Mutable, Immutable, Tuples
+:tags: Data, Types, Mutable, Immutable, Objects, Copy, Memory
 :description: Understanding how tuples which are immutable, may seem to change.
 
 

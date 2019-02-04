@@ -68,7 +68,21 @@ As always, all the code for this project `can be found here <https://github.com/
 
 Sending Email
 -------------
+The most basic function of any customer relationship manager is to be able to send e-mails. Having just this functionality is already useful in a lot of different situations, not only professionally but also for private tasks. For example, you can invite your friends to a party by addressing them by name: '*Dear Brian,*'. In order to be able to send e-mails, you need to be able to configure an SMTP server.
 
+If you are a Google User you can check `this guide <https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server>`_, or you can `sign up to Dreamhost <https://www.dreamhost.com/r.cgi?181470/promo/dreamsavings50/>`_ or `Amazon Services <https://aws.amazon.com/ses/>`_. If you want to use a custom domain, the Dreamhost way is the easiest and quickest. You can read the `documentation for configuring your e-mail <https://help.dreamhost.com/hc/en-us/articles/214918038-Email-client-configuration-overview>`_.
+
+Let's start by creating a configuration file in which we will store some useful parameters. Create an empty file in the same directory where you will be working and call it **config.yml**. You can use Jupyter to create this file, just select *Text File* after clicking on *New*. And in the file, put the following:
+
+.. code-block:: yaml
+
+    EMAIL:
+      username: my_username
+      password: my_password
+      port: 1234
+      smtp_server: smtp.server
+
+The format of this file is called YAML, which is a very simple markup language in which blocks are indented by **2 spaces**. Replace the different variables by what you need, i.e., replace ``my_username`` with the username of your server, etc.
 
 Receiving Email
 ---------------

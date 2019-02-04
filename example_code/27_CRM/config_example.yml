@@ -1,0 +1,5 @@
+EMAIL:
+  username: my_username
+  password: my_password
+  port: 1234
+  smtp_server: smtp.server
