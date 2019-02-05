@@ -6,7 +6,7 @@ Building a CRM with Jupyter Notebooks
 :author: Aquiles Carattino
 :subtitle: Send and receive emails from Jupyter notebooks, keep track of people
 :header: {attach}rebecca-georgia-269933-unsplash.jpg
-:tags: Data, Types, Mutable, Immutable, Tuples
+:tags: CRM, Jupyter, Databases, Relational, SQLAlchemy, SQLite, Customers, email
 :description: Send and receive emails from Jupyter notebooks, keep track of people
 
 
@@ -507,16 +507,230 @@ On the other hand, you can check the lists to which a user is subscribed:
 
 See that the output of this last command is not particularly nice. This is because we haven't defined a specific ``__repr__`` method as we have done for the other classes.
 
-With this, we are done regarding how to use databases to store information. Now it is time to get into the action. The full code can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_crm_02.ipynb>`__. Now it is time to clean up the code in order to make more usable and extendable.
+With this, we are done regarding how to use databases to store information. Now it is time to get into the action. The full code discussed in this section can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_crm_02.ipynb>`__. Now it is time to clean up the code in order to make more usable and extendable.
 
 Sending To All Customers
 ------------------------
+The notebook that we have developed in the previous section is very dirty. We have been adding features on the fly, without really worrying about how easy to understand it is. Imports were scattered all over the place, classes get modified at runtime, etc. An example of a cleaned up notebook can be `found here <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_03_clean_db.ipynb>`__. I won't enter into the details, you are free to use it.
 
-Storing Email
--------------
+We are going to focus now a bit more on usability. How can we send the e-mail to all our customers, using what we've learned in the first section and combining it with what we've develop in the previous one. We will start a new notebook. The first thing we need, is to have available all the classes to interface with the database. We start the new notebook like this:
 
-Sending to a Group of Customers
--------------------------------
+.. code-block:: ipython3
+
+    %run clean_db.ipynb
+
+in this case you need to change ``clean_db`` by whatever name you have given to the notebook that created the database. The command above is equivalent to inserting the notebook at the beginning and running it. Therefore, all the variables, classes, functions, etc. that you have developed are going to be available.
+
+Now we need to be able to send a message to all our customers. Since we guess a feature is going to be to send to customers that belong to a specific list, we can develop a function that will take care of the sending of e-mails, and we will learn later how refactoring works. We can start with a function like this:
+
+.. code-block:: python
+
+    def send_all():
+        customers = session.query(Customer)
+        for customer in customers:
+            message = customer.create_msg('Message_name', 'template_file')
+            message.send(config)
+            session.add(message)
+            session.commit()
+
+At this stage this is not sending any message, it is just showing how it would look like. The code above implements a lot of different choices on how to find a solution. One is that we would like the ``Customer`` class that creates a message, and the message is able to send itself. Then we store that message into the database. This allows us to prevent adding messages to the database if the sending fails. The ``Customer`` class will look like this:
+
+.. code-block:: python
+
+    class Customer(Base):
+        __tablename__ = 'customers'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        last_name = Column(String)
+        email = Column(String)
+
+        def create_msg(self, message_name, template_file):
+            with open(template_file, 'r') as template:
+                text = template.format(name=self.name)
+            message = Message(name=message_name, text=text, customer=self, date=datetime.now())
+            return message
+
+        def __repr__(self):
+            return "<Customer(name='{}', last_name='{}', email='{}')>".format(
+            self.name, self.last_name, self.email)
+
+You see that we have only added the method ``create_msg`` which returns a new message, after formatting the test. Then, we need to update the message class to be able to send itself to a customer. We can do the following:
+
+.. code-block:: python
+
+    class Message(Base):
+        __tablename__ = 'messages'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        text = Column(Text)
+        date = Column(Date)
+
+        customer_id = Column(Integer, ForeignKey('customers.id'))
+        customer = relationship("Customer", back_populates="messages")
+
+        def send(self, config):
+            me = config['me']
+            you = '{} <{}>'.format(self.customer.name, self.customer.email)
+            msg = MIMEMultipart('alternative')
+            msg['From'] = me
+            msg['To'] = you
+            msg['Subject'] = self.name
+            msg.attach(MIMEText(self.text, 'plain'))
+            with smtplib.SMTP(config['EMAIL']['smtp_server'], config['EMAIL']['port']) as s:
+                s.ehlo()
+                s.login(config['EMAIL']['username'],config['EMAIL']['password'])
+                s.sendmail(me, you, msg.as_string())
+
+        def __repr__(self):
+            return "<Message(name='{}', date='{}', customer='{}')>".format(
+                self.name, self.date, self.customer)
+
+You can see that I have moved the ``me`` option into the config file. This is something you will need to add by yourself in order to make it compatible. It should look like:
+
+.. code-block:: yaml
+
+    me: My Name <my@email.com>
+
+And should be top-level (i.e. not inside the ``EMAIL`` block). Since sending the message needs to have the config available, we will run the code like this:
+
+.. code-block:: python
+
+    with open('config.yml', 'r') as config_file:
+        config = yaml.load(config_file)
+    send_all()
+
+Remember that when you change notebooks you need to save them, and then you need to run the first block with the ``%run`` command again in order to reflect the changes. We still need to work a bit on the ``send_all``. In the example above, we have fake names to the subject and the template. We can improve that:
+
+.. code-block:: python
+
+    def send_all(subject, template):
+        customers = session.query(Customer)
+        for customer in customers:
+            message = customer.create_msg(subject, template)
+            message.send(config)
+            session.add(message)
+            session.commit()
+            print('Sent message {} to: {}'.format(subject, customer.email))
+
+Now, let's create a text file called **test_email.txt** with the following content:
+
+.. code-block:: text
+
+    Hello {name},
+    Welcome to the test CRM.
+    Hope you are enjoying it!
+
+And now, if we want to send the message to all our customers, we can do the following:
+
+.. code-block:: python
+
+    with open('config.yml', 'r') as config_file:
+        config = yaml.load(config_file)
+    send_all('Testing the CMR', 'test_email.txt')
+
+And now, you should see your messages being sent. You should also see that the messages are personalized, replacing the name in the template by the name of the customer getting the message. You can get as creative as you want with these options. However, there is still an important feature missing: send to a group of customers.
+
+Refactoring: Send to a list
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since the amount of code we have developed is not that much, you can still go through it and change it in all the needed places. But imagine someone else has developed code that depends on what you have done. If you change something as important as the number of arguments a function takes, you will break downstream code. In our case, we want to change the ``send_all`` function in order to accept as an argument the name of a list. However, we don't want to break the code that already uses ``send_all`` with just two arguments (subject and template).
+
+If you want to add a new argument to a function while making it optional, there are two ways. One is to use the ``*args`` syntax, the other is to use a default value. The latter is slightly easier to understand for novice programmers. If we do the following to our function:
+
+.. code-block:: python
+
+    def send_all(subject, template, list_name='all'):
+
+You will see that the code ``send_all('Testing the CMR', 'test_email.txt')`` still works fine. So we can now improve the function to get the customers that belong to a certain list.
+
+.. code-block:: python
+
+    def send_all(subject, template, list_name='all'):
+        if list_name == 'all':
+            customers = session.query(Customer)
+        else:
+            customer_list = session.query(List).filter_by(name=list_name).first()
+            customers = customer_list.customers
+        for customer in customers:
+            message = customer.create_msg(subject, template)
+            message.send(config)
+            session.add(message)
+            session.commit()
+            print('Sent message {} to: {}'.format(subject, customer.email))
+
+So now, if you create a list of customers named ``'Initial Customers'``, for example, you can send a message to them by simply doing the following:
+
+.. code-block:: python
+
+    send_all('Testing the CMR', 'test_email.txt', 'Initial Customers')
+
+Avoid repeating messages
+------------------------
+What you have seen up to now, should open the doors to a lot of very nice creative approaches not only to CRM but to variety of tasks that you can automate with Python. The last feature that I would like to show you is how to avoid sending the same message to the same person. You can check it either when you create the message with the customer class, or before sending it. Since it is normally a good idea to catch problems as early as possible, let's improve the ``Customer`` class:
+
+.. code-block:: python
+    :hl_lines: 9
+
+    class Customer(Base):
+        __tablename__ = 'customers'
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        last_name = Column(String)
+        email = Column(String)
+
+        def create_msg(self, message_name, template_file):
+            message_count = session.query(Message).filter_by(name=message_name, customer=self).count()
+            if message_count > 0:
+                raise Exception('Message already sent')
+            with open(template_file, 'r') as template:
+                template = template.read()
+                text = template.format(name=self.name)
+            message = Message(name=message_name, text=text, customer=self, date=datetime.now())
+            return message
+
+The highlighted line is the important change to the ``Customer`` class. Pay attention to the syntax. We filter both by the message name and the customer who received the message. Then, we use the ``count()`` method, which is the proper way of knowing how many results are available in the database. It is much more efficient than getting all the results with ``all()`` and then using the ``len()`` function. Anyways, if you try again the ``send_all`` function, you will see that it fails if you try to send the same message twice. Now, this is not exactly what we need. If you want to send the message to the people who didn't get the message yet, you would like to skip the people, not stop the execution.
+
+In order to achieve that, we can `handle the exception <{filename}12_handling_exceptions.rst>`__. But since we are using a generic exception, we will handle everything in the same way, regardless of whether it was raised because of an error in the database or because the message was repeated. The best strategy is therefore to create a custom exception:
+
+.. code-block:: python
+
+    class MessageAlreadySent(Exception):
+        pass
+
+And then the ``Customer`` can use:
+
+.. code-block:: python
+
+    if message_count > 0:
+        raise MessageAlreadySent('Message {} already sent to {}'.format(message_name, self.email))
+
+Finally, we can change the ``send_all`` in order to catch this specific exception:
+
+.. code-block:: python
+
+    def send_all(subject, template, list_name='all'):
+        if list_name == 'all':
+            customers = session.query(Customer)
+        else:
+            customer_list = session.query(List).filter_by(name=list_name).first()
+            customers = customer_list.customers
+        for customer in customers:
+            try:
+                message = customer.create_msg(subject, template)
+                message.send(config)
+                session.add(message)
+                session.commit()
+                print('Sent message {} to: {}'.format(subject, customer.email))
+            except MessageAlreadySent:
+                print('Skipping {} because message already sent'.format(customer.email))
+
+If the exception is ``MessageAlreadySent`` we will deal with it, and will skip the user. Bear in mind that since the exception appears with the ``customer.create_msg`` line, the rest of the block is not executed, the message is not created, nor added to the database. This guarantees that if the exception is of a different kind, for example the SMTP server is not working, the database is broken, etc. the exception will not be handled and the proper error will appear on the screen.
+
+The final version of the definition of classes can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_05_clean_db_2.ipynb>`__, while the final version for the sending e-mail is `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_04_send_all.ipynb>`__.
 
 Conclusions
 -----------
+This tutorial aims at showing you how you can quickly prototype solutions by using **Jupyter notebooks**. They are not the proper tool if you want to distribute the code as a package for others to use, but it is very quick to find problems, run just what you need, etc.
+
+Regarding the CRM itself, it is not complete yet. You can see it as a minimum-viable-product. You can send e-mails to your customers, keep track of what messages were sent when, etc. Considering the amount of work it took to set it up, you should be very satisfied.
+
+The main objective of this tutorial was to show you how you can combine different tools in order to build a new project. Of course, many things can be improved, made more efficient, etc. The reality is that if you need to handle communication with some hundreds of customers, you don't need much more than what we did. Perhaps you can make it more functional, prettier, etc. But that is more customization than core development.
