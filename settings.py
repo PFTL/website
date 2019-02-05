@@ -46,7 +46,7 @@ RELATIVE_URLS = False
 INDEX_SAVE_AS = 'blog/index.html'
 
 PLUGIN_PATHS = ['plugins',]
-PLUGINS = ['new_pigment', 'header_image', 'tipue_search', 'sitemap']
+PLUGINS = ['new_pigment', 'header_image', 'tipue_search', 'sitemap', 'newsletter_directive']
 
 LOCALE = 'en_US.utf8'
 

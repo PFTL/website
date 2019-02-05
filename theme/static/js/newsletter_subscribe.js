@@ -45,4 +45,26 @@ $(document).ready(function () {
         }
        });
   });
+  $('#newsletter-inline').submit(function (event) {
+        event.preventDefault();
+    var email = {'email': $("#email-inline").val()};
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        contentType: 'application/json',
+        url: "https://uetke.uetke.com/subscribe-newsletter",
+        data: JSON.stringify(email),
+        beforeSend: function () {
+          $("#send-inline").prop("disabled", true);
+          $("#send-inline").text("Sending");
+        },
+        success: function (data) {
+          $("#newsletter_feedback-inline").html('<div class="alert alert-primary" role="alert">Thanks for signing up to our newsletter!</div>');
+        },
+        error: function () {
+          $("#newsletter_feedback-inline").html('<div class="alert alert-danger" role="alert">An error ocurred, please try again!</div>');
+          $("#send-inline").prop("disabled", false);
+        }
+       });
+  });
 });

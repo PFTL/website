@@ -96,6 +96,8 @@ I hope the example above is enough for you to understand what it means. If you w
     >>> id(c[0])
     140381217929672
 
+.. newsletter::
+
 Copies of Custom Classes
 ------------------------
 We have seen the differences between deep and shallow copies of standard python data types such as lists and dictionaries. Now it is important to see what happens when you define your own classes that also reference other mutable objects. Let's quickly see what happens if you copy your custom class:
