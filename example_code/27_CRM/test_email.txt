@@ -1,0 +1,3 @@
+Hello {name}, 
+Welcome to the test CRM. 
+Hope you are enjoying it!
