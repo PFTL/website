@@ -35,6 +35,8 @@ If you go through the menus, you will see that there are some examples available
 
 Arduinos are not programmed with Python, but with C++ type of code. Therefore the syntax is different, but the routines we will develop are simple enough. If you are in doubt, the fastest is to learn by reading code from others.
 
+.. newsletter::
+
 Downloading data with Python
 ----------------------------
 Structure the Arduino code to download data. Pyserial

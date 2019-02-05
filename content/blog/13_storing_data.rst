@@ -91,6 +91,8 @@ Note that it automatically discards the headers. The advantage of using always t
 
 In the example above, the code will skip all the lines that start with an ``@`` symbol.
 
+.. newsletter::
+
 Saving Partial Files with Numpy
 -------------------------------
 One common situation is to save to file while the data acquisition or generation is happening. This allows you, for example, to monitor the progress of an experiment and to have the data safe even if something goes wrong with your program. The code is very similar to what we have done earlier, but not exactly the same:

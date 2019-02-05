@@ -148,6 +148,8 @@ you are starting to imagine some places where you can use a class to
 make your daily life easier and your code more reusable. However, this
 is just the tip of the iceberg. Classes are very powerful tools.
 
+.. newsletter::
+
 Initializing classes
 --------------------
 **Instantiating** a class is the moment in which we call the class and pass

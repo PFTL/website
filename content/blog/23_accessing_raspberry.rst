@@ -39,6 +39,8 @@ You will also see that different devices have different numbers within the netwo
 
 If all the devices connected to one router have the same public IP, you may wonder how come that communication is established. The reality is that connections are always started from your devices and never to them. Even when you receive a Whatsapp message, it is actually your phone connecting to the Whatsapp server and asking whether there is a new message available.
 
+.. newsletter::
+
 The DNS Infrastructure
 ----------------------
 If every computer connected to the internet gets one number assigned to it, you may wonder how come that you can visit this website by entering into the browser wwww.pythonforthelab.com. Connected to the internet you have several services that are so ubiquitous normally no one thinks about them. In order to have websites and not plain IP addresses, there are distributed lookup tables hooked to the internet.

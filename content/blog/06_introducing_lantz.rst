@@ -56,6 +56,8 @@ Now we see the use of the first decorator, called ``Feat``. Decorators in Python
 
 And now we see the magic of Lantz happening. First, the fact that we can use the ``with`` statement means that some methods were defined for us under the hood; these methods are in charge of initializing and finalizing the communication with the device, in order to free the resource right after the statement finishes. The second important thing to notice is that we initialize the device with the ``via_usb()`` method. Of course, it could have been ``via_serial()``, for example, but let's keep with the USB for now.
 
+.. newsletter::
+
 The second important thing to note is that the method ``idn`` is treated as a property of the device itself. This is achieved through the ``Feat`` decorator. If you are an experienced Python programmer you probably know how to achieve this behavior for your own classes; in Lantz, you shouldn't worry too much about understanding it, but you have to learn just how to use them.
 
 Now, imagine you want to trigger the device; that doesn't count as a Feature because you are not setting a specific value nor getting a value. That is the situation where you would use an ``Action`` decorator:

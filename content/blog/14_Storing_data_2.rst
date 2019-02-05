@@ -49,6 +49,8 @@ We have stored 256 elements, but there more numbers in the file. 10 elements are
 
 When you want to write a ``1``, it takes 1 byte. However, when you store a ``10`` it will take 2 bytes. You have to remember that, in the space of integer numbers of 8 bits, they both take the same amount of memory. With this simple example, you start seeing that there are a lot of small details that you have to take into account when saving data.
 
+.. newsletter::
+
 Different encodings for text data
 ---------------------------------
 You may have realized in the previous section that ASCII is limited to a special set of characters. If you want to write characters of other languages, for example, such as the Spanish ñ, you will need to resort to other standards. This gave rise to a myriad of different encodings, with a small degree of compatibility between them. If you are `Notpad++ <https://notepad-plus-plus.org/>`_ user you can see on the menu that you can select the *encoding* for the file.

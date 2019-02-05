@@ -100,6 +100,8 @@ The error means that we are trying to access a dataset to which we have no longe
 
 If you pay attention, the only difference is that we added ``[:]`` after reading the dataset. Many other guides stop at these sort of examples, without ever really showing the full potential of the HDF5 format with the h5py package. Because of the examples that we did up to now, you could wonder why using HDF5, if saving numpy files gives you the same functionality. Let's dive into the specifics of the HDF5 format.
 
+.. newsletter::
+
 Selective Reading from HDF5 files
 *********************************
 So far we have seen that when we read a dataset we are not yet reading data from the disk, instead, we are creating a link to a specific location on the hard drive. We can see what happens if, for example, we explicitly read the first 10 elements of a dataset:

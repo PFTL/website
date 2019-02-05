@@ -53,6 +53,8 @@ Every time someone wants to use the function with a negative argument, an error 
 
 There is a general rule of thumb that says that code shouldn't be copied more than twice. If you are going to copy-paste code for the third time there is probably a better way of doing it. In the examples above, you can see that the verification of the input is exactly the same in both functions. If we were to write a third function, we would meet the three-copies rule. It would be useful to have an external way of checking that both inputs are positive, and this is exactly what decorators are meant to do.
 
+.. newsletter::
+
 Functions as arguments and as outputs of other functions
 ********************************************************
 Before we can go into the details of how to use ``decorators`` in Python, it is important to show how functions work with inputs and outputs that are other functions. For example, we could define a function that transforms the output of the averages defined above into integers. It is a very simplistic example but already shows the pattern that you can follow to achieve more complex behaviors.

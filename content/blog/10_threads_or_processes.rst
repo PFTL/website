@@ -85,6 +85,8 @@ A crucial component of every computer is its processor. It is the piece of hardw
 
 Within Python, the same functionality can be achieved. Each thread is nothing more than a Python program interpreter running specific tasks. Each program will have a main thread and you may spawn child threads from within it, as you have seen above. This means that in the line where you define ``threading.Thread``, what you are actually doing is creating a new python interpreter within your own program, and that interpreter will be running the method ``make_measurement`` with the given arguments.
 
+.. newsletter::
+
 Plotting Results During Acquisition
 -----------------------------------
 So far, the only thing we have done is to print to screen that the acquisition is happening. However, the results of the measurement are lost, we don't plot nor save them after the program finishes. Now is the time when we can exploit the use of a class instead of a simple function. Remember that the core objective of using classes is to preserve state, exactly what we want to do. We can improve ``OhmLaw`` like this:

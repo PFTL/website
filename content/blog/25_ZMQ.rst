@@ -125,6 +125,8 @@ Now you will see that the server cleanly exits the loop when it gets the proper 
 
 A very important feature is that the REQ-REP pattern is 1-on-1. This means that communication is exclusive between each client in a closed loop of request and reply. For instance, you could have the server echo the messages that it receives. Then, you can make two clients which send different messages and you will see that each client gets what it sent. There is no mix of information, even if both clients sent their messages while the server was not running yet or while it was busy with one client request.
 
+.. newsletter::
+
 REQ-REP for a device
 ^^^^^^^^^^^^^^^^^^^^
 Now that we have explored one of the ZMQ patterns, we can see how it can be useful when dealing with a device. Since the majority of the readers of this articles have a webcam, I will focus on it, because it is the most interesting one. The same principles work with any other device or task. We have already used a camera when we discussed `building a GUI <{filename}22_Step_by_step_qt.rst>`_ for it. I suggest you to give it a quick read if you are not familiar with open CV.

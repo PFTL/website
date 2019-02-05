@@ -67,6 +67,8 @@ Because of the background of this website, we are going to go for the third opti
 
 Now we are ready to develop the application.
 
+.. newsletter::
+
 Welcome to OpenCV
 -----------------
 When developing this kind of applications, the first step is to understand what do we want to do before embarking on designing and developing a User Interface. OpenCV makes it very simple to read from a webcam attached to a computer, you simply do the following:

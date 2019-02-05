@@ -190,6 +190,8 @@ The idea of attaching both the text and the html version of the e-mail is that w
 
 The e-mail, if you attach both versions, will be shown as html if the client supports it and will fall back to the text version if it doesn't. In general lines, we can say that adding html versions of your messages is up to you, adding the text version should be mandatory.
 
+.. newsletter::
+
 Receiving Email
 ---------------
 Sending e-mails is half of what a CRM should do. The other half is checking e-mails. This will allow the system to store messages associated to the people with whom you interact. This will allow you to check who never replied to your questions, for example. We will start by updating the configuration file, since we now need to add the POP3 server:

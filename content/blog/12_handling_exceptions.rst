@@ -67,6 +67,8 @@ For you to have an idea of the importance of correct handling of errors, I will 
 
 Handling all possible errors in a graceful way is very complicated and sometimes almost impossible. However, you can see that even the software that ships with very expensive instruments (in this case I mean instruments with a price tag similar to a small apartment), also has to deal with all kinds of exceptions, and not always in the most user-friendly way.
 
+.. newsletter::
+
 Catching Specific Exceptions
 ----------------------------
 The proper way of handling exceptions in Python is to specify what exception are we expecting. In this way, we know that if the problem is that the file doesn't exist, we can create it, while if the problem is of a different nature, it will be raised and displayed to the user. We can alter the above examples like this:

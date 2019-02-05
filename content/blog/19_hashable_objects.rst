@@ -97,6 +97,8 @@ Both ``var1`` and ``var2`` have the same hash value. So, we may wonder, what hap
 
 As you can see in the snippet above, Python is relying on more than just the hash value of an object when using it as keys for a dictionary.
 
+.. newsletter::
+
 Hash Values of Custom Classes
 -----------------------------
 We have seen `before <{filename}17_mutable_and_immutable.rst>`_ that there are differences between mutable and immutable types in Python. Built-in immutable types have always a hash method, while mutable types don't. However, this leaves outside custom defined classes. By default, all instances of custom classes will have a hash value defined at creation and it will not change over time. Two instances of the same class will have two different hash values. For example:

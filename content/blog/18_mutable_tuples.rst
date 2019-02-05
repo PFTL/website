@@ -100,6 +100,8 @@ Now you see that we have three labels for the same list, and if we update any of
 
 A lot of possibilities appear when you start playing around. However, your code has to be very well structured and explained if you plan to keep it maintainable.
 
+.. newsletter::
+
 Tuples as Dictionary Keys
 -------------------------
 In principle, any immutable variable can be used as a dictionary key. Therefore, it is possible to also use tuples. For example:

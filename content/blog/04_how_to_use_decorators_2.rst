@@ -114,6 +114,8 @@ As with many things in Python, this is not the only option but is the one that a
 
 The highlighted lines are the ones that changed compared to the previous example. Again, the ``help`` command is working as expected. In principle what the decorator ``@wraps`` does is the same as setting the ``__name__`` and ``__doc__`` properties. Now you start seeing that the uses of decorators are virtually endless.
 
+.. newsletter::
+
 Arguments in decorators
 -----------------------
 Imagine that you want to be able to check that both arguments in a function are higher than a parameter, not necessarily ``0``. This would imply that the decorator takes one argument. Let's see first what do we want to achieve and then how to do it.

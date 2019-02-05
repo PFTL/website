@@ -128,6 +128,8 @@ As you can see, docstrings are very useful when you are trying to navigate a pac
 
 The code up to here can be found in `Tag 0.3 <https://github.com/PFTL/website/tree/0.3/example_code/11_documenting/my_module>`_.
 
+.. newsletter::
+
 From docstrings to doctest
 --------------------------
 A very useful approach when developing code is to test it. Especially if you are going to collaborate with others. Testing means to run the code with inputs to which you know the expected outcome. If the output is correct, the test passes, if the output is not correct, the test fails. This is a very systematic way to be sure that modifications to existing code are not going to ruin code downstream, for example.

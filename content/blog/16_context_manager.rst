@@ -154,6 +154,8 @@ Which will generate the following output:
 
 This is enough to make decisions based on the kind of information that the exception is providing. You can check the `previous article on exceptions <{filename}12_handling_exceptions.rst>`_ to have an idea of the kind of things you can accomplish.
 
+.. newsletter::
+
 With and Constructors
 ---------------------
 In the simple class that we have seen earlier, we completely skipped the discussion of what happens when you have a constructor, i.e. the ``__init__`` method is defined. So let's quickly try it. Let's make the ``SimpleClass`` print at each step:

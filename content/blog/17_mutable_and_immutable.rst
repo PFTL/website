@@ -62,6 +62,8 @@ This is the first, crucial difference between a list and a tuple. Once defined, 
 
 When you have a variable that cannot be changed after it has been created it is called **immutable**, while in the opposite case, that variable is called **mutable**. Let's explore what that means.
 
+.. newsletter::
+
 Mutable and Immutable Data Types
 --------------------------------
 There is an `excellent article written by Luciano Ramalho <https://standupdev.com/wiki/doku.php?id=python_tuples_are_immutable_but_may_change>`_ in which he explains how to understand variables in Python. I am not going to copy his article, but I think it is a great inspiration on how to explain things. What he suggests is to think about labels and not about boxes when referring to variables. A variable is a label that we assign to an object, it is the way we, as humans, have to identify it. However, what is important about the underlying object is its value and its type.

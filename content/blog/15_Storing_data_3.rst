@@ -90,6 +90,8 @@ A proper way of adding new values to a table is:
 
 Assuming that the access to the database is only yours, i.e. you are not going to take variables from the public, you shouldn't worry too much about safety. In any case, it is important to be aware.
 
+.. newsletter::
+
 Retrieving Data
 ---------------
 Now that you have some data stored in the database, we need to be able to retrieve it. You can do the following:

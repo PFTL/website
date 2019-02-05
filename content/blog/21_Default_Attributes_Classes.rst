@@ -81,6 +81,8 @@ Of course, the same pattern will appear if you use a mutable variable defined ou
     print(my_list)
     # [1, 2, 3, 4]
 
+.. newsletter::
+
 Classes provide another pattern which is the use of **class attributes** instead of **instance attributes**. Class attributes are those values that are defined directly in the class, outside of any methods. Let's update our example to use a class attribute called ``var``:
 
 .. code-block:: python

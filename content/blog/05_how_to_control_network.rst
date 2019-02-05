@@ -83,6 +83,8 @@ The core is the same as before, but we have added some lines for the device. We 
 
 The lines above show a very simple way of sending variables through a browser. The ``route`` takes more complex structures than plain strings. ``<int:source_id>`` will take an integer after the ``datasource/`` and it will pass it as an argument to the function below. The function ``datasource`` in our server, therefore, should take exactly one argument, ``source_id``, and we use it for changing the ``datasource`` of the device. Now, if you head your browser to ``localhost:5000/datasource/1`` we will change the source to `1`, we can do the same with `2`, `3`, etc. Bear in mind that not all values are valid with the device. Check what happens if, for example, you send a value outside the range of what is possible.
 
+.. newsletter::
+
 Communicating with our devices through the browser may not be the most practical approach. Instead, we can build a special program called `Client` that will handle the sending and retrieving of information from the server. When we have control on both the server and the client side software, we can easily control the data that is being exchanged. When we don't have control over one of the two sides, we have to base ourselves on available standards; for example, the data that a browser can handle is limited, the instructions a server can receive are few, etc. We are going to base our client on a common Python library called ``requests``:
 
 .. code-block:: python

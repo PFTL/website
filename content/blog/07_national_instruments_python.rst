@@ -46,6 +46,8 @@ Since we are using the task as Python object, we drop the first argument of the 
 
 Then it asks for the limits of our analog input; remember that the DAQmx works with units that can be different from volts and that will be defined later on; the limits that we establish here are in those specific units. Setting the limits allows the DAQ card to automatically set a gain to our measurement, therefore increasing the effective resolution of the measurement. The values are automatically converted to the requested type, provided that they are numbers.
 
+.. newsletter::
+
 When performing a measurement with an NI Card we have to explicitly set its units; it may very well be that you have a thermocouple connected to the analog input and therefore you want to measure Kelvins instead of Volts, or that you have any other transducer plugged. Defining custom scales is an entire chapter and therefore it is much easier to leave them here as volts and do the transformation directly in our code. We use again a built-in option of DAQmx, the ``nidaq.DAQmx_Val_Volts`` and the last option is left to ``None`` because it is what the documentation asks for in case we set the scale to Volts.
 
 .. note:: Converting variable types from Python to C or the other way around is handled in different ways by different libraries. PyDAQmx is doing all the work under to hood and that is why we can use an integer instead of a float, for example. But be aware that it will not always be the same; some libraries require to define very specific types.

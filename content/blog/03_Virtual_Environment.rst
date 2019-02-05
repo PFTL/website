@@ -94,6 +94,8 @@ And if you run again ``pip freeze`` you will notice that the version of Flask ha
 
 Of course, you can run the ``freeze`` command outside of any virtual environment to see all the packages installed in your computer. It is a very useful way of keeping track of the packages that may need an upgrade or that you no longer use.
 
+.. newsletter::
+
 How does the Virtual Environment Work
 -------------------------------------
 When you run programs from the command line, your operating system needs to know where to find them. The location of the programs in Windows and Linux is radically different, but they both are able to understand that when you type ``python`` in the command line, you want to start the Python interpreter. In order to achieve this, operating systems know where to look for programs thanks to the so-called environmental variables. The ``PATH`` is one of those variables that stores a list of folders where to look for programs.

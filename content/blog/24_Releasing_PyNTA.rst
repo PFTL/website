@@ -26,6 +26,8 @@ The main problem is that all processes start from the same objects, and my objec
 
 In order to develop PyNTA, careful planning of functions was needed, making the codebase harder to follow. In any case, the end product is a decentralized code that can be independently improved. This modularity makes it ideal to test new algorithms for tracking or saving without breaking the downstream code. It also opens the door for interesting patterns in the future, leveraging the power of modern computers to new extents while doing data acquisition.
 
+.. newsletter::
+
 Current Limitations
 -------------------
 pyZMQ implements a convenience method called ``send_pyobj`` which serializes objects with cPickle before sending them. There is a correspondent ``recv_pyobj`` which does the opposite. Adding objects to a queue follows the same procedure, they get serialized and deserialized. Even if it is convenient not to think about this, in the current status of the program data sent by the publisher gets serialized/deserialized/serialized/deserialized. Which is a big overhead for fast acquisition routines like the one PyNTA tries to tackle.
