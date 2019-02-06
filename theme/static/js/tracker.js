@@ -13,8 +13,8 @@
       var url = url_info.protocol + '//' + url_info.hostname + url_info.pathname;
 
       // Don't send the last URL again (this could happen when pushState is used to change the URL hash or search)
-      if (lastSendUrl === url) return;
-      lastSendUrl = url;
+      if (last_url === url) return;
+      last_url = url;
 
       // ignore prerendered pages
     if( 'visibilityState' in document && document.visibilityState === 'prerender' ) {
