@@ -3,10 +3,10 @@ Building a CRM with Jupyter Notebooks
 
 :date: 2019-02-12
 :author: Aquiles Carattino
-:subtitle: Send and receive emails from Jupyter notebooks, keep track of people
+:subtitle: Manage customer relationships with Python
 :header: {attach}rawpixel-760036-unsplash.jpg
 :tags: CRM, Jupyter, Databases, Relational, SQLAlchemy, SQLite, Customers, email
-:description: Send and receive emails from Jupyter notebooks, keep track of people
+:description: Manage customer relationships with Python
 
 
 This tutorial is going to be off-topic compared to the others on the website. It was born out of a question regarding how to send personalized e-mails to several people on a list, and I thought it could be useful to post a tutorial online. This will help people interested in building a simple Customer Relationship Manager (CRM) and it will also show scientists that the skills they develop while working in the lab can be used in various contexts.
