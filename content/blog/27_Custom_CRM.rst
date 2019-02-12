@@ -1,30 +1,29 @@
 Building a CRM with Jupyter Notebooks
 =====================================
 
-:status: draft
-:date: 2019-02-04
+:date: 2019-02-12
 :author: Aquiles Carattino
 :subtitle: Send and receive emails from Jupyter notebooks, keep track of people
-:header: {attach}rebecca-georgia-269933-unsplash.jpg
+:header: {attach}rawpixel-760036-unsplash.jpg
 :tags: CRM, Jupyter, Databases, Relational, SQLAlchemy, SQLite, Customers, email
 :description: Send and receive emails from Jupyter notebooks, keep track of people
 
 
-This tutorial is going to be off-topic compared to the others on the website. It was born out of a question regarding how to send personalized e-mail to several people on a list, and I thought it could be useful to post a tutorial online. This will help people interested in building a simple Customer Relationship Manager (CRM) and it will also show scientists that the skills they develop while working in the lab can be used in various contexts.
+This tutorial is going to be off-topic compared to the others on the website. It was born out of a question regarding how to send personalized e-mails to several people on a list, and I thought it could be useful to post a tutorial online. This will help people interested in building a simple Customer Relationship Manager (CRM) and it will also show scientists that the skills they develop while working in the lab can be used in various contexts.
 
-Let's first discuss what we want to achieve. A CRM is a tool that allows users to send e-mails to customers and keep track of their answers. It could be much more complex than that, integrating with phone, social media, billing platforms, etc. but for our purposes we will keep it to what a normal person (like me) needs. It should be able to send the same e-mail to several people but with a certain degree of personalization, for example saying *Dear John* instead of a generic *Dear Customer*.
+Let's first discuss what we want to achieve. A CRM is a tool that allows users to send e-mails to customers and keep track of their answers. It could be much more complex than that, integrating with a phone, social media accounts, billing platforms, etc. but for our purposes, we will keep it to what a normal person (like me) needs. It should be able to send the same e-mail to several people but with a certain degree of personalization, for example, saying *Dear John* instead of a generic *Dear Customer*.
 
-The CRM should prevent me from sending the same e-mail twice to the same person and should be able to show me all the e-mails I have exchanged with that person. It should also allow me to segment customers, making it possible for me to send e-mails just to groups of people, for example the ones who took the Python For The Lab course and those who are interested. The ones who bought the book and those who only asked for the free chapter, etc. Let's get started!
+The CRM should prevent me from sending the same e-mail twice to the same person and should be able to show me all the e-mails I have exchanged with that person. It should also allow me to segment customers, making it possible for me to send e-mails just to groups of people, for example, the ones who took the Python For The Lab course and those who are interested in it. The ones who bought the book and those who only asked for the free chapter, etc. Let's get started!
 
 .. contents::
 
 The Choices
 -----------
-First, we will need a way of sending and receiving e-mail. If you are a GMail user, you can check `this guide <https://support.google.com/mail/answer/7104828?hl=en>`__ and `this other one <https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server>`_ on how to setup the server (you will need this information later on, so keep it in hand). If you want ot use a custom domain to send and receive e-mail, I strongly suggest you to use `Dreamhost <https://www.dreamhost.com/r.cgi?181470/promo/dreamsavings50/>`_ which is what I use myself (if you use the link, you will get 50U$ discount and at the same time you will help me keep this website running). If you expect to send more than 100 e-mails per hour, I suggest you to check `Amazon SES <https://aws.amazon.com/ses/>`_ which is very easy to setup and has a reasonable pricing.
+First, we will need a way of sending and receiving e-mail. If you are a GMail user, you can check `this guide <https://support.google.com/mail/answer/7104828?hl=en>`__ and `this other one <https://www.digitalocean.com/community/tutorials/how-to-use-google-s-smtp-server>`_ on how to set up the server (you will need this information later on, so keep it in hand). If you want to use a custom domain to send and receive e-mail, I strongly suggest you use `Dreamhost <https://www.dreamhost.com/r.cgi?181470/promo/dreamsavings50/>`_ which is what I use myself (if you use the link, you will get a 50U$ discount and at the same time you will help me keep this website running). If you expect to send more than 100 e-mails per hour, I suggest you check `Amazon SES <https://aws.amazon.com/ses/>`_ which is very easy to set up and has reasonable pricing.
 
-Next, we need to define how to send the e-mails. That we are going to use Python is out of question. But here we have several choices to make. I believe the best is to use Jupyter notebooks. They have the advantage of allowing you to run different pieces of code, see the output inline, etc. It is easier to have interaction through a Jupyter notebook than through plain scripts. Building a user interface (either a desktop app or a web app) would be too time consuming for a minimum increase in usability.
+Next, we need to define how to send e-mails. The fact that we are going to use Python is out of the question. But here we have several choices to make. I believe the best is to use Jupyter notebooks. They have the advantage of allowing you to run different pieces of code, see the output inline, etc. It is easier to have interaction through a Jupyter notebook than through plain scripts. Building a user interface (either a desktop app or a web app) would be too time-consuming for a minimum increase in usability.
 
-We have now a web server, a platform, we only need to define how to store the data. For this I will choose SQLite. I have written in the past about how to `store data using SQLite <15_Storing_data_3.rst>`_, but in this article we are going one step further by introducing an ORM, or Object Relational Mapping, which will greatly simplify our work when defining tables, accessing data, etc.
+We have now a web server, a platform, we only need to define how to store the data. For this, I will choose SQLite. I have written in the past about how to `store data using SQLite <15_Storing_data_3.rst>`_, but in this article, we are going one step further by introducing an ORM, or Object Relational Mapping, which will greatly simplify our work when defining tables, accessing data, etc.
 
 Jupyter Notebooks
 -----------------
@@ -54,7 +53,7 @@ You should be welcomed by a screen like this:
     :alt: Empty Jupyter Notebook
     :class: center-img
 
-The arrow indicates the name of the notebook. You can edit it to something more descriptive than Untitled. For example, **Test_Notebook**. The line that you see in green is where your input should go. Let's try a simple print statement, like what you see in the image below. To run the code, you can either press Shift+Enter, or click the play button that says run, while the cursor is still in the cell.
+The arrow indicates the name of the notebook. You can edit it to something more descriptive than Untitled. For example, **Test_Notebook**. The line that you see in green is where your input should go. Let's try a simple print statement, like what you see in the image below. To run the code, you can either press Shift+Enter or click the play button that says run, while the cursor is still in the cell.
 
 .. image:: /images/27_images/02_jupyter.jpg
     :alt: First Cell
@@ -62,7 +61,7 @@ The arrow indicates the name of the notebook. You can edit it to something more 
 
 The advantage of Jupyter notebooks is that they also keep the output when you share them. You can see `this example notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/Test_Notebook.ipynb>`_ on Github. And they allow you to embed markdown text in order to document what you are doing.
 
-If you haven't used Jupyter notebooks before, now it is a great chance to get started. They are very useful for prototyping code that later can became an independent program. From now on, I will not stress every single time that the code should go into a notebook, but you should assume it.
+If you haven't used Jupyter notebooks before, now it is a great chance to get started. They are very useful for prototyping code that later can become an independent program. From now on, I will not stress every single time that the code should go into a notebook, but you should assume it.
 
 As always, all the code for this project `can be found here <https://github.com/PFTL/website/tree/master/example_code/27_CRM>`_. The majority of the code that goes into the Jupyter notebooks can also be copy-pasted into plain Python script files. Just keep in mind that the order in which you can run cells is up to you and not necessarily from top to bottom as is the case for scripts.
 
@@ -123,9 +122,9 @@ Now, the way of composing the message requires to import a special module of Pyt
     msg['Subject'] = msg_sbj
     msg.attach(MIMEText(msg_text, 'plain'))
 
-We first create a ``msg``, which will be ready to send both plain and html e-mails. We specify the ``from``, ``to``, and ``subject`` of the email. Remember that if you specify the wrong ``from``, your message has a high chance of being filtered either by your SMTP provider or the receiver's server as spam. Be sure you use the proper e-mail from-address that you have configured.
+We first create a ``msg``, which will be ready to send both plain and HTML e-mails. We specify the ``from``, ``to``, and ``subject`` of the email. Remember that if you specify the wrong ``from``, your message has a high chance of being filtered either by your SMTP provider or the receiver's server as spam. Be sure you use the proper e-mail from-address that you have configured.
 
-The last line is attaching to the message the plain version of the e-mail. We will see that it is also possible to send more complex messages, with a plain text version and an html version. Now that we have our e-mail ready, we need to send it.
+The last line attaches the plain version of the e-mail to the message. We will see that it is also possible to send more complex messages, with a plain text version and an HTML version. Now that we have our e-mail ready, we need to send it.
 
 .. code-block:: ipython3
 
@@ -137,7 +136,7 @@ The last line is attaching to the message the plain version of the e-mail. We wi
         s.sendmail(me, you, msg.as_string())
         s.quit()
 
-First you see that we start the SMTP connection using the configuration parameters that were defined on the **config.yml** file. The ``ehlo`` command is a way of telling the server *hello* and start the exchange of information. We then login and finally send the message. See that we defined both the sender and receiver twice: they are used in the ``sendmail`` command, but also they are defined within the ``msg`` object.
+First, you see that we start the SMTP connection using the configuration parameters that were defined on the **config.yml** file. The ``ehlo`` command is a way of telling the server *hello* and start the exchange of information. We then log in and finally send the message. See that we defined both the sender and receiver twice: they are used in the ``sendmail`` command, but also they are defined within the ``msg`` object.
 
 If you used real e-mails, you should by now receive the example message.
 
@@ -164,7 +163,7 @@ Which will output the message exactly as you expected. If you now would like to 
 
 Adding HTML to the message
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-Now it is time to make your messages more beautiful by adding HTML to them. Coding HTML e-mails is a complicated subject because there are many things to take into account. First, e-mail clients work differently from each other, meaning that the way your e-mail is displayed depends on how it is opened. Screen sizes change, and therefore your e-mail should have a fixed width or it will look very ugly on some devices. Being aware of these problems, I would suggest you to check ready-made templates developed by designers who took care of all of this.
+Now it is time to make your messages more beautiful by adding HTML to them. Coding HTML e-mails is a complicated subject because there are many things to take into account. First, e-mail clients work differently from each other, meaning that the way your e-mail is displayed depends on how it is opened. Screen sizes change, and therefore your e-mail should have a fixed width or it will look very ugly on some devices. Being aware of these problems, I would suggest you check ready-made templates developed by designers who took care of all of this.
 
 In this tutorial, we are going to use `Cerberus <https://tedgoas.github.io/Cerberus/>`_ which, among other things, is open source and free. If you unzip the contents, you will find 3 important files: **cerberus-fluid.html**, **cerberus-responsive.html**, and **cerberus-hybrid.html**. Those are three different templates which you can use. We are going to use the responsive version.
 
@@ -184,17 +183,17 @@ And then, the only two things we need to add to the message is the following:
     msg = MIMEMultipart('alternative')
     msg.attach(MIMEText(msg_html, 'html'))
 
-Pay attention that we need to initialize the message with the argument ``'alternative'``. If we fail to do this, the message will include both the text and the html versions.
+Pay attention that we need to initialize the message with the argument ``'alternative'``. If we fail to do this, the message will include both the text and the HTML versions one after the other.
 
-The idea of attaching both the text and the html version of the e-mail is that we keep in mind that not all people accept html messages. You can configure most e-mail clients to use only plain text messages. This is a good way of preventing trackers from spying on you and makes e-mails easier to read. Moreover, it can make phishing attempts easier to spot.
+The idea of attaching both the text and the HTML version of the e-mail is that we keep in mind that not all people accept HTML messages. You can configure most e-mail clients to use only plain text messages. This is a good way of preventing trackers from spying on you and makes e-mails easier to read. Moreover, it can make phishing attempts easier to spot.
 
-The e-mail, if you attach both versions, will be shown as html if the client supports it and will fall back to the text version if it doesn't. In general lines, we can say that adding html versions of your messages is up to you, adding the text version should be mandatory.
+The e-mail, if you attach both versions, will be shown as HTML if the client supports it and will fall back to the text version if it doesn't. In general lines, we can say that adding HTML versions of your messages is up to you, adding the text version should be mandatory.
 
 .. newsletter::
 
 Receiving Email
 ---------------
-Sending e-mails is half of what a CRM should do. The other half is checking e-mails. This will allow the system to store messages associated to the people with whom you interact. This will allow you to check who never replied to your questions, for example. We will start by updating the configuration file, since we now need to add the POP3 server:
+Sending e-mails is half of what a CRM should do. The other half is checking e-mails. This will allow the system to store messages associated with the people with whom you interact. This will allow you to check, for example, who never replied to your questions. We will start by updating the configuration file since we now need to add the POP3 server:
 
 .. code-block:: yaml
 
@@ -207,7 +206,7 @@ Sending e-mails is half of what a CRM should do. The other half is checking e-ma
 
 If you would need a different username or password for the POP server, you can add them also to the config file. Remember that you will need to reload the configuration file in order to have the new variable available.
 
-Reding from the server is relatively easy:
+Reading from the server is relatively easy:
 
 .. code-block:: ipython3
 
@@ -240,7 +239,7 @@ In this case, the server has 3 available messages. The first number is the id of
 
     msg = server.retr('1')
 
-If you explore the ``msg``, you will see it is a tuple with 3 elements. The message itself is stored in ``msg[1]``. However, it is a list, full of information regarding the message you have downloaded. Without going into too much detail, first, you need to transform the list into a single array, and then we can use the mail tools to parse the information to a usable format:
+If you explore the ``msg``, you will see it is a tuple with 3 elements. The message itself is stored in ``msg[1]``. However, it is a list, full of information regarding the message you have downloaded. Without going into too much detail, first, you need to transform the list into a single array, and then we can use the mail tools to parse the information into a usable format:
 
 .. code-block:: ipython3
 
@@ -249,7 +248,7 @@ If you explore the ``msg``, you will see it is a tuple with 3 elements. The mess
     raw_email = b'\n'.join(msg[1])
     parsed_email = email.message_from_bytes(raw_email)
 
-You are free to explore each step independently to try to understand what is available in your message. The ``parsed_email`` has a lot of information, not only regarding who sent the message and to whom, but also the server used, spam filtering options, etc. We would like to show the contents of the e-mail, both the html and the text formats, so we can do the following:
+You are free to explore each step independently to try to understand what is available in your message. The ``parsed_email`` has a lot of information, not only regarding who sent the message and to whom but also the server used, spam filtering options, etc. We would like to show the contents of the e-mail, both the HTML and the text formats, so we can do the following:
 
 .. code-block:: ipython3
 
@@ -265,7 +264,7 @@ The code up to here can be found on `this notebook <https://github.com/PFTL/webs
 
 Using a Database
 ----------------
-In the previous sections we have seen how you can send and receive e-mails with Python directly from a Jupyter notebook. Now it is time to focus onto a different topic. It is important when you want to establish relationships with customers, to have a way of storing information persistently. For example, you would like to keep an agenda of contacts, you would like to know when was the last time you contacted someone, etc.
+In the previous sections, we have seen how you can send and receive e-mails with Python directly from a Jupyter notebook. Now it is time to focus onto a different topic. It is important when you want to establish relationships with customers, to have a way of storing information persistently. For example, you would like to keep an agenda of contacts, you would like to know when was the last time you contacted someone, etc.
 
 In order to achieve a high level of flexibility, we are going to use a database to store all our information. Fortunately, Python supports SQLite databases out of the box. We have discussed about them in a `different article <{filename}15_Storing_data_3.rst>`_ that may be useful for you to check if you want to dig into the details. We are going to use a library called SQLAlchemy, which will allow us to define relationships between elements much faster. You can install it like any other Python package:
 
@@ -287,7 +286,7 @@ Next, we create the database engine:
 
     engine = create_engine('sqlite:///crm.db', echo=True)
 
-Note that the engine supports other types of databases, not only sqlite. However, sqlite is by far the easiest to work with for small applications such as ours.
+Note that the engine supports other types of databases, not only SQLite. However, SQLite is by far the easiest to work with for small applications such as ours.
 
 We also define a declarative base, that will allow us to define classes that will be mapped to tables:
 
@@ -310,13 +309,13 @@ Now it is time to define what information we want to store to the database. For 
             return "<Customer(name='{}', last_name='{}', email='{}')>".format(
             self.name, self.last_name, self.email)
 
-I think the code above it is self explanatory. We define the name of the table we want to use. Each attribute defined with ``Column`` will be transformed into a column in the table, of the specified type, in our case we have ``Integer`` for ``id`` and ``String`` for all the rest. In order to create the table, we have to run the following command:
+I think the code above it is self-explanatory. We define the name of the table we want to use. Each attribute defined with ``Column`` will be transformed into a column in the table, of the specified type, in our case we have ``Integer`` for ``id`` and ``String`` for all the rest. In order to create the table, we have to run the following command:
 
 .. code-block:: ipython3
 
     Base.metadata.create_all(engine)
 
-You will see a lot of content appearing to the screen. If you are familiar with SQL you will notice the commands that are being executed. Now what we have is a very nice relationship between a class (``Customer``) and a table (``customers``) on our database. Let's create our first customer:
+You will see a lot of content appearing on the screen. If you are familiar with SQL you will notice the commands that are being executed. Now what we have is a very nice relationship between a class (``Customer``) and a table (``customers``) on our database. Let's create our first customer:
 
 .. code-block:: ipython3
 
@@ -350,7 +349,7 @@ It will give you as output the information of your customer. Pay attention to th
 
     one_customer = session.query(Customer).filter(Customer.name.like('aqui%')).first()
 
-This will find all customers with a name that starts with ``aqui``, regardless of their case. There is a detail that it is also very important and that I haven't mentioned yet, the ``first()`` that appears at the end. Let's see what happens if you have two customers in the database, and they have similar names, so that the command above gets both of them:
+This will find all customers with a name that starts with ``aqui``, regardless of their case. There is a detail that it is also very important and that I haven't mentioned yet, the ``first()`` that appears at the end. Let's see what happens if you have two customers in the database, and they have similar names so that the command above gets both of them:
 
 .. code-block:: ipython3
 
@@ -380,11 +379,11 @@ The answer is not a list of customers, but an object called Query. If you want t
 
 The idea of the query is that it knows how many elements are there but it didn't load the information to memory. This makes it incredibly handy if you are working with very large databases.
 
-With a bit of creativity, you can already merge what we learned before in order to send e-mails to all the customers in your database. Before discussing how to implement that, I would like to focus into one more topic, which is how to add tags to the customers and keep track of the sent messages.
+With a bit of creativity, you can already merge what we learned before in order to send e-mails to all the customers in your database. Before discussing how to implement that, I would like to focus on one more topic, which is how to add tags to the customers and keep track of the sent messages.
 
 Database Relationships
 ~~~~~~~~~~~~~~~~~~~~~~
-One of the features we want to have in our CRM is to be able to keep track of the sent messages, so we avoid sending twice the same e-mail to the same person, or we can check how long it was since we sent the e-mail, etc.  We will define a new class called ``Message`` in which we will hold the information of every message sent. It will look like this:
+One of the features we want to have in our CRM is to be able to keep track of the sent messages, so we can avoid sending twice the same e-mail to the same person, or we can check how long it was since we sent the last message, etc.  We will define a new class called ``Message`` in which we will hold the information of every message sent. It will look like this:
 
 .. code-block:: ipython3
 
@@ -405,7 +404,7 @@ One of the features we want to have in our CRM is to be able to keep track of th
             return "<Message(name='{}', date='{}', customer='{}')>".format(
             self.name, self.date, self.customer)
 
-Bear in mind that the imports complement the ones of the previous section, they do not replace the others but are new for this piece of code. The beginning is very similar to the previous class, but the main difference is the part referring to the customers. Each message will be sent to a specific customer. To make this bridge, we use the ``ForeignKey``. This means that the value that is going to be stored in ``customer_id`` has to be an existing customer id. In this way we can add more dimensions to our plain tables.
+Bear in mind that the imports complement the ones of the previous section, they do not replace the others but are new for this piece of code. The beginning is very similar to the previous class, but the main difference is the part referring to the customers. Each message will be sent to a specific customer. To make this bridge, we use the ``ForeignKey``. This means that the value that is going to be stored in ``customer_id`` has to be an existing customer id. In this way, we can add more dimensions to our plain tables.
 
 The ``relationship`` is a way of telling SQLAlchemy where the data is going to be accessed. Having the id of the customer is handy, but it is better if we have direct access to the information. In such a case, if we would like to know the name of the customer who got the message, we can do something like ``message.customer.name``. The opposite relationship is also valid, and we need to add it. We can simply do:
 
@@ -430,14 +429,14 @@ Now, let's create some messages to understand how we can use this new strategy. 
     session.add(new_message)
     session.commit()
 
-We get the first customer from the table, and then we create a new message. This is just an example, but in principle the variable ``text`` could be much longer. If we want to retrieve this message from the database, we can do the following:
+We get the first customer from the table, and then we create a new message. This is just an example, but in principle, the variable ``text`` could be much longer. If we want to retrieve this message from the database, we can do the following:
 
 .. code-block:: ipython3
 
     message = session.query(Message).first()
     print(message)
 
-And now you will see that you have the information not only about this message, but also about the customer to whom the message was sent. You can also try the other way around, see all the messages sent to a particular customer, by doing the following:
+And now you will see that you have the information not only about this message but also about the customer to whom the message was sent. You can also try the other way around, see all the messages sent to a particular customer, by doing the following:
 
 .. code-block:: ipython3
 
@@ -446,7 +445,7 @@ And now you will see that you have the information not only about this message, 
 
 And you will get a list of all the messages that were sent. Now you have an idea of how this can very quickly start to be a useful tool, not just a mere exercise.
 
-The relationship between messages and customers is called many-to-one, because a customer can have many messages associated with it, but each message will be associated to a single customer. There is also another relationship possible, which is called many-to-many. This would be the case of having lists of customers. A customer can belong to several lists, and at the same time each list can contain several customers.
+The relationship between messages and customers is called many-to-one because a customer can have many messages associated with it, but each message will be associated with a single customer. There is also another relationship possible, which is called many-to-many. This would be the case of having lists of customers. A customer can belong to several lists, and at the same time, each list can contain several customers.
 
 If you think that a database is nothing more than a collection of tables in which each entry has a unique identifier, you will realize that there is no way of making this many-to-many between two tables directly. We will need to define an intermediate table which will hold these relationships. First, let's start by the list itself:
 
@@ -513,17 +512,17 @@ With this, we are done regarding how to use databases to store information. Now 
 
 Sending To All Customers
 ------------------------
-The notebook that we have developed in the previous section is very dirty. We have been adding features on the fly, without really worrying about how easy to understand it is. Imports were scattered all over the place, classes get modified at runtime, etc. An example of a cleaned up notebook can be `found here <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_03_clean_db.ipynb>`__. I won't enter into the details, you are free to use it.
+The notebook that we have developed in the previous section is very dirty. We have been adding features on the fly, without really worrying about how easy it is to understand it. Imports were scattered all over the place, classes get modified at runtime, etc. An example of a cleaned up notebook can be `found here <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_03_clean_db.ipynb>`__. I won't enter into the details, you are free to use it.
 
-We are going to focus now a bit more on usability. How can we send the e-mail to all our customers, using what we've learned in the first section and combining it with what we've develop in the previous one. We will start a new notebook. The first thing we need, is to have available all the classes to interface with the database. We start the new notebook like this:
+We are going to focus now a bit more on usability. How can we send the e-mail to all our customers, using what we've learned in the first section and combining it with what we've developed in the previous one? We will start a new notebook. The first thing we need is to have available all the classes to interface with the database. We start the new notebook like this:
 
 .. code-block:: ipython3
 
     %run clean_db.ipynb
 
-in this case you need to change ``clean_db`` by whatever name you have given to the notebook that created the database. The command above is equivalent to inserting the notebook at the beginning and running it. Therefore, all the variables, classes, functions, etc. that you have developed are going to be available.
+in this case, you need to change ``clean_db`` by whatever name you have given to the notebook that created the database. The command above is equivalent to inserting the notebook at the beginning and running it. Therefore, all the variables, classes, functions, etc. that you have developed are going to be available.
 
-Now we need to be able to send a message to all our customers. Since we guess a feature is going to be to send to customers that belong to a specific list, we can develop a function that will take care of the sending of e-mails, and we will learn later how refactoring works. We can start with a function like this:
+Now we need to be able to send a message to all our customers. We can develop a function that will take care of the sending of e-mails:
 
 .. code-block:: python
 
@@ -535,7 +534,7 @@ Now we need to be able to send a message to all our customers. Since we guess a 
             session.add(message)
             session.commit()
 
-At this stage this is not sending any message, it is just showing how it would look like. The code above implements a lot of different choices on how to find a solution. One is that we would like the ``Customer`` class that creates a message, and the message is able to send itself. Then we store that message into the database. This allows us to prevent adding messages to the database if the sending fails. The ``Customer`` class will look like this:
+At this stage this is not sending any message, it is just showing how it would look like. The code above implements a lot of different choices on how to find a solution. One is that we would like the ``Customer`` class that creates a message, and the message is able to send itself. Then we store that message into the database. This prevents adding messages to the database if the sending fails. The ``Customer`` class will look like this:
 
 .. code-block:: python
 
@@ -601,7 +600,7 @@ And should be top-level (i.e. not inside the ``EMAIL`` block). Since sending the
         config = yaml.load(config_file)
     send_all()
 
-Remember that when you change notebooks you need to save them, and then you need to run the first block with the ``%run`` command again in order to reflect the changes. We still need to work a bit on the ``send_all``. In the example above, we have fake names to the subject and the template. We can improve that:
+Remember that when you change notebooks you need to save them, and then you need to run the first block with the ``%run`` command again in order to reflect the changes. We still need to work a bit on the ``send_all``. In the example above, we have fake names for the subject and the template. We can improve that:
 
 .. code-block:: python
 
@@ -634,7 +633,7 @@ And now, you should see your messages being sent. You should also see that the m
 
 Refactoring: Send to a list
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Since the amount of code we have developed is not that much, you can still go through it and change it in all the needed places. But imagine someone else has developed code that depends on what you have done. If you change something as important as the number of arguments a function takes, you will break downstream code. In our case, we want to change the ``send_all`` function in order to accept as an argument the name of a list. However, we don't want to break the code that already uses ``send_all`` with just two arguments (subject and template).
+Since the amount of code we have developed is not that much, you can still go through it and change it in all the needed places. But imagine someone else has developed code that depends on what you have done. If you change something as important as the number of arguments a function takes, you will break the downstream code. In our case, we want to change the ``send_all`` function in order to accept the name of a list as an argument. However, we don't want to break the code that already uses ``send_all`` with just two arguments (subject and template).
 
 If you want to add a new argument to a function while making it optional, there are two ways. One is to use the ``*args`` syntax, the other is to use a default value. The latter is slightly easier to understand for novice programmers. If we do the following to our function:
 
@@ -667,7 +666,7 @@ So now, if you create a list of customers named ``'Initial Customers'``, for exa
 
 Avoid repeating messages
 ------------------------
-What you have seen up to now, should open the doors to a lot of very nice creative approaches not only to CRM but to variety of tasks that you can automate with Python. The last feature that I would like to show you is how to avoid sending the same message to the same person. You can check it either when you create the message with the customer class, or before sending it. Since it is normally a good idea to catch problems as early as possible, let's improve the ``Customer`` class:
+What you have seen up to now, should open the doors to a lot of very nice creative approaches not only to CRM but to a variety of tasks that you can automate with Python. The last feature that I would like to show you is how to avoid sending the same message to the same person. You can check it either when you create the message with the customer class, or before sending it. Since it is normally a good idea to catch problems as early as possible, let's improve the ``Customer`` class:
 
 .. code-block:: python
     :hl_lines: 9
@@ -693,14 +692,14 @@ The highlighted line is the important change to the ``Customer`` class. Pay atte
 
 In order to achieve that, we can `handle the exception <{filename}12_handling_exceptions.rst>`__. But since we are using a generic exception, we will handle everything in the same way, regardless of whether it was raised because of an error in the database or because the message was repeated. The best strategy is therefore to create a custom exception:
 
-.. code-block:: python
+.. code-block:: ipython3
 
     class MessageAlreadySent(Exception):
         pass
 
 And then the ``Customer`` can use:
 
-.. code-block:: python
+.. code-block:: ipython3
 
     if message_count > 0:
         raise MessageAlreadySent('Message {} already sent to {}'.format(message_name, self.email))
@@ -725,7 +724,7 @@ Finally, we can change the ``send_all`` in order to catch this specific exceptio
             except MessageAlreadySent:
                 print('Skipping {} because message already sent'.format(customer.email))
 
-If the exception is ``MessageAlreadySent`` we will deal with it, and will skip the user. Bear in mind that since the exception appears with the ``customer.create_msg`` line, the rest of the block is not executed, the message is not created, nor added to the database. This guarantees that if the exception is of a different kind, for example the SMTP server is not working, the database is broken, etc. the exception will not be handled and the proper error will appear on the screen.
+If the exception is ``MessageAlreadySent`` we will deal with it and will skip the user. Bear in mind that since the exception appears with the ``customer.create_msg`` line, the rest of the block is not executed, the message is not created, nor added to the database. This guarantees that if the exception is of a different kind, for example, the SMTP server is not working, the database is broken, etc. the exception will not be handled and the proper error will appear on the screen.
 
 The final version of the definition of classes can be found on `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_05_clean_db_2.ipynb>`__, while the final version for the sending e-mail is `this notebook <https://github.com/PFTL/website/blob/master/example_code/27_CRM/simple_CRM_04_send_all.ipynb>`__.
 
@@ -733,6 +732,9 @@ Conclusions
 -----------
 This tutorial aims at showing you how you can quickly prototype solutions by using **Jupyter notebooks**. They are not the proper tool if you want to distribute the code as a package for others to use, but it is very quick to find problems, run just what you need, etc.
 
-Regarding the CRM itself, it is not complete yet. You can see it as a minimum-viable-product. You can send e-mails to your customers, keep track of what messages were sent when, etc. Considering the amount of work it took to set it up, you should be very satisfied.
+Regarding the CRM itself, it is not complete yet. You can see it as a minimum-viable-product. You can send e-mails to your customers, keep track of what messages were sent when etc. Considering the amount of work it took to set it up, you should be very satisfied.
 
 The main objective of this tutorial was to show you how you can combine different tools in order to build a new project. Of course, many things can be improved, made more efficient, etc. The reality is that if you need to handle communication with some hundreds of customers, you don't need much more than what we did. Perhaps you can make it more functional, prettier, etc. But that is more customization than core development.
+
+
+Header Photo by `rawpixel <https://unsplash.com/photos/7uGUFCyH3GY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
