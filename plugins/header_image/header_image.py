@@ -110,7 +110,7 @@ def process_image(generator, content, image):
 
                 # Make it darker, to display the text without problems
                 brightness = ImageEnhance.Brightness(im_copped)
-                im_dark = brightness.enhance(0.4)
+                im_dark = brightness.enhance(0.5)
                 draw = ImageDraw.Draw(im_dark)
 
                 # Using a font size equivalent to 1/5 of the height
@@ -119,7 +119,7 @@ def process_image(generator, content, image):
                 text = textwrap.fill(title, width=24)
                 text_size = draw.textsize(text)
                 logger.info('Text size: {}, image width: {}'.format(text_size, th_size[0]))
-                y_pos = int(th_size[1]*1/5)
+                y_pos = int(th_size[1]*1/10)
                 x_pos = int(th_size[0]/8)
                 draw.text((x_pos, y_pos), text, (255, 255, 255), font=font)
 
