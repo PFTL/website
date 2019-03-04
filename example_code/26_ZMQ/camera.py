@@ -11,15 +11,14 @@ class Camera:
     def initialize(self):
         self.cap = cv2.VideoCapture(self.cam_num)
 
-    def get_frame(self):
+    def get_frame(self, queue=None):
         ret, self.last_frame = self.cap.read()
         return self.last_frame
 
-    def acquire_movie(self, num_frames):
-        movie = []
-        for _ in range(num_frames):
-            movie.append(self.get_frame())
-        return movie
+    def acquire_movie(self, queue):
+        self.stop_movie = False
+        while not self.stop_movie:
+            queue.put({'topic': 'frame', 'data':self.get_frame()})
 
     def set_brightness(self, value):
         self.cap.set(cv2.CAP_PROP_BRIGHTNESS, value)
@@ -35,13 +34,19 @@ class Camera:
 
 
 if __name__ == '__main__':
+    from time import sleep, time
+    from multiprocessing import Process
+    import multiprocessing as mp
+
+    mp.set_start_method('spawn')
+
     cam = Camera(0)
     cam.initialize()
-    print(cam)
-    frame = cam.get_frame()
-    print(frame)
-    cam.set_brightness(1)
-    print(cam.get_brightness())
-    cam.set_brightness(0.5)
-    print(cam.get_brightness())
+    movie_process = Process(target=cam.acquire_movie)
+    movie_process.start()
+    t0 = time()
+    while time() - t0 < 10:
+        # print(f'Total frames: {len(cam.movie)}')
+        sleep(0.5)
+    movie_process.terminate()
     cam.close_camera()
