@@ -8,7 +8,7 @@ Using pyZMQ for inter-process communication: Part 2
 :tags: ZMQ, Socket, Communication, Parallel, Data
 :description: Introduction to using sockets for communication between different processes
 
-In this article, we are going to cover how you can leverage the possibilities of ZMQ to exchange data between different processes in Python. This is a fairly advanced tutorial, in which we are not only going to use pyZMQ, but also the multiprocessing library, HDF5, and openCV. We are going to acquire images from the webcam as fast as possible, we are going to save the data to disk during the acquisition, and we are going to perform some basic analysis.
+In this article, we are going to cover how you can leverage the possibilities of ZMQ to exchange data between different processes in Python. We have covered the `basics of pyZMQ <{filename}25_ZMQ.rst>`_ in part 1. This is a fairly advanced tutorial, in which we are not only going to use pyZMQ, but also the multiprocessing library, `HDF5 <{filename}02_HDF5_python.rst>`_, and `openCV <{filename}22_Step_by_step_qt.rst>`_. We are going to acquire images from the webcam as fast as possible, we are going to save the data to disk during the acquisition, and we are going to perform some basic analysis.
 
 The idea of this article is to put together several of the topics covered in the past. If you find that some of the contents are confusing, I strongly suggest you check the other articles to clarify the topics. We are going to develop one main Python script with some extra files that will allow us to keep everything organized. To specify file names, I will use **bold**. The code, as always, `can be found on Github <https://github.com/PFTL/website/tree/master/example_code/26_ZMQ>`_.
 
@@ -189,10 +189,9 @@ Now we know how to acquire a movie, but we still need to do something with the d
 
 Here, some decisions have to be made. One is how we plan to make the information available to the publisher. An approach that works very nicely in multi-processing applications is to have a queue object. The publisher will consume this queue and will broadcast the information. For our application, this means that the camera class will append each frame to a specific queue, and the publisher will use it. Let's start by creating a new file called **publisher.py** with the following:
 
-import zmq
-from time import sleep
-
 .. code-block:: python
+    import zmq
+    from time import sleep
 
     def publisher(queue, event, port):
         port_pub = port

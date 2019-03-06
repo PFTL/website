@@ -12,7 +12,7 @@ Working with threads and processes in Python (and in any other language) always 
 
 For example, I have recently `released PyNTA <{filename}24_Releasing_PyNTA.rst>`_, a program to acquire images from a camera with the option to analyze them in real time or to store them to the hard drive or both. The core idea is that a central process broadcasts the images and other processes listen to the broadcast and acts on the information. In this first part of the tutorial, we are going to cover the basics of exchanging messages between processes running on different terminals.
 
-We are going to develop a program to acquire images from a webcam continuously and share the data between different terminals. We are going to explore different patterns provided by the excellent pyZMQ library, focusing on practical examples and discussing the benefits and limitations of them. The examples are going to be the base of the next part of this tutorial, in which we are going to focus on how to implement the same patterns using the multi-threading and multi-processing libraries of Python.
+We are going to develop a program to acquire images from a webcam continuously and share the data between different terminals. We are going to explore different patterns provided by the excellent pyZMQ library, focusing on practical examples and discussing the benefits and limitations of them. The examples are going to be the base of the next part of this tutorial, in which we are going to focus on how to implement the same patterns using the multi-threading and multi-processing libraries of Python. On `Part 2 <{filename}26_ZMQ.rst>`_ of this tutorial we are going to develop a real-world example using the topics learned here.
 
 .. contents::
 
