@@ -1,15 +1,16 @@
 What are args and kwargs and when to use them
 =============================================
 
-:status: draft
-:date: 2019-03-12
+:date: 2019-03-10
 :author: Aquiles Carattino
-:subtitle: Manage customer relationships with Python
-:header: {attach}rawpixel-760036-unsplash.jpg
-:tags: CRM, Jupyter, Databases, Relational, SQLAlchemy, SQLite, Customers, email
-:description: Manage customer relationships with Python
+:subtitle: How to develop functions with a variable number of arguments
+:header: {attach}luca-bravo-217276-unsplash.jpg
+:tags: functions, methods, arguments, packing, unpacking, args, kwargs
+:description: How to develop functions with a variable number of arguments
 
-If you have worked with Python for long enough, probably you have encountered code that uses ``*args`` and ``*kwargs`` as arguments in functions. Even if you haven't, it is a very neat feature that allows you to achieve great flexibility while developing code. In this article we are going to discuss what and how to use flexible arguments in functions.
+If you have worked with Python for long enough, probably you have encountered code that uses ``*args`` and ``**kwargs`` as arguments in functions. Even if you haven't, it is a very neat feature that allows you to achieve great flexibility while developing code. In this article, we are going to discuss what and how to use flexible arguments in functions.
+
+.. contents::
 
 Args
 ----
@@ -46,7 +47,7 @@ It is also possible to mix explicit arguments with ``*args``, for example:
         for arg in args:
             print(arg)
 
-The main difference here, is that ``first`` and ``second`` are mandatory. This two options would work fine:
+The main difference here is that ``first`` and ``second`` are mandatory. This two options would work fine:
 
 .. code-block:: python
 
@@ -120,7 +121,7 @@ Which outputs:
     first => 1
     second => 2
 
-If you try to run the function without keywords, it will through an exception. In the same way that when ``*args``was used as argument of a function, the inputs were transformed to a tuple, ``**kwargs`` are transformed to a dictionary. Here, the important detail is the use of the ``**`` instead of the single ``*``. Of course, you can mix required and variable inputs, for example:
+If you try to run the function without keywords, it will through an exception. In the same way that when ``*args`` was used as the argument of a function, the inputs were transformed to a tuple, ``**kwargs`` are transformed to a dictionary. Here, the important detail is the use of the ``**`` instead of the single ``*``. Of course, you can mix required and variable inputs, for example:
 
 .. code-block:: python
 
@@ -139,7 +140,7 @@ Which will give you the following outputs:
     1
     Number kwargs:  2
 
-In the same way as we used ``*args`` to unpack a tuple, we can unpack a dictionary. Let's first consider a function with some required arguments:
+In the same way, as we used ``*args`` to unpack a tuple, we can unpack a dictionary. Let's first consider a function with some required arguments:
 
 .. code-block:: python
 
@@ -187,14 +188,14 @@ On the other hand, functions that accept arguments with either ``*`` or ``**`` c
 
 When not to use args and kwargs
 -------------------------------
-When you expand your programming toolbox, there is a common desire to use what you have just learnt at every possibility that you encounter. However, you have to be aware of the consequences and advantages of using ``args`` and ``kwargs`` in your code. Let's consider, for example, a function that calculates the area of a triangle. We could define it like this:
+When you expand your programming toolbox, there is a common desire to use what you have just learned at every possibility that you encounter. However, you have to be aware of the consequences and advantages of using ``args`` and ``kwargs`` in your code. Let's consider, for example, a function that calculates the area of a triangle. We could define it like this:
 
 .. code-block:: python
 
     def area(base, height):
         return base*height/2
 
-If you look at the code above, you can easily understand what is going on. If you want to use what you have just learnt, we can re-write the code to:
+If you look at the code above, you can easily understand what is going on. If you want to use what you have just learned, we can re-write the code to:
 
 .. code-block:: python
 
@@ -255,7 +256,7 @@ And now you will see that an exception will be thrown with the second line using
     def perimeter(side1, side2, side3):
         return side1+side2+side3
 
-The *args (or **kwargs) are incredibly useful to have a flexible decorator. If you go to the article linked earlier, you will see that the first couple of examples always use a fixed number of arguments, thus making the decorator applicable only to certain cases.
+The ``*args`` (or ``**kwargs``) are incredibly useful to have a flexible decorator. If you go to the article linked earlier, you will see that the first couple of examples always use a fixed number of arguments, thus making the decorator applicable only to certain cases.
 
 Inheritance
 ~~~~~~~~~~~
@@ -267,7 +268,7 @@ Another very common scenario where ``args`` and ``kwargs`` is very handy is when
         def __init__(self, *args):
             super(MainWindow, self).__init__(*args)
 
-The rest of the code will do the specific parts of your application. The snippet above shows that we don't need to look at the original code to see what arguments are passed, etc. They are simply relied to the original ``QMainWindow`` class when instantiating. Moreover, if there is code downstream that is already using ``QMainWindow``, we can use ``MainWindow`` as a drop-in replacement, without the need to explicitly change every time the class is used.
+The rest of the code will do the specific parts of your application. The snippet above shows that we don't need to look at the original code to see what arguments are passed, etc. They are simply relayed to the original ``QMainWindow`` class when instantiating. Moreover, if there is code downstream that is already using ``QMainWindow``, we can use ``MainWindow`` as a drop-in replacement, without the need to explicitly change every time the class is used.
 
 If you are familiar with frameworks such as **Django** and you are overriding a method such as ``save`` (you can see `the docs here <https://docs.djangoproject.com/en/2.1/ref/models/instances/#django.db.models.Model.save>`_), you can use the following syntax on your own model:
 
@@ -277,7 +278,7 @@ If you are familiar with frameworks such as **Django** and you are overriding a 
         # Your custom code goes here
         super().save(**kwargs)
 
-In this way, your code is future proof. Perhaps today you are not using some of the arguments that ``save`` takes, but by taking a flexible number of them, you know that if tomorrow you decide to start using some, your program will not break. Pay attention to the fact that we used only ``**kwargs``. This is a choice to force the use of keyword arguments, mainly because it is a function with a lot of arguments, each with a default value, and we may be interested in alter only one of them.
+In this way, your code is future proof. Perhaps today you are not using some of the arguments that ``save`` takes, but by taking a flexible number of them, you know that if tomorrow you decide to start using some, your program will not break. Pay attention to the fact that we used only ``**kwargs``. This is a choice to force the use of keyword arguments, mainly because it is a function with a lot of arguments, each with a default value, and we may be interested in altering only one of them.
 
 Flexibility
 ~~~~~~~~~~~
@@ -297,7 +298,10 @@ The fact that dict can take any keyword argument set is an asset. If you look at
 
 Conclusions
 -----------
-Having a variable number of arguments in functions and methods can help you develop much more flexible code. However, this normally comes at a cost in readability. Understanding where it can be useful to use ``*args`` or ``*kwargs`` in your functions requires practice and, more importantly, reading other's code. You may find great examples if you just look around the libraries you are already using and you wonder how is it possible that sometimes you use a different number of arguments.
+Having a variable number of arguments in functions and methods can help you develop a much more flexible code. However, this normally comes at a cost in readability. Understanding where it can be useful to use ``*args`` or ``*kwargs`` in your functions requires practice and, more importantly, reading other's code. You may find great examples if you just look around the libraries you are already using and you wonder how is it possible that sometimes you use a different number of arguments.
 
 The opposite path, of using the ``*`` or ``**`` syntax to pass a tuple or a dictionary as arguments to a function can greatly simplify your code. A very simple example would be what happens when you import data using ``pyyaml``, for example. You end up with a dictionary, that perhaps you would like to directly pass to a function. Unpacking arguments is very useful, especially when you are not in control of the functions that you are using.
 
+The source version of this article is available `on Github <https://github.com/PFTL/website/blob/master/content/blog/29_args_kwargs.rst>`_. The code examples are `available here <https://github.com/PFTL/website/tree/master/example_code/29_args_kwargs>`_.
+
+Header photo by `Luca Bravo <https://unsplash.com/photos/XJXWbfSo2f0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
