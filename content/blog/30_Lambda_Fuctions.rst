@@ -1,7 +1,6 @@
 Intro to Python Lambda Functions
 ================================
 
-:status: draft
 :date: 2019-03-17
 :author: Aquiles Carattino
 :subtitle: Anonymous functions are powerful, but they are hard to understand
