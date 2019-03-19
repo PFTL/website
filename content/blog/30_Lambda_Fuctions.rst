@@ -82,6 +82,8 @@ Or, using the lambda expressions:
 
 Which gives the exact same output and, again, one can argue which one is easier to read. The examples above are what you may see in other tutorials. Probably is what you will see if you go through StackOverflow. One of the possibilities is to use lambda functions in combination with Pandas.
 
+.. newsletter::
+
 Pandas and Lambda Functions
 ---------------------------
 The example data was inspired by `this <https://data36.com/pandas-tutorial-1-basics-reading-data-files-dataframes-data-selection/>`_ example and can be found `here <https://github.com/PFTL/website/blob/master/example_code/30_lambdas/example_data.csv>`__. Create a file **example_data.csv** with the following content:

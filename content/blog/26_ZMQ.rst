@@ -130,6 +130,8 @@ This also opens the door to monitor the progress, for example:
 
 So now you can see that while the movie is being acquired, you can monitor how many frames are available. This looks already very good, is you can forgive the ``append`` which is a bottleneck for this kind of applications.
 
+.. newsletter::
+
 Multi-Processing
 ^^^^^^^^^^^^^^^^
 Threads work, but what about Processes? The syntax is extremely similar: we should just replace ``Thread`` for ``Process``. However, we would face several issues if we try to do this. Because the memory is not shared between different processes, we will not be able to stop the acquisition by changing an attribute to a class. We will see later that this is not an issue because there are proper multiprocessing tools to achieve this behavior. On the other hand, we wouldn't be able to monitor the number of frames acquired because ``cam.movie`` wouldn't be accessible from the main process. But we could still find ways around this.

@@ -98,6 +98,8 @@ The action of transforming a tuple (or a list) to different inputs of a function
 
 Working with generators is a different topic, that I will cover in another tutorial, but for the time being, it is important to note that the ``*`` can have a great impact when used in combination with the arguments of functions.
 
+.. newsletter::
+
 Kwargs
 ------
 The idea of ``kwargs`` is very similar to that of ``args``, but instead of a tuple or a list, these are keyword-arguments. This means that instead of the order in which they appear, the importance is in the label that each variable has. A quick example:
