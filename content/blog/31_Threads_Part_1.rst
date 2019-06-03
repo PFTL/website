@@ -1,5 +1,5 @@
-Introduction to Threads in Python
-=================================
+Introduction to Threads in Python: Part 1
+==========================================
 
 :status: draft
 :date: 2019-03-17
@@ -315,7 +315,126 @@ Another object that may be very helpful in this scenario is the ``RLock``, or re
 
 I've removed the repeated code for brevity. If you try again, you will see that the program runs as expected. Reentrant locks are thread-aware, this means that they block the execution only if you try to acquire them from a different thread, not from the same one. Since we acquired the lock on the main thread, when we run the ``increase_by_one``, it will not be blocked on the lock line.
 
-Reentrant locks are a great tool when you may have functions that are executed from different threads and you know it is safe to run them within the same lock. You have to be very careful with the design of your program in order to create code with an expected behavior. Sometimes RLocks can be changed to Locks if the code is designed in a different way (or vice versa), and you will have to decide what is healthier for the long term.
+Re-entrant locks are a great tool when you may have functions that are executed from different threads and you know it is safe to run them within the same lock. You have to be very careful with the design of your program in order to create code with an expected behavior. Sometimes RLocks can be changed to Locks if the code is designed in a different way (or vice versa), and you will have to decide what is healthier for the long term.
 
 Timeouts
 --------
+A very common scenario when working with threads is that something happens in an un-expected manner, either it happens before than expected, or an exception is raised, or there is simply a bug in your code. In any case, it is very likely that you will end up with threads which are blocked from running. And thus, some resources may not be released in a timely fashion.
+
+To avoid these dead ends, we can implement timeouts for most blocking operations. Let's see how to use a timeout for a ``Lock``:
+
+.. code-block:: python
+
+    def increase_by_one(array):
+        l = lock.acquire(timeout=1)
+        print('Lock: ', l)
+        for i in range(len(array)):
+            array[i] += 1
+
+    data = np.ones((100000,1))
+
+    t = Thread(target=increase_by_one, args=(data,))
+    lock.acquire()
+    t.start()
+    print('Before Sleeping')
+    sleep(5)
+    print('After sleeping')
+    t.join()
+    print(data[0])
+    print(np.mean(data))
+
+The code above is very similar to what we have been doing in the previous examples. However, pay attention to the fact that we eliminated the context manager from the ``increase_by_one`` function, in order to make it explicit. We've also added two print statements to show at which stage the program is being delayed. If you run the code above, you should see the following output:
+
+.. code-block:: bash
+
+    Before Sleeping
+    Lock:  False
+    After sleeping
+    [2.]
+    2.0
+
+Now you see, that even if the lock is acquired by the main thread (and never released), the thread which holds the ``increase_by_one`` function is executed correctly. You can alter the code to see what are the different possibilities. It is important to note that the value for ``l`` within the function is ``False``. This allows you to monitor whether the lock has timed out or not and act accordingly.
+
+Timeouts also work for ``join``. You have to be aware, though, that when timeouts happen, you may be in a situation that you were not intending. For example, if you are waiting for a lock and it times out, it means that the intended state may not be met. In the examples above, it would mean that we may try to increase and divide at the same time, without being able to guarantee what happens first.
+
+Events
+------
+Together with ``Locks``, ``Events`` can be used to synchronize the behavior of threads. Locks are useful because they can be acquired only once at a time. However, this may not be what you need. Events, as the name suggest, allow you to signal a specific condition which may be used by several threads which were waiting for that event. Let's see a very simple example, in which we run two threads to increase by one a value, but we are waiting for the array to be populated before.
+
+.. code-block:: python
+
+    from threading import Thread, Event
+    import numpy as np
+
+    evnt = Event()
+
+    def increase_by_one(array):
+        print('Waiting for event')
+        l = evnt.wait()
+        print('Increasing by one')
+        for i in range(len(array)):
+            array[i] += 1
+
+    data = np.zeros((100000,1))
+
+    t = Thread(target=increase_by_one, args=(data,))
+    t2 = Thread(target=increase_by_one, args=(data,))
+    t.start()
+    t2.start()
+    for i in range(len(data)):
+        data[i] += 1
+    print('Data Ready. Setting event')
+    evnt.set()
+    t.join()
+    t2.join()
+    print(data[0])
+    print(np.mean(data))
+
+What you see above, is that both threads are ready to run, but they will wait until the event is set. By the way, the ``wait`` command also accepts a timeout argument. Then we prepare our data, by setting each element to one. Once we are ready, we set the event which allows the threads to stop waiting and start working.
+
+A very common scenario for this patter would be if you are waiting for a connection to become available. Imagine you are communicating with a database, you would like to run the threads once the communication is established and not before. Resources which may take longer or shorter to become available are clear indicators for using an ``Event`` object.
+
+Stopping Threads with Events
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+So far, we have always let the program run until its completion, including the threads. However, a very common scenario is to have a thread which will run forever, processing any data that comes its way. For example, you may have a thread which continuously analysis the content of tweets. At some point, you may want to stop the thread without creating keyboard interrupt. Events are ideal tools for this. Let's see it with an example:
+
+.. code-block:: python
+
+    from threading import Thread, Event
+    from time import sleep
+
+    import numpy as np
+
+    event = Event()
+
+    def increase_by_one(array):
+        print('Starting to increase by one')
+        while True:
+            if event.is_set():
+                break
+            for i in range(len(array)):
+                array[i] += 1
+            sleep(0.1)
+        print('Finishing')
+
+    data = np.ones((10000, 1))
+    t = Thread(target=increase_by_one, args=(data,))
+    t.start()
+    print('Going to sleep')
+    sleep(1)
+    print('Finished sleeping')
+    event.set()
+    t.join()
+    print(data[0])
+
+In the example above, based on what we have been always doing in this tutorial, you see that there is a check within the loop. If the event is set, then the loop will end. While the event is not set, the loop will keep running forever. If we run the code, you will see that the thread starts increasing by one, we wait for one second and we set the event to break the loop.
+
+Since it takes at least 0.1 seconds to run each loop (there is a sleep), and we wait 1 second to set the event, you can see that the final value in the array is 10. You can experiment with different options, for example what happens if you remove the sleep in the function, do you get much higher values? That gives you an idea of how fast your code is running.
+
+Of course you are not limited to stopping only one thread with an event. You can use the same event in several threads. You are also not constrained to setting the event from the main thread. You can signal events from threads, etc. We are going to see this in the following article, where we will explore applications of threads.
+
+Conclusions
+-----------
+In this article we have seen the basics of working with threads. We have seen how you can start multiple threads and how to synchronize them. You have to remember that threads are not running simultaneously, and therefore you can't run your code faster, but it gives you a lot of flexibility when there are tasks that are slow and not computationally expensive.
+
+The examples that we have seen in this tutorial are almost trivial and most are based on performing highly inefficient tasks, such as increasing the values in an array one by one. We have already used threads while `building a User Interface <{filename}22_Step_by_step_qt.rst>`_, but without entering much into its details. In the next article we are going to see how to share data between threads.

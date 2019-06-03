@@ -9,6 +9,7 @@ def increase_by_one(array):
         for i in range(len(array)):
             array[i] += 1
 
+
 def divide(array):
     with lock:
         for i in range(len(array)):
