@@ -433,6 +433,8 @@ Since it takes at least 0.1 seconds to run each loop (there is a sleep), and we 
 
 Of course you are not limited to stopping only one thread with an event. You can use the same event in several threads. You are also not constrained to setting the event from the main thread. You can signal events from threads, etc. We are going to see this in the following article, where we will explore applications of threads.
 
+If you try to stop a threaded application by pressing Ctrl+C (or Ctrl+Break if you are on Windows), you will notice that the thread which is stopped is normally the main thread, but the other threads keep running. When you start having several threads running at the same time, it is important to start including into your design how you will handle the finalization of your program, both intentionally and non intentionally.
+
 Conclusions
 -----------
 In this article we have seen the basics of working with threads. We have seen how you can start multiple threads and how to synchronize them. You have to remember that threads are not running simultaneously, and therefore you can't run your code faster, but it gives you a lot of flexibility when there are tasks that are slow and not computationally expensive.
