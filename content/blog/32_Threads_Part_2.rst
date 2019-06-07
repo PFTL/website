@@ -26,7 +26,6 @@ The first and most naive approach is to use the same variables in different thre
 
     event = Event()
 
-
     def modify_variable(var):
         while True:
             for i in range(len(var)):
@@ -52,4 +51,4 @@ The first and most naive approach is to use the same variables in different thre
 
 The example above is almost trivial, but it has a very important feature. We start a new thread by passing an argument, ``my_var``, which is a list of numbers. The thread will increase the values of the numbers by one, with a certain delay. In this example we use events in order to graciously finish the thread, if you are not familiar with them, check the `previous tutorial <{filename}31_Threads_Part_1.rst>`__.
 
-The important piece of code in this example is the ``print(my_var)`` line. That print statement lives in the main thread, however, it has access to the information being generated within a thread. 
+The important piece of code in this example is the ``print(my_var)`` line. That print statement lives in the main thread, however, it has access to the information being generated within a child thread.
