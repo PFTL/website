@@ -1,15 +1,16 @@
 Duck Typing, or how to check variable types
 ===========================================
 
-:status: draft
-:date: 2019-03-17
+:date: 2019-06-11
 :author: Aquiles Carattino
 :subtitle: What duck typing means how can it affect your program architecture
-:header: {attach}ivana-cajina-324103-unsplash.jpg
+:header: {attach}joshua-coleman-655076-unsplash.jpg
 :tags: functions, methods, arguments, packing, unpacking, args, kwargs
 :description: What duck typing means how can it affect your program architecture
 
 The name duck typing has its root in `the expression <https://en.wikipedia.org/wiki/Duck_typing>`__ *If it walks like a duck and it quacks like a duck, then it must be a duck*. Which means that if you want to know whether you are dealing with a duck or not, you only care about how it looks like and how it behaves rather than actually checking to what species the animal belongs.
+
+The code that we develop in this article is available `on Github <https://github.com/PFTL/website/tree/master/example_code/33_duck_typing>`__.
 
 The analogy translates *almost* literally to Python. Python is a dynamically typed language. This means that you don't need to specify what type of variables you are dealing with. The following lines are perfectly valid Python code:
 
@@ -210,3 +211,7 @@ Conclusions
 If you look for the definition of duck typing, you will typically find that in Python, it is common not to verify to which data type a variable belongs. If those variables behave as expected, then you shouldn't worry. In the beginning, we saw that this is very handy because it allowed us to use a function on variables which we didn't originally intend, such as numpy array or custom classes.
 
 In the second part, we saw that you can plan your code the other way around. If you assume that duck typing is a common practice (i.e. that the libraries you use don't verify the type of variables, but only their functioning), you can design your own classes in such a way that they behave as a specific data type. Our example was a class that mimics how dictionaries work, and which we used as an argument in a different object, which had no idea of our custom data type.
+
+Example code for this article can be found `on Github <https://github.com/PFTL/website/tree/master/example_code/33_duck_typing>`__. You can also find the `source code for this article <https://github.com/PFTL/website/blob/master/content/blog/33_duck_typing.rst>`_.
+
+Header image by `JOSHUA COLEMAN <https://unsplash.com/@joshstyle?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
