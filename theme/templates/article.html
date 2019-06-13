@@ -28,7 +28,8 @@
     <meta property="og:site_name" content="{{ SITENAME }}"/>
 
     <link rel="canonical" href="{{ SITEURL }}/{{ article.url }}"/>
-{% endif %}{% endblock %}
+{% endif %}
+{% endblock %}
 
 {% block content %}
     <div class="container my-5">
@@ -60,50 +61,10 @@
             <div class="col-md-6">{% include 'newsletter_card.html' %}</div>
             <div class="col-md-6">{% include 'support_us_card.html' %}</div>
         </div>
-{#        <div class="row">#}
-{#            {% include 'comments.html' %}#}
-{#        </div>#}
     </div>
-{#    {% include 'newsletter_popup.html' %}#}
+    {% include 'newsletter_funnel.html' %}
 {% endblock %}
 
 {% block footer_scripts %}
-{#    <script src="{{ SITEURL }}/theme/js/comment_submit.js"></script>#}
     <script src="{{ SITEURL }}/theme/js/newsletter_subscribe.js"></script>
-{#    <script src="{{ SITEURL }}/theme/js/newsletter_popup.js"></script>#}
-{#    <script>#}
-{#    function subscriptionPopup(){#}
-{#    // get the mPopup#}
-{#    var mpopup = $('#mpopupBox');#}
-{##}
-{#    // open the mPopup#}
-{#    mpopup.show();#}
-{##}
-{#    // close the mPopup once close element is clicked#}
-{#    $(".close").on('click',function(){#}
-{#        mpopup.hide();#}
-{#    });#}
-{##}
-{#    // close the mPopup when user clicks outside of the box#}
-{#    $(window).on('click', function(e) {#}
-{#        if(e.target == mpopup[0]){#}
-{#            mpopup.hide();#}
-{#        }#}
-{#    });#}
-{#        $(document).ready(function () {#}
-{#            $.ajax({#}
-{#                type: 'GET',#}
-{#                url: '/comments/{{ article.url }}/comments.html',#}
-{#                success: function (data) {#}
-{#                    $('#current-comments').html(data);#}
-{#                },#}
-{#                error: function () {#}
-{#                    $('#current-comments').html('<h3 class="mb-3">No comments yet, be the first!</h3>');#}
-{#                }#}
-{#            });#}
-{#            setTimeout( function() {#}
-{#                subscriptionPopup();#}
-{#            },30000);#}
-{#        });#}
-{#    </script>#}
 {% endblock %}

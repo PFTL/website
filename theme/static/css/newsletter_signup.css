@@ -1,0 +1,215 @@
+#funnel-tools-capture {
+  background-color: #f59a0e;
+  font-size: 16px;
+  color: white;
+  padding: 10px 20px;
+  width: 350px;
+  right: 40px;
+  position: fixed;
+  z-index: 1001;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  -webkit-border-top-left-radius: 10px;
+  -webkit-border-top-right-radius: 10px;
+  -moz-border-top-left-radius: 10px;
+  -moz-border-top-right-radius: 10px;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-box-sizing: border-box;
+}
+#funnel-tools-capture.open {
+  background-color: #fff;
+  color: #4F5362;
+  -webkit-box-shadow: 0px 10px 28px rgba(0,0,0,0.36);
+  box-shadow: 0px 10px 28px rgba(0,0,0,0.36);
+}
+
+#funnel-tools-capture .close,
+#funnel-tools-capture .open,
+#funnel-tools-capture .title,
+#funnel-tools-capture *[type="submit"] {
+  cursor: pointer;
+}
+
+#funnel-tools-capture .close,
+#funnel-tools-capture .open {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+#funnel-tools-capture .open {
+  display: block;
+}
+#funnel-tools-capture.open .open {
+  display: none;
+}
+#funnel-tools-capture.open .close {
+  display: block;
+}
+#funnel-tools-capture .title {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+#funnel-tools-capture.open .title {
+  color: #663399;
+}
+#funnel-tools-capture .description {
+  /*font-size: 14px;*/
+}
+#funnel-tools-capture p {
+  margin-bottom: 10px;
+}
+
+#funnel-tools-capture input[type="email"],
+#funnel-tools-capture *[type="submit"] {
+  width: 100%;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#funnel-tools-capture input[type="email"] {
+  border: 1px solid #A8ACB9;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  padding: 10px;
+  font-size: 14px;
+}
+#funnel-tools-capture *[type="submit"] {
+  margin: 10px 0;
+  padding: 10px;
+  border: 0;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 16px;
+  -webkit-appearance: none;
+  vertical-align: bottom;
+  background: #663399;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+#funnel-tools-capture *[type="submit"]:hover {
+  background: #613091;
+}
+#funnel-tools-capture *[type="submit"]:disabled,
+#funnel-tools-capture *[type="submit"]:hover:disabled {
+  background: #aaa;
+}
+#funnel-tools-capture .funnel-tools-footer {
+  text-align: center;
+  font-size: 0.8rem;
+}
+@-webkit-keyframes bounceInUp {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes bounceInUp {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 3000px, 0);
+    transform: translate3d(0, 3000px, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(0, -20px, 0);
+    transform: translate3d(0, -20px, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 10px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -5px, 0);
+  }
+
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.bounceInUp {
+  -webkit-animation-name: bounceInUp;
+  animation-name: bounceInUp;
+}
+
+#funnel-tools-capture span.error {
+  color: red;
+}
+#funnel-tools-capture input.error {
+  border-color: red;
+}
+
+#funnel-tools-capture .python-morsels-logo {
+  width: 66px;
+  height: 91.4px;
+  float: left;
+  margin: 0 1em 1em 0;
+}
+
+@media screen and (max-width: 425px){
+  #funnel-tools-capture {
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    animation-duration: 0s;
+    -webkit-animation-duration: 0s;
+  }
+  #funnel-tools-capture .title {
+    text-align: center;
+    font-size: 0.8em;
+  }
+  #funnel-tools-capture .open {
+    font-size: 0.8em;
+    top: 5px;
+  }
+}
