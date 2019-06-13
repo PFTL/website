@@ -97,13 +97,8 @@ $(document).ready(function () {
                 .prop('disabled', false)
                 .text($submit.data('submitText'));
         }).done(function (data, textStatus, xhr) {
-            if (xhr.status === 201) {
                 $title.html('Thanks for signing up!');
                 $description.html('Please check your email to confirm your subscription.');
-            } else {
-                alert("An unexpected error occurred while submitting this form, we are sorry!");
-                console.error(data.reason);
-            }
         }).fail(function (xhr, textStatus, error) {
             if (xhr.status === 401) {
                 $description.html("You've already signed up with that email.")
