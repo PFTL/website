@@ -82,7 +82,7 @@ $(document).ready(function () {
         var $submit = $form.find('*[type=submit]');
         var $title = $("#funnel-tools-capture .title");
         var $description = $("#funnel-tools-capture .description");
-        var $email = $("#funnel-tools-capture input[type=email]");
+        var email = {'email': $("#funnel-tools-capture input[type=email]").val()};
         $submit
             .prop('disabled', true)
             .data('submitText', $submit.text())

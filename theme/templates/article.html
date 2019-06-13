@@ -40,9 +40,9 @@
                     <h3>{{ article.subtitle }}</h3>
                 {% endif %}
                 <p style="font-size: small"><span class="ml-1">by {{ article.author }}</span><span class="ml-1"><img
-                        src="{{ SITEURL }}/theme/img/calendar.png"
+                        src="{{ STATIC }}/theme/img/calendar.png"
                         style="height: auto"> {{ article.date.strftime('%B %d, %Y') }}</span><span class="ml-1"><img
-                        src="{{ SITEURL }}/theme/img/tags.png">
+                        src="{{ STATIC }}/theme/img/tags.png">
                     {% for tag in article.tags %}<span class="article-tag">{{ tag }}</span>{% endfor %}</span></p>
 
             </div>
@@ -66,5 +66,5 @@
 {% endblock %}
 
 {% block footer_scripts %}
-    <script src="{{ SITEURL }}/theme/js/newsletter_subscribe.js"></script>
+    <script src="{{ STATIC }}/theme/js/newsletter_subscribe.js"></script>
 {% endblock %}
