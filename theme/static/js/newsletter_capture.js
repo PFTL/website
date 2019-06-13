@@ -107,7 +107,8 @@ $(document).ready(function () {
                 $email.after('<span class="error">Invalid Email</span>');
                 $email.addClass('error');
             } else {
-                alert("An unexpected error occurred while submitting this form, we are sorry!");
+                $title.html('Thanks for signing up!');
+                $description.html('Please check your email to confirm your subscription.');
             }
         });
         event.preventDefault();
