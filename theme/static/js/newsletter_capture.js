@@ -91,7 +91,7 @@ $(document).ready(function () {
         $.ajax({
             url: $form.attr('action'),
             method: 'POST',
-            data: $form.serialize()
+            data: JSON.stringify(email),
         }).always(function () {
             $submit
                 .prop('disabled', false)
