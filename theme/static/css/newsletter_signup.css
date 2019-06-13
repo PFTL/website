@@ -1,5 +1,5 @@
 #funnel-tools-capture {
-  background-color: #f59a0e;
+  background-color: #E74C3C;
   font-size: 16px;
   color: white;
   padding: 10px 20px;
@@ -54,7 +54,7 @@
   font-weight: bold;
 }
 #funnel-tools-capture.open .title {
-  color: #663399;
+  color: #269934;
 }
 #funnel-tools-capture .description {
   /*font-size: 14px;*/
@@ -89,12 +89,12 @@
   font-size: 16px;
   -webkit-appearance: none;
   vertical-align: bottom;
-  background: #663399;
+  background: #269934;
   color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 #funnel-tools-capture *[type="submit"]:hover {
-  background: #613091;
+  background: #269934;
 }
 #funnel-tools-capture *[type="submit"]:disabled,
 #funnel-tools-capture *[type="submit"]:hover:disabled {
