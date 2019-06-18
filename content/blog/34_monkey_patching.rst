@@ -1,8 +1,7 @@
 Monkey Patching and its consequences
 ====================================
 
-:status: draft
-:date: 2019-06-11
+:date: 2019-06-18
 :author: Aquiles Carattino
 :subtitle: Replacing methods and attributes at runtime
 :description: Replacing methods and attributes at runtime
@@ -10,9 +9,9 @@ Monkey Patching and its consequences
 :tags: functions, methods, monkey patching, replacing, extending, mutable, immutable
 
 
-Monkey patching is a technique that allows you to alter the behavior of objects at runtime. Even though it can be a very useful feature, it can also make your code much harder to understand and debug, and therefore you have to be careful with how you implement monkey patching. In this article we are going to see some examples on how you can use monkey patching to solve quickly specific problems. We are also going to discuss the consequences of monkey patching in the context of larger projects.
+Monkey patching is a technique that allows you to alter the behavior of objects at runtime. Even though it can be a very useful feature, it can also make your code much harder to understand and debug, and therefore you have to be careful with how you implement monkey patching. In this article, we are going to see some examples of how you can use monkey patching to solve quickly specific problems. We are also going to discuss the consequences of monkey patching in the context of larger projects.
 
-Monkey patching is tightly related to the idea of `mutablity in Python <{filename}17_mutable_and_immutable.rst>`_. Custom objects are mutable, and therefore their attributes can be replaced without creating a new copy of the object. To quickly recap those ideas, we can do the following:
+Monkey patching is tightly related to the idea of `mutability in Python <{filename}17_mutable_and_immutable.rst>`_. Custom objects are mutable, and therefore their attributes can be replaced without creating a new copy of the object. To quickly recap those ideas, we can do the following:
 
 .. code-block:: python
 
@@ -35,7 +34,7 @@ And then we can use the code like this:
     print(var2.b)
     # '3'
 
-If we go line by line, you see that we create an object using ``MyClass`` and we call it ``var1``. We then copy the object to another variable, called ``var2``. We change the values stored in ``var1``, but we observe that the values stored in ``var2`` have also changed. This is simply because in Python, the variable is only a label. In the line ``var2 = var1`` we have just copied the label, but both are pointing to the same underlying object.
+If we go line by line, you see that we create an object using ``MyClass`` and we call it ``var1``. We then copy the object to another variable, called ``var2``. We change the values stored in ``var1``, but we observe that the values stored in ``var2`` have also changed. This is simply because, in Python, the variable is only a label. In the line ``var2 = var1`` we have just copied the label, but both are pointing to the same underlying object.
 
 Python also allows you to change attributes in the class itself, not in the instance of the class. We can do the following:
 
@@ -83,9 +82,9 @@ Finally, the last case I wanted to point out is what happens if you keep a refer
     print(var3)
     # 3
 
-I have skipped the code in which you change the value of the attributes. Now you see that if you actually store ``var1.a`` in the variable ``var3``, this variable is actually modified when you change the value stored directly in the class. All this behavior actually makes sense, if you think that variables only store references to objects and not the object itself, and that when you change an immutable variable, you create a new reference.
+I have skipped the code in which you change the value of the attributes. Now you see that if you actually store ``var1.a`` in the variable ``var3``, this variable is actually modified when you change the value stored directly in the class. All this behavior actually makes sense, if you think that variables only store references to objects and not the object itself and that when you change an immutable variable, you create a new reference.
 
-All the examples above refer to monkey patching in one way or another. You can see that we are changing values of a class during runtime. We have tried to highlight some of the consequences, expected or not, of changing the value of an attribute later in the execution of the program and not in the definition itself.
+All the examples above refer to monkey patching in one way or another. You can see that we are changing the values of a class during runtime. We have tried to highlight some of the consequences, expected or not, of changing the value of an attribute later in the execution of the program and not in the definition itself.
 
 The examples above can be extended if we consider that methods are attributes which behave exactly like ``a`` or ``b`` in our examples above:
 
@@ -125,7 +124,7 @@ If you use it, you will get:
     print(var1.get_value())
     # 2
 
-You see that we have replaced the ``get_value`` after the ``var1`` has been defined. If we would define a new object, it seams reasonable to expect that we would get the same output:
+You see that we have replaced the ``get_value`` after the ``var1`` has been defined. If we would define a new object, it seems reasonable to expect that we would get the same output:
 
 .. code-block:: python
 
@@ -145,7 +144,7 @@ If we would have defined the two distinct objects before changing the method, th
     print(var1.get_value())
     print(var2.get_value())
 
-The examples at the beginning of the article, when we were using an integer or a string as attributes are still valid. You can check what happens if you copy the object, if you overwrite the method after you stored it as a new variable, etc. There are no mysteries, methods are attributes such as integers or strings. The main difference is that they take inputs.
+The examples at the beginning of the article, when we were using an integer or a string as attributes are still valid. You can check what happens if you copy the object, you store it as a new variable, and then you overwrite the method. There are no mysteries, methods are attributes such as integers or strings. The main difference is that they take inputs.
 
 In the example above, we have replaced the method at the class-level. If we want to replace the method at an instance level, then the approach would be slightly different. Note that if we do it at a class-level, all the instances will get the changes, and this may not be what we want. We can do:
 
@@ -171,7 +170,7 @@ In the example above, we have replaced the method at the class-level. If we want
     print(var2.get_value())
     # 1
 
-You see in this example that we have altered the behavior of the method of ``var1`` but not of ``var2``. Note that we are importing ``types`` at the beginning of the script. The rest is the same we have already done, with one exception when we replace the ``get_value`` method. Because we are changing a method of a instance, it needs to be of the proper type. We can quickly see the following:
+You see in this example that we have altered the behavior of the method of ``var1`` but not of ``var2``. Note that we are importing ``types`` at the beginning of the script. The rest is the same we have already done, with one exception when we replace the ``get_value`` method. Because we are changing a method of an instance, it needs to be of the proper type. We can quickly see the following:
 
 .. code-block:: pycon
 
@@ -269,4 +268,4 @@ Exactly how to achieve this behavior will depend on your situation, but with the
 
 Header Photo by `Shashank Sahay <https://unsplash.com/@shashanksahay?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
 
-The code
+The code found in this article is `available on Github <https://github.com/PFTL/website/tree/master/example_code/34_monkey_patching>`_. Any comment, improvement, or suggestion can be `submitted here <https://github.com/PFTL/website/issues/new>`_
