@@ -246,7 +246,8 @@ You see that we are using the ``print_variable`` from the original module. We ar
 You see that by changing the ``print_variable`` on our main script, we have also altered what is happening on our second module. There are a lot of things you can start thinking about after seeing these patterns.
 
 When (not) to Monkey Patch
---------------------
+--------------------------
+
 Monkey patching is very powerful and it shows how flexible Python is. In the end, everything is derived from the same principles of understanding different data types and what variables mean in Python. However, it may be very hard to understand when would you use these patterns in your own programs.
 
 As a general rule, the best is not to monkey patch. If you want to alter the behavior of a program, for example, you can define child classes for the ones you want to alter. The problem with monkey-patching is that the behavior of a program becomes much harder to understand. In the example above, when you call ``module2.another_print`` you are seeing an output which is very hard to understand. If you check the module, you won't see why you would get ``3`` and not ``2``. Tracing back where the behavior was changed is very complicated. If you inspect the variables, you will see that there is nothing wrong, and ``var1`` is still ``1``.
