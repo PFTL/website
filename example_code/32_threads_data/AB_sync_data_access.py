@@ -1,13 +1,14 @@
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 from time import sleep, time
 
 event = Event()
-
+data_lock = Lock()
 
 def modify_variable(var):
     while True:
         for i in range(len(var)):
-            var[i] += 1
+            with data_lock:
+                var[i] += 1
         if event.is_set():
             break
         # sleep(.5)
@@ -17,7 +18,8 @@ def modify_variable(var):
 def modify_variable2(var):
     while True:
         for i in range(len(var)):
-            var[i] -= 1
+            with data_lock:
+                var[i] -= 1
         if event.is_set():
             break
         # sleep(.5)
@@ -26,7 +28,7 @@ def modify_variable2(var):
 
 my_var = [1, 2, 3]
 t = Thread(target=modify_variable, args=(my_var, ))
-t2 = Thread(target=modify_variable2, args=(my_var, ))
+t2 = Thread(target=modify_variable, args=(my_var, ))
 t.start()
 t2.start()
 t0 = time()
