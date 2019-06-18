@@ -5,7 +5,7 @@ Duck Typing, or how to check variable types
 :author: Aquiles Carattino
 :subtitle: What duck typing means how can it affect your program architecture
 :header: {attach}joshua-coleman-655076-unsplash.jpg
-:tags: functions, methods, arguments, packing, unpacking, args, kwargs
+:tags: functions, methods, dynamic language, typing, types
 :description: What duck typing means how can it affect your program architecture
 
 The name duck typing has its root in `the expression <https://en.wikipedia.org/wiki/Duck_typing>`__ *If it walks like a duck and it quacks like a duck, then it must be a duck*. Which means that if you want to know whether you are dealing with a duck or not, you only care about how it looks like and how it behaves rather than actually checking to what species the animal belongs.
