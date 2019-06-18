@@ -6,11 +6,19 @@ At Python For The Lab, accessible from https://www.pythonforthelab.com, one of o
 
 If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through email at aquiles@uetke.com
 
-Log Files
----------
+Data Collection
+---------------
+We value your privacy as much as our own. Therefore, **Python for the Lab** is committed at making the internet a better place. We do not store `cookies </cookie-policy>`_ on your computer, and we do not store any personally identifiable information on our logs. We use `Privalytics.io <https://www.privalytics.io>`_ to build statistics on where users come from and popular articles. In no way Privalytics (which is a tool developed by ourselves) tracks user behavior through websites nor stores cookies.
 
-Python For The Lab follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.
+The only data we collect from users is subscriptions to the newsletter or requests for free sample chapters of our books. The data includes the IP that originated the request, the e-mail and a timestamp. We comply with GDPR rules by granting every user the basic online rights: to amend, to forget, to be informed, to access, to rectify, to erasure, to restrict processing, to data portability, and to object. We believe that these are the basic rights that every person should have irrespective of their origin.
 
+Data Retention
+--------------
+E-mails collected for the purpose of signing up to the newsletter or for requesting free sample chapters are stored for up to a year on our database. When that period elapses, an e-mail will remind each user of their subscription in order to make an informed decision of whether to remain in our database or not.
+
+Data Sharing
+------------
+We won't share any personal data with third parties nor visitors of Python for the Lab, unless you give us explicit permission to do so. For example, by leaving a testimonial on one of our workshops or books. We do not share any information with third parties for processing.
 
 Children's Information
 ----------------------
@@ -26,5 +34,3 @@ This privacy policy applies only to our online activities and is valid for visit
 Consent
 -------
 By using our website, you hereby consent to our Privacy Policy and agree to its Terms and Conditions.
-
-`This privacy policy was created at World's Free Privacy Policy Generator <https://privacypolicygenerator.info/#wizard>`_.

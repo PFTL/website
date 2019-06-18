@@ -8,4 +8,3 @@ Cookie Policy for Python For The Lab
 However if you are still looking for more information then you can contact us through one of our preferred contact methods:
 
   - Email: aquiles@uetke.com
-  - By visiting this link: https://www.pythonforthelab.com/contact
