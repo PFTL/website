@@ -8,33 +8,24 @@ queue2 = Queue()
 
 
 def modify_variable(queue_in: Queue, queue_out: Queue):
+    internal_t = 0
     while True:
-        if not queue_in.empty():
-            var = queue_in.get()
-            var += 1
-            queue_out.put(var)
+        t0 = time()
+        var = queue_in.get()
+        for i in range(len(var)):
+            var[i] += 1
+        queue_out.put(var)
+        internal_t += time()-t0
         if event.is_set():
             break
-    print('Stop printing')
+    sleep(0.1)
+    print(f'Running time: {internal_t} seconds\n')
 
 
-def modify_variable2(queue: Queue):
-    while True:
-        if not queue.empty():
-            var = queue.get()
-            var += 1
-            queue.put(var)
-        if event.is_set():
-            break
-    print('Stop printing')
-
-
-my_var = 1
+my_var = [1, 2, 3]
 queue1.put(my_var)
-queue3 = Queue()
-queue3.put(my_var)
-t = Thread(target=modify_variable2, args=(queue3,))
-t2 = Thread(target=modify_variable2, args=(queue3,))
+t = Thread(target=modify_variable, args=(queue1, queue2))
+t2 = Thread(target=modify_variable, args=(queue2, queue1))
 t.start()
 t2.start()
 t0 = time()
@@ -43,7 +34,6 @@ while time()-t0 < 5:
         sleep(1)
     except KeyboardInterrupt:
         break
-
 event.set()
 t.join()
 t2.join()
@@ -51,5 +41,3 @@ if not queue1.empty():
     print(queue1.get())
 if not queue2.empty():
     print(queue2.get())
-if not queue3.empty():
-    print(queue3.get())

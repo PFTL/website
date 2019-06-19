@@ -25,8 +25,8 @@ def modify_variable(queue_in: Queue, queue_out: Queue):
 
 my_var = [1, 2, 3]
 queue1.put(my_var)
-t = Thread(target=modify_variable, args=(queue1, queue1))
-t2 = Thread(target=modify_variable, args=(queue1, queue1))
+t = Thread(target=modify_variable, args=(queue1, queue2))
+t2 = Thread(target=modify_variable, args=(queue2, queue1))
 t.start()
 t2.start()
 t0 = time()
