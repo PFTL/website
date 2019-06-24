@@ -27,10 +27,10 @@ def save_data():
             break
         with file_lock:
             i = 0
-            while os.path.exists(f'website_data_{i}.dat'):
+            while os.path.exists(f'website_data_{i:03d}.dat'):
                 i += 1
-            open(f'website_data_{i}.dat', 'w').close()
-        with open(f'website_data_{i}.dat', 'wb') as f:
+            open(f'website_data_{i:03d}.dat', 'w').close()
+        with open(f'website_data_{i:03d}.dat', 'wb') as f:
             f.write(var)
 
 
