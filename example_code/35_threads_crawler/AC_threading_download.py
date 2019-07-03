@@ -33,7 +33,7 @@ def download_page(queue_downloads, queue_pages, event):
     print(f'Downloaded {i} pages in total')
 
 
-max_depth = 5
+max_depth = 2
 queue_down = Queue()
 queue_pages = Queue()
 event = Event()
@@ -42,7 +42,7 @@ initial_page = '/wiki/Shergar'
 queue_down.put(initial_page)
 pages = {initial_page:
              {'depth': depth,
-              'pages': None}
+              'links': None}
               }
 
 threads = []
@@ -55,9 +55,34 @@ while True:
         new_pages = queue_pages.get(timeout=0.5)
     except Empty:
         continue
+    except KeyboardInterrupt:
+        event.set()
+        break
 
-    pages.update(new_pages)
-    _, links = new_pages.items()[0]
-    for link in links:
-        if link not in pages:
-            queue_down.put(link)
+    page, links = list(new_pages.items())[0]
+    print(f'Got {len(links)} links for {page}')
+    pages[page]['links'] = links
+    if pages[page]['depth'] < max_depth:
+        new_depth = pages[page]['depth'] + 1
+        for link in links:
+            if link not in pages:
+                queue_down.put(link)
+                pages[link] = {'depth': new_depth,
+                               'links': None}
+    else:
+        print(f'Max depth reached for {page}')
+        break
+
+for i in range(10):
+    queue_down.put(None)
+
+for t in threads:
+    while t.is_alive():
+        sleep(0.1)
+
+print('All threads done')
+print('Links:')
+i = 0
+for k in pages:
+    print(f'i: {k}')
+    i += 1
