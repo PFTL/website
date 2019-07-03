@@ -40,13 +40,13 @@ First, we open the page we want, in this case a random Wikipedia article. We rea
 
 Let's use Firefox to explore the structure of a Wikipedia article. If you wonder why I point you to Firefox and not Chrome, you can check `this article <https://www.fastcompany.com/90174010/bye-chrome-why-im-switching-to-firefox-and-you-should-too>`__, or you can do a quick search online. If you open `the article <https://en.wikipedia.org/wiki/Shergar>`__, you can explore its structure by pressing **Ctrl**+**Shift**+**I**. A toolbar like the one shown below will appear:
 
-.. image:: /images/22_images/01_firefox.png
+.. image:: /images/35_images/01_firefox.png
     :alt: Firefox with developers tools
     :class: center-img
 
 If you go with the mouse through the elements, you will see that they light up on the main window. If you expand the ``div`` element with id ``content``, you can go through its children. You will see that there is one specifically which selects the entire article, but not the elements around:
 
-.. image:: /images/22_images/02_firefox.png
+.. image:: /images/35_images/02_firefox.png
     :alt: Selecting the appropriate div
     :class: center-img
 
@@ -139,6 +139,4 @@ The first thing to do when dealing with threads is to decide what we want to par
                         links.append(link)
             queue_pages.put({url: links})
 
-We use a queue to get the data into the thread. We use a timeout of half a second while waiting for data from the queue. This will allow the program to verify whether the event was set and stop the loop. If after the timeout there is no new data, we just skip the rest and wait for new data. The rest is quite similar to the function of the previous section. The only different part is at the end, in which instead of returning the list of pages, we add them to an output queue. This will allow us to build the tree of links, and limit the depth of the crawling from the main thread.
-
-Now we need to define the loop that will do something with the generated data.
+We use a queue to get the data into the thread. We use a timeout of half a second while waiting for data from the queue. This will allow the program to verify whether the event was set and stop the loop. If after the timeout there is no new data, we just skip the rest and wait for new data. The rest is quite similar to the function of the previous section. The only different part is at the end, in which instead of returning the list of pages, we add them to an output queue. This will allow us to build the tree of links, and limit the depth of the crawling from the main thread. 
