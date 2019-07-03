@@ -1,5 +1,5 @@
 Introduction to Threads in Python: Part 3
-==========================================
+=========================================
 
 :status: draft
 :date: 2019-03-17
@@ -95,7 +95,7 @@ You see that we filter links which do not contain those four special words, but 
 
 There are few things to note. The first is that we assume Wikipedia urls. This means that we add the base url ``https://en.wikipedia.org`` to every URL provided. There are, of course, more flexible ways to work with crawlers. The first part of the crawler is the same we have seen earlier. The main difference is that when we go through the links, we append each link to a list called ``pages``. And then we check whether we are below or above our max depth. If we are below, then we call the same function again to check for the links, increasing the level by one. The result of the function is then concatenated to the pages list.
 
-If you run the code above, you will download a total of ``199948`` pages from Wikipedia. Bear in mind that this number is gigantic for most websites. For you to have an idea, this website is receiving around 1000 visits per day. Therefore, you have to be responsible when creating such strain on somebody's webserver. One way to be transparent about what we are doing, is to specify a header for our requests.
+If you run the code above, you will download a total of ``199948`` pages from Wikipedia. Bear in mind that this number is gigantic for most websites. For you to have an idea, Python for the Lab website is receiving around 1000 visits per day. Therefore, you have to be responsible when creating such a strain on somebody's web server. One way to be transparent about what we are doing, is to specify a header for our requests.
 
 For example, we can change one line in the above code in order to give the server the chance to filter our requests, either for the statistics or to balance the load:
 
@@ -106,4 +106,39 @@ For example, we can change one line in the above code in order to give the serve
     req = request.Request('https://en.wikipedia.org'+url, headers=headers)
     response = request.urlopen(req)
 
-In this way, every time we download a page, we are going to identify the request as the PFTLBot version 1.0, and the website owner is free to decide what to do with our request. Ideally, the User Agent should also allow the website owner to see who we are. PFTLBot will not allow them to find us back, but I hope you get the point.
+In this way, every time we download a page, we are going to identify the request as the PFTLBot version 1.0, and the website owner is free to decide what to do with our request. Ideally, the User Agent should also allow the website owner to see who we are. The string PFTLBot will not allow the operator of the website to find us back, and therefore something more descriptive can be a good idea. I hope you get the point.
+
+Threading the Requests
+----------------------
+In the approach above you can see plenty of problems. The most obvious one is that we may be downloading the same page more than once. For example, if A links to B, and B links back to A, we may end up downloading 2 (or more) times both pages. Improving the code in the previous section is therefore left as an exercise to the reader.
+
+We are going to focus now on how to use threads to perform the same task. Our core strategy would be to have a main thread that synchronizes the behavior of the children threads. From the main thread we will keep track of the pages visited. We are going to use all the strategies learned in the previous two articles, even if perhaps not completely needed.
+
+The first thing to do when dealing with threads is to decide what we want to parallelize. We would like to download pages from different threads, but just that. The handling of the information would happen on the main thread. Moreover, threads should pull data from a Queue. Whenever there is a new page available, the thread will download it. Let's quickly adapt the code from the previous section:
+
+.. code-block:: python
+
+    def download_page(queue_downloads, queue_pages, event):
+        while not event.is_set():
+            try:
+                url = queue_downloads.get(timeout=0.5)
+            except Empty:
+                continue
+            print(f'Getting pages for {url}')
+            headers = {'User-Agent': 'Mozilla/5.0 (compatible; PFTLBot/1.0)'}
+            req = request.Request('https://en.wikipedia.org'+url, headers=headers)
+            response = request.urlopen(req)
+            data = response.read().decode('utf-8')
+            soup = BeautifulSoup(data, 'html.parser')
+            body = soup.find('div', id='bodyContent')
+            links = []
+            for alink in body.find_all('a'):
+                link = alink.get('href')
+                if link and link.startswith('/wiki'):
+                    if not any(x in link for x in ('Category:', 'File:', 'Help:', 'Special:')):
+                        links.append(link)
+            queue_pages.put({url: links})
+
+We use a queue to get the data into the thread. We use a timeout of half a second while waiting for data from the queue. This will allow the program to verify whether the event was set and stop the loop. If after the timeout there is no new data, we just skip the rest and wait for new data. The rest is quite similar to the function of the previous section. The only different part is at the end, in which instead of returning the list of pages, we add them to an output queue. This will allow us to build the tree of links, and limit the depth of the crawling from the main thread.
+
+Now we need to define the loop that will do something with the generated data.
