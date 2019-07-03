@@ -1,3 +1,8 @@
 .idea/
 __pycache__/
 output
+*.npy
+*.hdf5
+*.db
+config.yml
+.ipynb_checkpoints/
