@@ -54,7 +54,10 @@ while True:
     try:
         new_pages = queue_pages.get(timeout=0.5)
     except Empty:
-        continue
+        if queue_down.empty():
+            break
+        else:
+            continue
     except KeyboardInterrupt:
         event.set()
         break
