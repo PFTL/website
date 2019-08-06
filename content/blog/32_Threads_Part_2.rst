@@ -1,17 +1,16 @@
-Introduction to Threads in Python: Part 2
-==========================================
+Handling and Sharing Data Between Threads
+=========================================
 
-:status: draft
-:date: 2019-03-17
+:date: 2019-08-06
 :author: Aquiles Carattino
 :subtitle: Learn how to share data between threads
-:header: {attach}ivana-cajina-324103-unsplash.jpg
-:tags: functions, methods, arguments, packing, unpacking, args, kwargs
+:header: {attach}amirali-mirhashemian-kiH-RBm08NQ-unsplash.jpg
+:tags: threading, data, queue, sharing, threads, async, multithreading
 :description: Learn how to share data between threads
 
-When working with threads in Python, you will find very useful to be able to share data between different tasks. One of the advantages of threads in Python is that they share the same memory space, and thus exchanging information is relatively easy. However, there are some structures that can help you achieve more specific goals.
+When working with threads in Python, you will find very useful to be able to share data between different tasks. One of the advantages of threads in Python is that they share the same memory space, and thus exchanging information is relatively easy. However, some structures can help you achieve more specific goals.
 
-In the previous article, we have covered `how to start and synchronize threads <{filename}31_Threads_Part_1.rst>`_ and now it is time to expand the toolbox in order to handle the exchange of information between them.
+In the previous article, we have covered `how to start and synchronize threads <{filename}31_Threads_Part_1.rst>`_ and now it is time to expand the toolbox to handle the exchange of information between them.
 
 .. contents::
 
@@ -49,7 +48,7 @@ The first and most naive approach is to use the same variables in different thre
     t.join()
     print(my_var)
 
-The example above is almost trivial, but it has a very important feature. We start a new thread by passing an argument, ``my_var``, which is a list of numbers. The thread will increase the values of the numbers by one, with a certain delay. In this example we use events in order to graciously finish the thread, if you are not familiar with them, check the `previous tutorial <{filename}31_Threads_Part_1.rst>`__.
+The example above is almost trivial, but it has a very important feature. We start a new thread by passing an argument, ``my_var``, which is a list of numbers. The thread will increase the values of the numbers by one, with a certain delay. In this example we use events to graciously finish the thread, if you are not familiar with them, check the `previous tutorial <{filename}31_Threads_Part_1.rst>`__.
 
 The important piece of code in this example is the ``print(my_var)`` line. That print statement lives in the main thread, however, it has access to the information being generated within a child thread. This behavior is possible thanks to memory sharing between different threads. Being able to access the same memory space is useful, but it can also pose some risks. In the example above, we have started only one thread, but we are not limited to that. We could, for example, start several threads:
 
@@ -73,7 +72,7 @@ And you would see that ``my_var`` and its information is shared across all threa
             # sleep(.5)
         print('Stop printing')
 
-Now, when we run the code, there will be no sleep in between one iteration and the next. Let's run it for a short period of time, let's say 5 seconds, we can do the following:
+Now, when we run the code, there will be no sleep in between one iteration and the next. Let's run it for a short time, let's say 5 seconds, we can do the following:
 
 .. code-block:: python
 
@@ -207,7 +206,7 @@ Coming back to the examples from the beginning of the article, we can use queues
                 break
         print('Stop printing')
 
-In order to use the code above, we will need to create two queues. The idea is that we can also create two threads, in which the input and output queue are reversed. In that case, on thread puts its output on the queue of the second thread and the other way around. This would look like the following:
+To use the code above, we will need to create two queues. The idea is that we can also create two threads, in which the input and output queue are reversed. In that case, on thread puts its output on the queue of the second thread and the other way around. This would look like the following:
 
 .. code-block:: python
 
@@ -344,7 +343,7 @@ Queues have some extra options, such as the maximum number of elements they can 
 
 What is important to note, is that when you work with multiple Threads, sometimes you want to wait (i.e. block the execution), sometimes you don't. In the examples above, we have always been checking whether the Queue was empty before reading from it. But what happens if we don't check it? The method ``get`` has two options: ``block`` and ``timeout``. The first is used to determine whether we want the program to wait until an element is available. The second is to specify the number of seconds we want it to wait. After that amount of time, an exception is raised. If we set ``block`` to false, and the queue is empty, the exception is raised immediately.
 
-We can change the function ``modify_variable`` in order to take advantage of this:
+We can change the function ``modify_variable`` to take advantage of this:
 
 .. code-block:: python
 
@@ -489,7 +488,7 @@ The saving requires a bit more care because we have to be sure that no two threa
             with open(f'website_data_{i}.dat', 'wb') as f:
                 f.write(var)
 
-The approach is similar to the downloading of data. We wait until a special element is present to stop the thread. Then we acquire a lock in order to be sure no other thread is looking at the available files to write to. The loop just checks which file number is available. We have to use a lock here because there is a change two threads run the same lines at the same time and find the available file to be the same.
+The approach is similar to the downloading of data. We wait until a special element is present to stop the thread. Then we acquire a lock to be sure no other thread is looking at the available files to write to. The loop just checks which file number is available. We have to use a lock here because there is a change two threads run the same lines at the same time and find the available file to be the same.
 
 When we write to the file, we don't care about the lock, because we know that only one thread will write to each file. That is why we create the file on one line, while the lock is acquired:
 
@@ -574,4 +573,6 @@ In the `previous article <{filename}31_Threads_Part_1.rst>`__, we have seen how 
 
 Having access to shared memory makes programs very quick to develop, but they can give rise to problems when different threads are reading/writing to the same elements. This was discussed at the beginning of the article, in which we explored what happens when using a simple operator such as `` =+ `` to increase the values of an array by 1. Then we explored how to use Queues to share data between threads, both between the main thread and child threads as between child threads.
 
-To finish, we have shown a very simple example of how to use threads to download data from a website and save it to disk. The example is very basic, but we will expand it in the following article. Other IO (input-output) tasks that can be explored are `acquisition from devices <{filename}22_Step_by_step_qt.rst>`_ such as a camera, waiting for user input, `reading from disk <{filename}13_storing_data.rst>`_, etc. We will expand the series of tutorials on threading through such applications.
+To finish, we have shown a very simple example of how to use threads to download data from a website and save it to disk. The example is very basic, but we will expand it in the following article. Other IO (input-output) tasks that can be explored are `acquisition from devices <{filename}22_Step_by_step_qt.rst>`_ such as a camera, waiting for user input, `reading from disk <{filename}13_storing_data.rst>`_, etc.
+
+Header Photo by `Amirali Mirhashemian <https://unsplash.com/@amir_v_ali?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
