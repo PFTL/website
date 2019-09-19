@@ -159,9 +159,64 @@ Different packages have different shortcuts. For example ``PyQtGraph`` is normal
 
 Absolute Imports
 ----------------
-So far, we have seen how to import packages and modules developed by other people. Importing, however, is a great tool to structure different parts of your code into different files, making it much handier to maintain. Therefore, sooner or later you are going to find yourself importing your own code.
+So far, we have seen how to import packages and modules developed by other people. Importing, however, is a great tool to structure different parts of your code into different files, making it much handier to maintain. Therefore, sooner or later you are going to find yourself importing your own code. Let's start very simple and build up in complexity. In a file called **first.py** let's place the following code:
 
+.. code-block:: python
 
+   def first_function():
+      print('This is the first function')
+
+In another file, let's call it **second.py**, let's put the following code:
+
+.. code-block:: python
+
+   from first import first_function
+
+   first_function()
+
+And you can run it:
+
+.. code-block:: bash
+
+   $ python second.py
+   This is the first function
+
+That is as easy as it gets. You define a function in a file, but you use that function in another file. Bear in mind that what we discussed in the previous sections still holds. You can do ``from first import first_function as ff``, for example. Having only scripts is just the beginning. At some point you will also organize your code into folders. Let's create a folder called **module_a**, within it, a new file, called **third.py**. So the folder structure is like this:
+
+.. code-block:: bash
+
+   $ tree
+   .
+   ├── first.py
+   ├── module_a
+   │   └── third.py
+   └── second.py
+
+Let's add a new function in **third**. Bear in mind that the examples are incredibly basic in order not to loose the important concepts from sight:
+
+.. code-block:: python
+
+   def third_function():
+       print('This is the third function')
+
+Now, let's edit **second.py** in order to import this new function:
+
+.. code-block:: python
+
+   from first import first_function
+   from module_a.third import third_function
+
+   first_function()
+   third_function()
+
+If you run it as before, you will get the following output:
+
+.. code-block:: bash
+
+   This is the first function
+   This is the third function
+
+Pay attention to the notation we used to import the ``third_function``. We specified the folder, in this case ``module_a`` and then we referred to the file with a dot: ``.``. We ended up having ``module_a.third``, and we stripped the ``.py``.
 
 Relative Imports
 ----------------
