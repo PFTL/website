@@ -1,4 +1,5 @@
-from ..mod_a import file_a
+from mod_a.file_a import simple
 
 def bsimple():
-    file_a.simple()
+    print('This is simple B')
+    simple()
