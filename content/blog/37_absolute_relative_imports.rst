@@ -491,11 +491,64 @@ Another problem on our current approach is that we are specifying the name of th
 
    from string import m_theory
 
-It will give you problems, because ``string`` belongs to Python's standard library. 
+It will give you problems, because ``string`` belongs to Python's standard library. It can also happen quite often that you develop two different packages and both have some modules with the same name. In the end it is hard to come up with unique names, and things like *config*, *lib*, *util*, etc. are quite descriptive.
+
+A better approach is to develop projects always in their own folder. The structure would be like this:
+
+.. code-block:: bash
+
+   code
+   ├── pckg_a
+   │   └── file_a.py
+   ├── pckg_b
+   │   ├── docs
+   │   │   ├── conf_complete.py
+   │   │   └── output
+   │   │       └── output.txt
+   │   └── mod_a
+   │       ├── factorial.py
+   │       ├── __init__.py
+   │       └── people.py
+   └── pckg_c
+       ├── another.py
+       ├── __init__.py
+       ├── mod_a
+       │   ├── file_a.py
+       │   └── __init__.py
+       ├── mod_b
+       │   ├── file_b.py
+       │   └── __init__.py
+       └── start.py
+
+In the folder tree above, you can se a base folder called **code**. Inside there are different packages, *a*, *b*, and *c*. If you check **pckg_c** you will notice that it contains the code we were discussing in this tutorial. There are several advantages of working in this way. First, you can add just the folder **code** to the PYTHONPATH and you will have all your packages immediately available. The other advantage is that now you can import modules without risking mistakes:
+
+.. code-block:: python
+
+   from pckg_b import mod_a as one_module
+   from pckg_c import mod_a as two_module
+
+Now you see that it is very clear what module you are importing, even though they are both called ``mod_a``. Remember, absolute imports mean that you define the full path of what you want to import. However, in Python, full is *relative*. You are not specifying a path in the file system, but rather an import path. Therefore, it is impossible to think about absolute imports without also considering the PYTHONPATH.
 
 
 Relative Imports
 ----------------
+Another option for importing modules is to define the relative path. Let's continue building on the example from the previous section. Imagine you have a folder structure like this:
+
+.. code-block:: bash
+   :hl_lines: 8 9 10
+
+   .
+   ├── mod_a
+   │   ├── file_a.py
+   │   └── __init__.py
+   ├── mod_b
+   │   ├── file_b.py
+   │   ├── __init__.py
+   │   └── mod_a
+   │       ├── file_c.py
+   │       └── __init__.py
+   └── start.py
+
 
 Limitations
 -----------
