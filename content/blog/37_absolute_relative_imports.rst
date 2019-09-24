@@ -466,6 +466,34 @@ The same happens if we trigger python from any other folder:
 
 Based on what we have discussed earlier, can you think of a solution to prevent the errors?
 
+What we are doing in the examples above is called **absolute imports**. This means that we specify the full path to the module we want to import. What you have to remember is that the folder from which you trigger Python is the first place where the program looks for modules. Then it goes to the paths stored in ``sys.path``. So, if we want the code above to work, we need to be sure that Python knows where **mod_a** and **mod_b** are stored.
+
+The proper way would be to include the folder in the **PYTHONPATH** environment variable, as we explained earlier. A *dirtier* way would be to append the folder at runtime, we can add the following lines to **file_by.py**:
+
+.. code-block:: python
+   :hl_lines: 4
+
+   import os
+   import sys
+
+   BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+   sys.path.append(BASE_PATH)
+
+   from mod_a.file_a import simple
+
+This is very similar to what we have done earlier. The important line is the highlighted, it shows you a way of getting the full path to the folder one level above where the current file (**file_b.py**) is. Note that you need to append to the ``sys.path`` before you try to import ``mod_a``, or it will fail such as before.
+
+If you think about this approach, you can quickly notice that it has several drawbacks. The most obvious one is that you should add those lines to every single file you are working with. Imagine that later you develop **mod_c** which depends also on **mod_a**, you will need to append the folder to the path again, etc. This quickly becomes a nightmare.
+
+Another problem on our current approach is that we are specifying the name of the module, but not the package to which it belongs. This connects back to what we did at the beginning of the article. Modules that belong to packages sometimes have the same names even if they are very different. Imagine you would like to develop a module called ``string``. Perhaps you are a theoretical physicist working on string theory. If you have code that looks like this:
+
+.. code-block:: python
+
+   from string import m_theory
+
+It will give you problems, because ``string`` belongs to Python's standard library. 
+
+
 Relative Imports
 ----------------
 
