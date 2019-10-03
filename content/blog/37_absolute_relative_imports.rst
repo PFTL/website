@@ -529,7 +529,6 @@ In the folder tree above, you can se a base folder called **code**. Inside there
 
 Now you see that it is very clear what module you are importing, even though they are both called ``mod_a``. Remember, absolute imports mean that you define the full path of what you want to import. However, in Python, full is *relative*. You are not specifying a path in the file system, but rather an import path. Therefore, it is impossible to think about absolute imports without also considering the PYTHONPATH.
 
-
 Relative Imports
 ----------------
 Another option for importing modules is to define the relative path. Let's continue building on the example from the previous section. Imagine you have a folder structure like this:
@@ -537,7 +536,7 @@ Another option for importing modules is to define the relative path. Let's conti
 .. code-block:: bash
    :hl_lines: 8 9 10
 
-   .
+   code
    ├── mod_a
    │   ├── file_a.py
    │   └── __init__.py
@@ -549,13 +548,149 @@ Another option for importing modules is to define the relative path. Let's conti
    │       └── __init__.py
    └── start.py
 
+Note that in this example, we are placing the files within a folder called **code**, which will be relevant later on. Each ``file_X.py`` defines a function called ``function_X`` (where X is the letter of the file). The function simply prints the name of the function. It is a very simple example to show how this structure works. By not it should be clear that if you would like to import ``function_c`` from ``file_c`` in the ``start.py`` file, you would simply do the following:
 
-Limitations
------------
+.. code-block:: python
 
-The __init__.py file
---------------------
+   from mod_b.mod_a.file_c import function_c
 
-Lazy Importing
---------------
+The situation becomes more interesting when you want to import ``function_a`` into ``file_b``. It is important to pay attention, because there are two different ``mod_a`` defined. If we add the following to ``file_b``:
 
+.. code-block:: python
+
+   from mod_a.file_c import function_c
+
+It would work, regardless of how you run the script:
+
+.. code-block:: bash
+
+   $ python mod_b/file_b.py
+   $ cd mod_b
+   $ python file_b.py
+
+But this is not what we wanted! We want ``function_a`` from ``file_a``. If we, however add the following to ``file_b``:
+
+.. code-block:: python
+
+   from mod_a.file_a import function_a
+
+We would get the following error:
+
+.. code-block:: bash
+
+   $ python mod_b/file_b.py
+   Traceback (most recent call last):
+     File "mod_b/file_b.py", line 1, in <module>
+       from mod_a.file_a import function_a
+   ImportError: No module named file_a
+
+So, now is where relative imports come into play. From ``file_b``, the module we want to import is one folder up. In principle, it would be enough to write the following:
+
+.. code-block:: python
+
+   from ..mod_a.file_a import function_a
+
+
+   def function_b():
+       print('This is simple B')
+       function_a()
+
+   function_b()
+
+Most tutorials end at this point. They explain that the first ``.`` means this directory, while the second means going one level up, etc. However, if you run the the file, there will be problems. If you are still using Python 2 (STRONGLY discouraged!), you would get the following error:
+
+.. code-block:: bash
+
+   $ cd mod_b/
+   $ python file_b.py
+   Traceback (most recent call last):
+     File "file_b.py", line 1, in <module>
+       from ..mod_a.file_a import function_a
+   ValueError: Attempted relative import in non-package
+
+This error means that you can't simply run the file as if it would be a script. You have to tell Python that it is actually a package. The way of running a script as if it would be a package is to add a ``-m``, you need to be one folder up in order to work:
+
+.. code-block:: bash
+
+   $ python -m mod_b.file_b
+
+**Python 3** users can simply run the file as always, and you will get the following error:
+
+.. code-block:: bash
+
+   $ python3 file_b.py
+   Traceback (most recent call last):
+     File "file_b.py", line 1, in <module>
+       from ..mod_a.file_a import function_a
+   ValueError: attempted relative import beyond top-level package
+
+It doesn't matter if you change folders, if you move one level up, you will get the same problem:
+
+.. code-block:: bash
+
+   $ python3 mod_b/file_b.py
+   Traceback (most recent call last):
+     File "mod_b/file_b.py", line 1, in <module>
+       from ..mod_a.file_a import function_a
+   ValueError: attempted relative import beyond top-level package
+
+At some point this becomes nerve wracking. It doesn't matter if you add folders to the PATH, create **__init__.py** files, etc. It all boils down to the fact that you are not treating your files as a package. **Python 2** was showing a different error message that could point into the direction of solving the problem, but for **Python 3** it became slightly more cryptical. In order to instruct Python to run your file as part of a package, you would need to do the following:
+
+.. code-block:: bash
+
+   $ python3 -m code.mod_b.file_b
+   This is function_b
+   This is function_a
+
+Bear in mind that the only way of running the code like this is if python knows where to find the folder ``code``. And this brings us back to the discussion of the PYTHONPATH variables. If you are in the folder that contains ``code`` and run Python from there, you won't see no problems. If you, however, are in any other folder in your computer, Python will follow to usual rules to try to understand where ``code`` is.
+
+There is one more detail with relative imports. Imagine that **file_c** has the following:
+
+.. code-block:: python
+
+   from ..file_b import function_b
+
+   def function_c():
+       print('This is function c')
+       function_b()
+
+   function_c()
+
+Since **file_c** is deeper, we can try to run it in different ways:
+
+.. code-block:: bash
+
+   $ python -m code.mod_b.mod_a.file_c
+   $ python -m mod_b.mod_a.file_c
+
+However, the second option is going to fail. **file_c** is importing **file_b** which in turn is importing **file_a**. Therefore, Python needs to be able to go all the way to the root of ``code``. This is, however, not always the case. It depends on how the code was developed. Bear in mind that imports work equally well if you import ``code`` into another project, provided that Python knows where to find it:
+
+.. code-block:: pycon
+
+   >>> from code.mod_b.mod_a.file_c import function_c
+
+The last detail is that you can't mix relative imports and what we have done at the beginning of this section. If you add the following to **file_b**:
+
+.. code-block:: python
+
+   from ..mod_a.file_a import function_a
+   from mod_a.file_c import function_c
+
+   def function_b():
+       print('This is function_b')
+       function_a()
+
+   function_b()
+
+You will get the following error:
+
+.. code-block:: bash
+
+   $ python -m AF_relative.mod_b.file_b
+   Traceback (most recent call last):
+   [...]
+   ModuleNotFoundError: No module named 'mod_a'
+
+
+Absolue or Relative: Conclusions
+--------------------------------
