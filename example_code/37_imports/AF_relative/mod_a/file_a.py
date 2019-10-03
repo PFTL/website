@@ -1,2 +1,2 @@
-def simple():
-    print('This is simple')
+def function_a():
+    print('This is function_a')

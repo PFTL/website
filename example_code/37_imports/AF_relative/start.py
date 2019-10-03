@@ -1,3 +1,3 @@
-from mod_b import file_b
+from mod_b.file_b import function_b
 
-file_b.bsimple()
+function_b.bsimple()
