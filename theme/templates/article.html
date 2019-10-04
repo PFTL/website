@@ -32,9 +32,15 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="container my-5">
         <div class="row">
-            <div class="col">
+            <div class="col-md-9">
+                {% if article.illustration %}
+                    <div class="pb-5 big-header">
+                        <img src="{{ SITEURL }}/{{ article.illustration }}"/>
+                    </div>
+                {% endif %}
                 <h1>{{ article.title }}</h1>
                 {% if article.subtitle %}
                     <h3>{{ article.subtitle }}</h3>
@@ -44,11 +50,6 @@
                         style="height: auto"> {{ article.date.strftime('%B %d, %Y') }}</span><span class="ml-1"><img
                         src="{{ STATIC }}/theme/img/tags.png">
                     {% for tag in article.tags %}<span class="article-tag">{{ tag }}</span>{% endfor %}</span></p>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-9">
                 <article>
                     {{ article.content }}
                 </article>

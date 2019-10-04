@@ -2,7 +2,12 @@
     font-family: 'Indie Flower';
 }
 
-.center-img{
+.big-header img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.center-img {
     display: block;
     margin-right: auto;
     margin-left: auto;
@@ -149,7 +154,8 @@ article {
     .article-title h3 {
         font-size: 1.75rem;
     }
-    .center-img{
+
+    .center-img {
         width: auto;
     }
 }
@@ -189,30 +195,30 @@ article {
     background-color: #bbbbbb;
 }
 
-tt{
+tt {
     background-color: lightgray;
 }
+
 .affix {
-  top: 20px;
-  width: 213px;
+    top: 20px;
+    width: 213px;
 }
 
 /*.latest-articles{*/
-    /*position: -webkit-sticky;*/
-    /*position: fixed;*/
-    /*top: 120px;*/
-    /*border: 1px rgba(0, 0, 0, 0.34) solid;*/
-    /*border-radius: 5px;*/
+/*position: -webkit-sticky;*/
+/*position: fixed;*/
+/*top: 120px;*/
+/*border: 1px rgba(0, 0, 0, 0.34) solid;*/
+/*border-radius: 5px;*/
 /*}*/
 
-.latest-articles{
+.latest-articles {
     position: -webkit-sticky;
     position: sticky;
     top: 120px;
     border: 1px rgba(0, 0, 0, 0.34) solid;
     border-radius: 5px;
 }
-
 
 
 .mpopup {
@@ -231,60 +237,73 @@ tt{
 }
 
 @media (min-width: 768px) {
-    .mpopup{
+    .mpopup {
         width: 500px;
         margin-left: 150px;
     }
 }
+
 /*.mpopup-content {*/
-    /*position: relative;*/
-    /*background-color: #fefefe;*/
-    /*margin: auto;*/
-    /*padding: 0;*/
-    /*width: 60%;*/
-    /*box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);*/
-    /*-webkit-animation-name: animatetop;*/
-    /*-webkit-animation-duration: 0.4s;*/
-    /*animation-name: animatetop;*/
-    /*animation-duration: 0.4s*/
+/*position: relative;*/
+/*background-color: #fefefe;*/
+/*margin: auto;*/
+/*padding: 0;*/
+/*width: 60%;*/
+/*box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);*/
+/*-webkit-animation-name: animatetop;*/
+/*-webkit-animation-duration: 0.4s;*/
+/*animation-name: animatetop;*/
+/*animation-duration: 0.4s*/
 /*}*/
 
 /*.mpopup-head {*/
-    /*padding: 2px 16px;*/
-    /*background-color: #ff0000;*/
-    /*color: white;*/
+/*padding: 2px 16px;*/
+/*background-color: #ff0000;*/
+/*color: white;*/
 /*}*/
 /*.mpopup-main {padding: 2px 16px;}*/
 /*.mpopup-main input[type="text"]{*/
-    /*width: 30%;*/
-    /*height: 25px;*/
-    /*font-size: 15px;*/
+/*width: 30%;*/
+/*height: 25px;*/
+/*font-size: 15px;*/
 /*}*/
 /*.mpopup-main input[type="submit"]{*/
-    /*padding: 5px;*/
-    /*font-size: 15px;*/
-    /*font-weight: bold;*/
-    /*background-color: #333;*/
-    /*outline: none;*/
-    /*border: none;*/
-    /*color: #fff;*/
-    /*cursor: pointer;*/
+/*padding: 5px;*/
+/*font-size: 15px;*/
+/*font-weight: bold;*/
+/*background-color: #333;*/
+/*outline: none;*/
+/*border: none;*/
+/*color: #fff;*/
+/*cursor: pointer;*/
 /*}*/
 /*.mpopup-foot {*/
-    /*padding: 2px 16px;*/
-    /*background-color: #ff0000;*/
-    /*color: #ffffff;*/
+/*padding: 2px 16px;*/
+/*background-color: #ff0000;*/
+/*color: #ffffff;*/
 /*}*/
 
 /* add animation effects */
 @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 /* close button style */
@@ -294,6 +313,7 @@ tt{
     font-size: 28px;
     font-weight: bold;
 }
+
 .close:hover, .close:focus {
     color: #000;
     text-decoration: none;
