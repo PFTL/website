@@ -4,7 +4,7 @@ Starting and Synchronizing Threads
 :date: 2019-08-06
 :author: Aquiles Carattino
 :subtitle: Learn how threads in Python can help you develop better code
-:header: {attach}amirali-mirhashemian-brXPUp545NI-unsplash.jpg
+:header: {illustration}python1-01.png
 :tags: threads, async, multithreading, parallel
 :description: Learn how threads in Python can help you develop better code
 
@@ -440,4 +440,4 @@ In this article, we have seen the basics of working with threads. We have seen h
 
 The examples that we have seen in this tutorial are almost trivial and most are based on performing highly inefficient tasks, such as increasing the values in an array one by one. If you want to continue learning about threads, you can head to the following tutorial on `how to handle data with threads in Python <{filename}32_Threads_Part_2.rst>`_.
 
-Header Photo by `Amirali Mirhashemian <https://unsplash.com/@amir_v_ali?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
+Header Illustration by ` Tsvetelina Stoynova <https://dribbble.com/tsvety-designs>`_

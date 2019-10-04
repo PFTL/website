@@ -4,7 +4,7 @@ Handling and Sharing Data Between Threads
 :date: 2019-08-06
 :author: Aquiles Carattino
 :subtitle: Learn how to share data between threads
-:header: {attach}amirali-mirhashemian-kiH-RBm08NQ-unsplash.jpg
+:header: {illustration}python1-01.png
 :tags: threading, data, queue, sharing, threads, async, multithreading
 :description: Learn how to share data between threads
 
@@ -575,4 +575,4 @@ Having access to shared memory makes programs very quick to develop, but they ca
 
 To finish, we have shown a very simple example of how to use threads to download data from a website and save it to disk. The example is very basic, but we will expand it in the following article. Other IO (input-output) tasks that can be explored are `acquisition from devices <{filename}22_Step_by_step_qt.rst>`_ such as a camera, waiting for user input, `reading from disk <{filename}13_storing_data.rst>`_, etc.
 
-Header Photo by `Amirali Mirhashemian <https://unsplash.com/@amir_v_ali?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText>`_ on Unsplash
+Header Illustration by ` Tsvetelina Stoynova <https://dribbble.com/tsvety-designs>`_
