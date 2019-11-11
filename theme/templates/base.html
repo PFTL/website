@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="google-site-verification" content="E-wHsju00y9AiJ8eEHL1wfv2SUb0oQJvUEgOpxlplYQ"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="google-site-verification" content="E-wHsju00y9AiJ8eEHL1wfv2SUb0oQJvUEgOpxlplYQ"/>
     {% block meta_header %}{% endblock %}
+  <meta name="author" content="Aquiles Carattino">
 
-    <link href="{{ STATIC }}/theme/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="{{ STATIC }}/theme/css/IndiFlower.css" rel="stylesheet"/>
-    <link href="{{ STATIC }}/theme/css/pygment.css" rel="stylesheet"/>
-    <link href="{{ STATIC }}/theme/css/pftl.css" rel="stylesheet"/>
-    <link href="{{ STATIC }}/theme/css/newsletter_signup.css" rel="stylesheet"/>
-    <link rel="icon" href="{{ STATIC }}/theme/img/favicon.ico"/>
+  <link href="{{ STATIC }}/theme/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="{{ STATIC }}/theme/css/IndiFlower.css" rel="stylesheet"/>
+  <link href="{{ STATIC }}/theme/css/pygment.css" rel="stylesheet"/>
+  <link href="{{ STATIC }}/theme/css/pftl.css" rel="stylesheet"/>
+  <link href="{{ STATIC }}/theme/css/newsletter_signup.css" rel="stylesheet"/>
+  <link rel="icon" href="{{ STATIC }}/theme/img/favicon.ico"/>
 
-    <!-- FEEDS -->
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed for PythonForTheLab.com" href="/feed.rss"/>
-    <script src="{{ STATIC }}/theme/js/jquery.min.js"></script>
-    <script src="{{ STATIC }}/theme/js/newsletter_capture.js"></script>
-    <title>{% block title %}{% endblock %} | Python For The Lab</title>
+  <!-- FEEDS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed for PythonForTheLab.com" href="/feed.rss"/>
+  <script src="{{ STATIC }}/theme/js/jquery.min.js"></script>
+  <script src="{{ STATIC }}/theme/js/newsletter_capture.js"></script>
+  <title>{% block title %}{% endblock %} | Python For The Lab</title>
     {% include 'head_scripts.html' %}
     {% block head_scripts %}{% endblock %}
 </head>
